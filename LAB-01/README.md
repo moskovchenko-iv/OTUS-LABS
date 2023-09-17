@@ -16,7 +16,28 @@
    !
    !
    aaa authentication login default local
-   aaa authorization exec default local 
+   aaa authorization exec default local
+   !
+   clock timezone MSK 3 0
+   !
+   no ip domain lookup
+   !
+   username cisco privilege 15 secret 5 $1$IE4e$CRkxPOAQmhp5JbkBmIuQl/
+   !
+   banner login ^CC
+        *************************************************************
+        **         All activity is subject to monitoring.          **
+        **    Any UNAUTHORIZED access or use is PROHIBITED,        **
+        **             and may result in PROSECUTION.              **
+        **                         <<R1>>                          **
+        *************************************************************
+   ^C
+   !
+   line con 0
+   logging synchronous
+   line aux 0
+   line vty 0 4
+   transport input all
    ```
 3. 
 
