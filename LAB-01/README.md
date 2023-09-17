@@ -1,9 +1,10 @@
 # VLAN и маршрутизация между VLAN 
 
-Реализуемая схема:
-![Реализуемая схема:](https://github.com/moskovchenko-iv/OTUS-LABS/blob/main/LAB-01/Screenshot_1.jpg)
-
 ### Выполнение
 1. Воссоздаем схему и коммутацию.
 2. Производим базовую настройку оборудования.
 3. 
+
+
+Реализуемая схема:
+![Реализуемая схема:](https://github.com/moskovchenko-iv/OTUS-LABS/blob/main/LAB-01/Screenshot_1.jpg)
