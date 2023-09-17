@@ -1,8 +1,8 @@
 # VLAN и маршрутизация между VLAN 
 
 ### Выполнение
-1. Воссоздаем схему и коммутацию, схема реализации п.6.
-2. Производим базовую настройку оборудования.
+1. Воссоздаем схему и коммутацию, схема реализации п.7
+2. Производим базовую настройку оборудования
    ```
    Current configuration : 1515 bytes
    !
@@ -103,6 +103,27 @@
    !
    ip default-gateway 192.168.3.1
    ```
-6. 
-Реализуемая схема:
+6. Проверяем работу схемы
+   ```
+   VPCS> ping 192.168.3.1
+   84 bytes from 192.168.3.1 icmp_seq=1 ttl=255 time=0.395 ms
+   84 bytes from 192.168.3.1 icmp_seq=2 ttl=255 time=0.593 ms
+
+   VPCS> ping 192.168.3.11
+   84 bytes from 192.168.3.11 icmp_seq=1 ttl=255 time=0.239 ms
+   84 bytes from 192.168.3.11 icmp_seq=2 ttl=255 time=0.303 ms
+
+   VPCS> ping 192.168.3.12
+   84 bytes from 192.168.3.12 icmp_seq=1 ttl=255 time=0.463 ms
+   84 bytes from 192.168.3.12 icmp_seq=2 ttl=255 time=0.584 ms
+
+   VPCS> ping 192.168.4.1 
+   84 bytes from 192.168.4.1 icmp_seq=1 ttl=255 time=0.587 ms
+   84 bytes from 192.168.4.1 icmp_seq=2 ttl=255 time=0.643 ms
+
+   VPCS> ping 192.168.4.3
+   84 bytes from 192.168.4.3 icmp_seq=1 ttl=63 time=2.089 ms
+   84 bytes from 192.168.4.3 icmp_seq=2 ttl=63 time=0.820 ms
+   ```
+7. Реализуемая схема:
 ![Реализуемая схема:](https://github.com/moskovchenko-iv/OTUS-LABS/blob/main/LAB-01/Screenshot_1.jpg)
