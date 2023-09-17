@@ -104,7 +104,7 @@ no ip http secure-server
 !
 control-plane
 !
-banner login ^CCC
+banner login ^C
      *************************************************************
      **         All activity is subject to monitoring.          **
      **    Any UNAUTHORIZED access or use is PROHIBITED,        **
