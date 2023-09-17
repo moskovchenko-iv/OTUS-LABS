@@ -125,7 +125,7 @@ control-plane
 !
 !
 !
-banner login ^CC
+banner login ^C
      *************************************************************
      **         All activity is subject to monitoring.          **
      **    Any UNAUTHORIZED access or use is PROHIBITED,        **
