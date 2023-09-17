@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 1492 bytes
+Current configuration : 1913 bytes
 !
-! Last configuration change at 20:38:01 MSK Sun Sep 17 2023
+! Last configuration change at 21:58:05 MSK Sun Sep 17 2023
 !
 version 15.2
 service timestamps debug datetime msec
@@ -22,9 +22,9 @@ enable secret 5 $1$52GP$AMcBUg8U.MZP4RXKHpK.11
 username cisco privilege 15 secret 5 $1$YeTO$QdH2qV36a21bmCWnk5OhD0
 aaa new-model
 !
-!         
+!
 aaa authentication login default local
-aaa authorization exec default local 
+aaa authorization exec default local
 !
 !
 !
@@ -45,13 +45,13 @@ no ip domain-lookup
 ip cef
 no ipv6 cef
 !
-!         
+!
 spanning-tree mode pvst
 spanning-tree extend system-id
 !
 vlan internal allocation policy ascending
 !
-! 
+!
 !
 !
 !
@@ -68,7 +68,7 @@ interface Ethernet0/0
  switchport access vlan 3
  switchport mode access
  spanning-tree portfast
-!         
+!
 interface Ethernet0/1
 !
 interface Ethernet0/2
@@ -91,7 +91,7 @@ interface Vlan3
 !
 ip default-gateway 192.168.3.1
 ip forward-protocol nd
-!         
+!
 no ip http server
 no ip http secure-server
 !
@@ -104,6 +104,14 @@ no ip http secure-server
 !
 control-plane
 !
+banner login ^CCC
+     *************************************************************
+     **         All activity is subject to monitoring.          **
+     **    Any UNAUTHORIZED access or use is PROHIBITED,        **
+     **             and may result in PROSECUTION.              **
+     **                         <<S1>>                          **
+     *************************************************************
+^C
 !
 line con 0
  logging synchronous
