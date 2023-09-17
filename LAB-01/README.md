@@ -1,2 +1,2 @@
 # VLAN и маршрутизация между VLAN 
-![Реализуемая схема:](https://github.com/Pekep97/Labs/blob/main/Lab-01/Screenshot_1.png)
+![Реализуемая схема:](https://github.com/moskovchenko-iv/OTUS-LABS/blob/main/LAB-01/Screenshot_1.jpg)
