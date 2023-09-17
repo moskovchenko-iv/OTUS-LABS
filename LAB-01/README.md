@@ -1,7 +1,7 @@
 # VLAN и маршрутизация между VLAN 
 
 ### Выполнение
-1. Воссоздаем схему и коммутацию, реализуемая схема ниже.
+1. Воссоздаем схему и коммутацию, схема реализации п.6.
 2. Производим базовую настройку оборудования.
    ```
    Current configuration : 1515 bytes
@@ -55,8 +55,54 @@
    description NATIVE
    encapsulation dot1Q 8
    ```
-4. 
-
-
+4. Настраиваем порты и интерфейсы S1
+   ```
+   interface Ethernet0/0
+   description dn-to-pc_a
+   switchport access vlan 3
+   switchport mode access
+   spanning-tree portfast
+   !
+   interface Ethernet0/2
+   description dn-to-s2
+   switchport trunk encapsulation dot1q
+   switchport trunk native vlan 8
+   switchport mode trunk
+   load-interval 60
+   !
+   interface Ethernet0/3
+   description up-to-r1
+   switchport trunk encapsulation dot1q
+   switchport trunk native vlan 8
+   switchport mode trunk
+   load-interval 60
+   !
+   interface Vlan3
+   description MANAGEMENT
+   ip address 192.168.3.11 255.255.255.0
+   !
+   ip default-gateway 192.168.3.1
+   ```
+5. Настраиваем порты и интерфейсы S2
+   ```
+   interface Ethernet0/0
+   description dn-to-pc_b
+   switchport access vlan 4
+   switchport mode access
+   spanning-tree portfast
+   !         
+   interface Ethernet0/3
+   description up-to-s1
+   switchport trunk encapsulation dot1q
+   switchport trunk native vlan 8
+   load-interval 60
+   !
+   interface Vlan3
+   description MANAGEMENT
+   ip address 192.168.3.12 255.255.255.0
+   !
+   ip default-gateway 192.168.3.1
+   ```
+6. 
 Реализуемая схема:
 ![Реализуемая схема:](https://github.com/moskovchenko-iv/OTUS-LABS/blob/main/LAB-01/Screenshot_1.jpg)
