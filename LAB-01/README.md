@@ -1,2 +1,2 @@
 # VLAN и маршрутизация между VLAN 
-[LOGO]: https://github.com/moskovchenko-iv/OTUS-LABS/edit/main/LAB-01/Screenshot_1.png "Текст заголовка логотипа 2"
+![Реализуемая схема:](https://github.com/Pekep97/Labs/blob/main/Lab-01/Screenshot_1.png)
