@@ -125,8 +125,13 @@ control-plane
 !
 !
 !
-banner login ^CCC
-Any UNAUTHORIZED access may result in PROSECUTION
+banner login ^CC
+     *************************************************************
+     **         All activity is subject to monitoring.          **
+     **    Any UNAUTHORIZED access or use is PROHIBITED,        **
+     **             and may result in PROSECUTION.              **
+     **                         <<R1>>                          **
+     *************************************************************
 ^C
 !
 line con 0
