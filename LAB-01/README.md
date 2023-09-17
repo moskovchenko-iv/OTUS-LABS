@@ -39,7 +39,23 @@
    line vty 0 4
    transport input all
    ```
-3. 
+3. Настраиваем интерфейсы роутера
+   ```
+   interface Ethernet0/1.3
+   description MANAGEMENT
+   encapsulation dot1Q 3
+   ip address 192.168.3.1 255.255.255.0
+   !
+   interface Ethernet0/1.4
+   description OPERATIONS
+   encapsulation dot1Q 4
+   ip address 192.168.4.1 255.255.255.0
+   !
+   interface Ethernet0/1.8
+   description NATIVE
+   encapsulation dot1Q 8
+   ```
+4. 
 
 
 Реализуемая схема:
