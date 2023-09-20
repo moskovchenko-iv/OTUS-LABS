@@ -53,7 +53,7 @@
    !
    interface Ethernet0/1.8
    description NATIVE
-   encapsulation dot1Q 8
+   encapsulation dot1Q 8 native
    ```
 4. Настраиваем порты и интерфейсы S1
    ```
