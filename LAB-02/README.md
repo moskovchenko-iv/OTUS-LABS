@@ -166,4 +166,33 @@
    * Root port S2 - Et0/1, S3 - Et0/3;
    * Desg port S1 - Et0/1, Et0/3, S2 - Et0/3
    * Altn port S3 - E0/1 при равенстве cost, поскольку BID имеет наибольшее значение за счет наибольшего Mac Address, а сам порт не является корневым, 
-9. 
+9. Изменение стоимости Root порта на коммутаторе с Altn портом, приведет у перестроению сети
+   ```
+   interface Ethernet0/3
+    switchport trunk encapsulation dot1q
+    switchport mode trunk
+    spanning-tree cost 18
+   end
+   
+   S3#sh spanning-tree
+   
+   VLAN0001
+     Spanning tree enabled protocol ieee
+     Root ID    Priority    32769
+                Address     aabb.cc00.1000
+                Cost        18
+                Port        4 (Ethernet0/3)
+                Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+   
+     Bridge ID  Priority    32769  (priority 32768 sys-id-ext 1)
+                Address     aabb.cc00.3000
+                Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+                Aging Time  300 sec
+   
+   Interface           Role Sts Cost      Prio.Nbr Type
+   ------------------- ---- --- --------- -------- --------------------------------
+   Et0/1               Desg FWD 100       128.2    Shr
+   Et0/3               Root FWD 18        128.4    Shr
+   
+   ```
+   
