@@ -202,7 +202,7 @@
     switchport mode trunk
    end
       
-      S3#sh spanning-tree
+   S3#sh spanning-tree
    
    VLAN0001
      Spanning tree enabled protocol ieee
