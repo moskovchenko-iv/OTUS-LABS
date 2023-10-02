@@ -157,4 +157,6 @@
    1. S1 aabb.cc00.1000
    2. S2 aabb.cc00.2000
    3. S3 aabb.cc00.3000
-7. 
+
+7. Схема сети
+![Screenshot_1.jpg](Screenshot_1.jpg)
