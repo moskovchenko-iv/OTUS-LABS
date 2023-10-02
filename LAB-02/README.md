@@ -75,5 +75,32 @@
     Sending 5, 100-byte ICMP Echos to 192.168.1.3, timeout is 2 seconds:
     !!!!!
     Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
-
-```
+    ```
+5. Определение корневого моста
+    ```
+    S1#sh spanning-tree
+    
+    VLAN0001
+      Spanning tree enabled protocol ieee
+      Root ID    Priority    32769
+                 Address     aabb.cc00.1000
+                 This bridge is the root
+                 Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+    
+      Bridge ID  Priority    32769  (priority 32768 sys-id-ext 1)
+                 Address     aabb.cc00.1000
+                 Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+                 Aging Time  300 sec
+    
+    Interface           Role Sts Cost      Prio.Nbr Type
+    ------------------- ---- --- --------- -------- --------------------------------
+    Et0/0               Desg FWD 100       128.1    Shr
+    Et0/1               Desg FWD 100       128.2    Shr
+    Et0/2               Desg FWD 100       128.3    Shr
+    Et0/3               Desg FWD 100       128.4    Shr
+    ```
+6. Переводим все порты в trunk
+   ```
+   switchport trunk encapsulation dot1q
+   switchport mode trunk
+   ```
