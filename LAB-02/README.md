@@ -56,7 +56,7 @@
     ip address 192.168.1.3 255.255.255.0
     end
    ```
-4. Проверяем связь
+4. Проверяем связь 
     ```
     S1#ping 192.168.1.2
     Type escape sequence to abort.
