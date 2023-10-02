@@ -153,10 +153,16 @@
    Et0/1               Altn BLK 100       128.2    Shr
    Et0/3               Root FWD 100       128.4    Shr
    ```
-   Согласно данных протокола STP S1 выбран как Root Bridge, поскольку при равенстве значений Priority 32769 имеет наименьшай Mac Address 
+   Согласно данных протокола STP S1 выбран как Root Bridge, поскольку при равенстве значений Priority 32769 имеет наименьшай BID за счет наименьшего Mac Address 
    1. S1 aabb.cc00.1000
    2. S2 aabb.cc00.2000
    3. S3 aabb.cc00.3000
 
 7. Схема сети
 ![Screenshot_1.jpg](Screenshot_1.jpg)
+8. Вопросы по схеме:
+   * S1 является корневым коммутатором;
+   * S1 имеет наименьший mac address;
+   * Root port S2 - Et0/1, S3 - Et0/3;
+   * Desg port S1 - Et0/1, Et0/3, S2 - Et0/3
+   * Altn port S3 - E0/1 поскольку BID имеет наибольшее значение за счет наибольшего Mac Address
