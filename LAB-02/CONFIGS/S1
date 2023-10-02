@@ -1,0 +1,116 @@
+Building configuration...
+
+Current configuration : 1767 bytes
+!
+! Last configuration change at 20:50:20 MSK Mon Oct 2 2023 by cisco
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+service compress-config
+!
+hostname S1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+no logging console
+enable secret 5 $1$r75v$qOesv2PxA6c09Ak7XBfhl1
+!
+username cisco privilege 15 secret 5 $1$IE4e$CRkxPOAQmhp5JbkBmIuQl/
+aaa new-model
+!
+!
+aaa authentication login default local
+aaa authorization exec default local
+!
+!
+!
+!
+!
+!
+aaa session-id common
+clock timezone MSK 3 0
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain-lookup
+ip cef
+no ipv6 cef
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Ethernet0/0
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Ethernet0/1
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Ethernet0/2
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Ethernet0/3
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Vlan1
+ description MANAGEMENT
+ ip address 192.168.1.1 255.255.255.0
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+!
+!
+!
+control-plane
+!
+banner login ^C
+     *************************************************************
+     **         All activity is subject to monitoring.          **
+     **    Any UNAUTHORIZED access or use is PROHIBITED,        **
+     **             and may result in PROSECUTION.              **
+     **                         <<S1>>                          **
+     *************************************************************
+^C
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ transport input all
+!
+!
+end

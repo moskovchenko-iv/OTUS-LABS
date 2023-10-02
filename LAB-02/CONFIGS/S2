@@ -1,0 +1,108 @@
+Building configuration...
+
+Current configuration : 1523 bytes
+!
+! Last configuration change at 20:50:25 MSK Mon Oct 2 2023 by cisco
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+service compress-config
+!
+hostname S2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+no logging console
+enable secret 5 $1$r75v$qOesv2PxA6c09Ak7XBfhl1
+!
+username cisco privilege 15 secret 5 $1$IE4e$CRkxPOAQmhp5JbkBmIuQl/
+aaa new-model
+!
+!
+aaa authentication login default local
+aaa authorization exec default local
+!
+!
+!
+!
+!
+!
+aaa session-id common
+clock timezone MSK 3 0
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain-lookup
+ip cef
+no ipv6 cef
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Ethernet0/0
+!
+interface Ethernet0/1
+!
+interface Ethernet0/2
+!
+interface Ethernet0/3
+!
+interface Vlan1
+ description MANAGEMENT
+ ip address 192.168.1.2 255.255.255.0
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+!
+!
+!
+control-plane
+!
+banner login ^C
+     *************************************************************
+     **         All activity is subject to monitoring.          **
+     **    Any UNAUTHORIZED access or use is PROHIBITED,        **
+     **             and may result in PROSECUTION.              **
+     **                         <<S2>>                          **
+     *************************************************************
+^C
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ transport input all
+!
+!
+end
