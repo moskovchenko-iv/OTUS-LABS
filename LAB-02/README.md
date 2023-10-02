@@ -162,7 +162,7 @@
 ![Screenshot_1.jpg](Screenshot_1.jpg)
 8. Вопросы по схеме:
    * S1 является корневым коммутатором;
-   * S1 имеет наименьший mac address;
+   * S1 имеет наименьший mac address при равенстве Priority;
    * Root port S2 - Et0/1, S3 - Et0/3;
    * Desg port S1 - Et0/1, Et0/3, S2 - Et0/3
    * Altn port S3 - E0/1 поскольку BID имеет наибольшее значение за счет наибольшего Mac Address
