@@ -195,4 +195,31 @@
    Et0/3               Root FWD 18        128.4    Shr
    
    ```
+10. Отмена изменений на этом порту приведет к возврату сети в исходное состояние
+   ```
+   interface Ethernet0/3
+    switchport trunk encapsulation dot1q
+    switchport mode trunk
+   end
+      
+      S3#sh spanning-tree
    
+   VLAN0001
+     Spanning tree enabled protocol ieee
+     Root ID    Priority    32769
+                Address     aabb.cc00.1000
+                Cost        100
+                Port        4 (Ethernet0/3)
+                Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+   
+     Bridge ID  Priority    32769  (priority 32768 sys-id-ext 1)
+                Address     aabb.cc00.3000
+                Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+                Aging Time  15  sec
+   
+   Interface           Role Sts Cost      Prio.Nbr Type
+   ------------------- ---- --- --------- -------- --------------------------------
+   Et0/1               Altn BLK 100       128.2    Shr
+   Et0/3               Root FWD 100       128.4    Shr
+   
+   ```
