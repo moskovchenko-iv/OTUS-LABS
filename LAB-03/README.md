@@ -211,3 +211,5 @@
     84 bytes from 192.168.1.1 icmp_seq=5 ttl=255 time=0.626 ms
     ```
 # Part 3: Configure and verify a DHCP Relay on R2
+### Выполнение Ч3
+1. 
