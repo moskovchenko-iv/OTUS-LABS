@@ -212,4 +212,22 @@
     ```
 # Part 3: Configure and verify a DHCP Relay on R2
 ### Выполнение Ч3
-1. 
+1. Настраиваем dhcp-relay на R2
+   ```
+   interface Ethernet0/1
+    ip address 192.168.1.209 255.255.255.240
+    ip helper-address 10.0.0.1
+   !
+   ```
+2. Получаем настройки на PC-B, проверяем связность
+   ```
+   VPCS> ip dhcp
+   DDORA IP 192.168.1.214/28 GW 192.168.1.209
+   
+   VPCS> ping 192.168.1.209
+   84 bytes from 192.168.1.209 icmp_seq=1 ttl=255 time=0.519 ms
+   84 bytes from 192.168.1.209 icmp_seq=2 ttl=255 time=0.554 ms
+   84 bytes from 192.168.1.209 icmp_seq=3 ttl=255 time=0.662 ms
+   84 bytes from 192.168.1.209 icmp_seq=4 ttl=255 time=0.544 ms
+   84 bytes from 192.168.1.209 icmp_seq=5 ttl=255 time=0.516 ms
+   ```
