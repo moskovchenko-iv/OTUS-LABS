@@ -124,3 +124,29 @@
     !!!!!
     Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
     ```
+# Part 2: Verify SLAAC Address Assignment from R1
+    ```
+    DHCPPv6-CLIENT#sh run int e0/1
+    !
+    interface Ethernet0/1
+    no ip address
+    ipv6 address autoconfig
+    ipv6 enable
+    end
+    
+    DHCPPv6-CLIENT#sh run int e0/2
+    !
+    interface Ethernet0/2
+    no ip address
+    ipv6 address autoconfig
+    ipv6 enable
+    end
+    
+    DHCPPv6-CLIENT#sh ipv6 interface brief
+    Ethernet0/1            [up/up]
+        FE80::A8BB:CCFF:FE00:5010
+        2001:DB8:ACAD:1:A8BB:CCFF:FE00:5010
+    Ethernet0/2            [up/up]
+        FE80::A8BB:CCFF:FE00:5020
+        2001:DB8:ACAD:3:A8BB:CCFF:FE00:5020
+    ```
