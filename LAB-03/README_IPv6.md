@@ -327,5 +327,4 @@
    --- 2001:db8:acad:3::1 ping statistics ---
    4 packets transmitted, 4 received, 0% packet loss, time 8ms
    rtt min/avg/max/mdev = 1.285/3.732/11.035/4.216 ms
-   
    ```
