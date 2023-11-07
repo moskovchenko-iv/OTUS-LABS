@@ -158,7 +158,7 @@
 
 ![img_2.png](img_2.png)
 
-1. Проверяем конфигурацию PC-A.
+1. Проверяем конфигурацию ens4 interface(e1).
    ```
    [root@localhost ~]# nmcli dev show ens4
    GENERAL.DEVICE:                         ens4
@@ -235,7 +235,7 @@
    end
    ```
 # Part 5: Configure and verify DHCPv6 relay on R2
-1. Проверяем конфигурацию PC-B
+1. Проверяем конфигурацию ens5 interface(e2)
    ```
    [root@localhost ~]# nmcli dev show ens5
    GENERAL.DEVICE:                         ens5
