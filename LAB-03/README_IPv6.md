@@ -153,3 +153,10 @@
         FE80::A8BB:CCFF:FE00:5020
         2001:DB8:ACAD:3:A8BB:CCFF:FE00:5020
     ```
+# Part 3: Configure and Verify a DHCPv6 server on R1
+### Выполнение Ч3
+1. Step 1: Examine the configuration of PC-A in more detail.
+2. Настраиваем R1 для предоставления DHCPv6 без сохранения состояния.
+```
+
+```
