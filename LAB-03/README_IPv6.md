@@ -155,7 +155,7 @@
     ```
 # Part 3: Configure and Verify a DHCPv6 server on R1
 ### Выполнение Ч3
-1. Step 1: Examine the configuration of PC-A in more detail.
+1. Проверяем конфигурацию PC-A.
 2. Настраиваем R1 для предоставления DHCPv6 STATELESS.
    ```
    ipv6 dhcp pool R1-STATELESS
