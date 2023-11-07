@@ -156,6 +156,8 @@
 # Part 3: Configure and Verify a DHCPv6 server on R1
 ### Выполнение Ч3
 
+![img_2.png](img_2.png)
+
 1. Проверяем конфигурацию PC-A.
    ```
    [root@localhost ~]# nmcli dev show ens4
