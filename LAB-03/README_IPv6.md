@@ -157,6 +157,24 @@
 ### Выполнение Ч3
 
 1. Проверяем конфигурацию PC-A.
+   ```
+   [root@localhost ~]# nmcli dev show ens4
+   GENERAL.DEVICE:                         ens4
+   GENERAL.TYPE:                           ethernet
+   GENERAL.HWADDR:                         00:50:01:00:05:01
+   GENERAL.MTU:                            1500
+   GENERAL.STATE:                          100 (connected)
+   GENERAL.CONNECTION:                     ens4
+   GENERAL.CON-PATH:                       /org/freedesktop/NetworkManager/ActiveConnection/6
+   WIRED-PROPERTIES.CARRIER:               on
+   IP6.ADDRESS[1]:                         2001:db8:acad:1:8be9:70f6:c5b:ba2e/64
+   IP6.ADDRESS[2]:                         fe80::bf37:c8c0:65d4:113e/64
+   IP6.GATEWAY:                            fe80::1
+   IP6.ROUTE[1]:                           dst = fe80::/64, nh = ::, mt = 103
+   IP6.ROUTE[2]:                           dst = 2001:db8:acad:1::/64, nh = ::, mt = 103
+   IP6.ROUTE[3]:                           dst = ::/0, nh = fe80::1, mt = 103
+   IP6.ROUTE[4]:                           dst = ff00::/8, nh = ::, mt = 256, table=255
+   ```
 2. Настраиваем R1 для предоставления DHCPv6 STATELESS.
    ```
    ipv6 dhcp pool R1-STATELESS
@@ -216,6 +234,24 @@
    ```
 # Part 5: Configure and verify DHCPv6 relay on R2
 1. Проверяем конфигурацию PC-B
+   ```
+   [root@localhost ~]# nmcli dev show ens5
+   GENERAL.DEVICE:                         ens5
+   GENERAL.TYPE:                           ethernet
+   GENERAL.HWADDR:                         00:50:01:00:05:02
+   GENERAL.MTU:                            1500
+   GENERAL.STATE:                          100 (connected)
+   GENERAL.CONNECTION:                     ens5
+   GENERAL.CON-PATH:                       /org/freedesktop/NetworkManager/ActiveConnection/7
+   WIRED-PROPERTIES.CARRIER:               on
+   IP6.ADDRESS[1]:                         2001:db8:acad:3:b4e6:5853:4524:f829/64
+   IP6.ADDRESS[2]:                         fe80::4a42:184:be5d:3398/64
+   IP6.GATEWAY:                            fe80::1
+   IP6.ROUTE[1]:                           dst = fe80::/64, nh = ::, mt = 104
+   IP6.ROUTE[2]:                           dst = 2001:db8:acad:3::/64, nh = ::, mt = 104
+   IP6.ROUTE[3]:                           dst = ::/0, nh = fe80::1, mt = 104
+   IP6.ROUTE[4]:                           dst = ff00::/8, nh = ::, mt = 256, table=255
+   ```
 2. Настраиваем RELAY на R2
    ```
    interface Ethernet0/1
