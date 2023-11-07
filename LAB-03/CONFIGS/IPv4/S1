@@ -1,0 +1,114 @@
+!
+! Last configuration change at 12:20:31 MSK Tue Oct 31 2023
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+service compress-config
+!
+hostname S1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+clock timezone MSK 3 0
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain-lookup
+ip cef
+no ipv6 cef
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Ethernet0/0
+ no shutdown
+ description PC-A
+ switchport access vlan 100
+ switchport mode access
+ load-interval 60
+!
+interface Ethernet0/1
+ no shutdown
+ description PARKING_LOT
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface Ethernet0/2
+ no shutdown
+ description PARKING_LOT
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface Ethernet0/3
+ no shutdown
+ description R1
+ switchport trunk allowed vlan 100,200,1000
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 1000
+ switchport mode trunk
+ load-interval 60
+!
+interface Vlan200
+ no shutdown
+ ip address 192.168.1.130 255.255.255.224
+!
+ip default-gateway 192.168.1.129
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+ip route 0.0.0.0 0.0.0.0 192.168.1.129
+!
+!
+!
+!
+!
+control-plane
+!
+banner login 
+        *************************************************************
+        **         All activity is subject to monitoring.          **
+        **    Any UNAUTHORIZED access or use is PROHIBITED,        **
+        **             and may result in PROSECUTION.              **
+        **                         <>                          **
+        *************************************************************
+   
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+ transport input all
+!
+!
+end
