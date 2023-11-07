@@ -155,6 +155,7 @@
     ```
 # Part 3: Configure and Verify a DHCPv6 server on R1
 ### Выполнение Ч3
+
 1. Проверяем конфигурацию PC-A.
 2. Настраиваем R1 для предоставления DHCPv6 STATELESS.
    ```
@@ -247,4 +248,48 @@
    IP6.ROUTE[4]:                           dst = ff00::/8, nh = ::, mt = 256, table=255
    IP6.ROUTE[5]:                           dst = 2001:db8:acad:3:aaa:95a7:2cc:5137/128, nh = ::, mt = 102
    IP6.DNS[1]:                             2001:db8:acad::254
+   ```
+4. Проверяем связность
+   ```
+   [root@localhost ~]# ping 2001:db8:acad:2::1
+   PING 2001:db8:acad:2::1(2001:db8:acad:2::1) 56 data bytes
+   64 bytes from 2001:db8:acad:2::1: icmp_seq=1 ttl=64 time=11.1 ms
+   64 bytes from 2001:db8:acad:2::1: icmp_seq=2 ttl=64 time=1.24 ms
+   64 bytes from 2001:db8:acad:2::1: icmp_seq=3 ttl=64 time=1.49 ms
+   64 bytes from 2001:db8:acad:2::1: icmp_seq=4 ttl=64 time=1.36 ms
+   ^C
+   --- 2001:db8:acad:2::1 ping statistics ---
+   4 packets transmitted, 4 received, 0% packet loss, time 9ms
+   rtt min/avg/max/mdev = 1.242/3.793/11.084/4.210 ms
+   [root@localhost ~]# ping 2001:db8:acad:1::1
+   PING 2001:db8:acad:1::1(2001:db8:acad:1::1) 56 data bytes
+   64 bytes from 2001:db8:acad:1::1: icmp_seq=1 ttl=64 time=11.9 ms
+   64 bytes from 2001:db8:acad:1::1: icmp_seq=2 ttl=64 time=1.39 ms
+   64 bytes from 2001:db8:acad:1::1: icmp_seq=3 ttl=64 time=1.35 ms
+   64 bytes from 2001:db8:acad:1::1: icmp_seq=4 ttl=64 time=1.31 ms
+   ^C
+   --- 2001:db8:acad:1::1 ping statistics ---
+   4 packets transmitted, 4 received, 0% packet loss, time 8ms
+   rtt min/avg/max/mdev = 1.309/3.984/11.881/4.559 ms
+   [root@localhost ~]# ping 2001:db8:acad:2::2
+   PING 2001:db8:acad:2::2(2001:db8:acad:2::2) 56 data bytes
+   64 bytes from 2001:db8:acad:2::2: icmp_seq=1 ttl=63 time=1.56 ms
+   64 bytes from 2001:db8:acad:2::2: icmp_seq=2 ttl=63 time=1.64 ms
+   64 bytes from 2001:db8:acad:2::2: icmp_seq=3 ttl=63 time=1.72 ms
+   64 bytes from 2001:db8:acad:2::2: icmp_seq=4 ttl=63 time=1.52 ms
+   ^C
+   --- 2001:db8:acad:2::2 ping statistics ---
+   4 packets transmitted, 4 received, 0% packet loss, time 8ms
+   rtt min/avg/max/mdev = 1.518/1.610/1.724/0.084 ms
+   [root@localhost ~]# ping 2001:db8:acad:3::1
+   PING 2001:db8:acad:3::1(2001:db8:acad:3::1) 56 data bytes
+   64 bytes from 2001:db8:acad:3::1: icmp_seq=1 ttl=64 time=11.0 ms
+   64 bytes from 2001:db8:acad:3::1: icmp_seq=2 ttl=64 time=1.31 ms
+   64 bytes from 2001:db8:acad:3::1: icmp_seq=3 ttl=64 time=1.30 ms
+   64 bytes from 2001:db8:acad:3::1: icmp_seq=4 ttl=64 time=1.29 ms
+   ^C
+   --- 2001:db8:acad:3::1 ping statistics ---
+   4 packets transmitted, 4 received, 0% packet loss, time 8ms
+   rtt min/avg/max/mdev = 1.285/3.732/11.035/4.216 ms
+   
    ```
