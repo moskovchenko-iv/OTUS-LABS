@@ -200,23 +200,23 @@
    |-----------|---------------|-------------|---------------|-------------|
    | ✔ **R23** | Loopback0     |             | 10.50.0.23/24 |             |
    |           | ⬆ Ethernet0/0 | link-to-R22 | 10.0.0.10/31  |             |
-   |           | Ethernet0/1   | link-to-R25 |               |             |
-   |           | Ethernet0/2   | link-to-R24 |               |             |
+   |           | Ethernet0/1   | link-to-R25 | 10.50.2.5/31  |             |
+   |           | Ethernet0/2   | link-to-R24 | 10.50.2.3/31  |             |
    |           | Ethernet0/3   | free        |               |             |
    | ✔ **R24** | Loopback0     |             | 10.50.0.24/24 |             |
    |           | ⬆ Ethernet0/0 | link-to-R21 | 10.0.0.14/31  |             |
-   |           | Ethernet0/1   | link-to-R26 |               |             |
-   |           | Ethernet0/2   | link-to-R23 |               |             |
+   |           | Ethernet0/1   | link-to-R26 | 10.50.2.7/31  |             |
+   |           | Ethernet0/2   | link-to-R23 | 10.50.2.2/31  |             |
    |           | ⬆ Ethernet0/3 | link-to-R18 | 10.0.0.6/31   |             |
    | ✔ **R25** | Loopback0     |             | 10.50.0.25/24 |             |
-   |           | Ethernet0/0   | link-to-R23 |               |             |
+   |           | Ethernet0/0   | link-to-R23 | 10.50.2.4/31  |             |
    |           | ⬆ Ethernet0/1 | link-to-R27 | 10.0.0.17/31  |             |
-   |           | Ethernet0/2   | link-to-R26 |               |             |
+   |           | Ethernet0/2   | link-to-R26 | 10.50.2.9/31  |             |
    |           | ⬆ Ethernet0/3 | link-to-R28 | 10.0.0.19/31  |             |
    | ✔ **R26** | Loopback0     |             | 10.50.0.26/24 |             |
-   |           | Ethernet0/0   | link-to-R24 |               |             |
+   |           | Ethernet0/0   | link-to-R24 | 10.50.2.6/31  |             |
    |           | ⬆ Ethernet0/1 | link-to-R28 | 10.0.0.21/31  |             |
-   |           | Ethernet0/2   | link-to-R25 |               |             |
+   |           | Ethernet0/2   | link-to-R25 | 10.50.2.8/31  |             |
    |           | ⬆ Ethernet0/3 | link-to-R18 | 10.0.0.8/31   |             |
 
    ###  **Лабынтанги:**
