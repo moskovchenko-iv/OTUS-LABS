@@ -136,8 +136,8 @@
     | Hostname   | Interface     | Description      | IPv4-address   | Gateway        |
     |------------|---------------|------------------|----------------|----------------|
     | ✔ **R18**  | Loopback0     |                  | 10.20.0.18     |                |
-    |            | ↕ Ethernet0/0 | link-to-R16      | 10.20.2.5/31   |                |
-    |            | ↕ Ethernet0/1 | link-to-R17      | 10.20.2.3/31   |                |
+    |            | Ethernet0/0   | link-to-R16      | 10.20.2.5/31   |                |
+    |            | Ethernet0/1   | link-to-R17      | 10.20.2.3/31   |                |
     |            | ⬆ Ethernet0/2 | link-to-R24      | 10.0.0.7/31    |                |
     |            | ⬆ Ethernet0/3 | link-to-R26      | 10.0.0.9/31    |                |
     | ✔ **R17**  | Loopback0     |                  | 10.20.0.17     |                |
