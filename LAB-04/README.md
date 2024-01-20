@@ -58,8 +58,33 @@
       - ...
 2. Настраиваем ip адреса на каждом активном порту
 
-| Column 1 | Column 2 | Column 3 |
-|----------|----------|----------|
-| Row 1    | Cell 2   | Cell 3   |
-| Row 2    | Cell 5   | Cell 6   |
-| Row 3    | Cell 8   | Cell 9   |
+    Москва:
+
+    | Hostname | Interface   | Description | IPv4-address | Gateway |
+    |----------|-------------|-------------|--------------|---------|
+    | R14      | Ethernet0/0 | link-to-R12 | 10.10.2.5/31 |         |
+    |          | Ethernet0/1 | link-to-R13 | 10.10.2.7/31 |         |
+    |          | Ethernet0/2 | link-to-R22 |              |         |
+    |          | Ethernet0/3 | link-to-R19 | 10.10.2.3/31 |         |
+    | R15      | Ethernet0/0 |             |              |         |
+    |          | Ethernet0/1 |             |              |         |
+    |          | Ethernet0/2 |             |              |         |
+    |          | Ethernet0/3 |             |              |         |
+    | R19      | Ethernet0/0 |             |              |         |
+    |          | Ethernet0/1 |             |              |         |
+    |          | Ethernet0/2 |             |              |         |
+    |          | Ethernet0/3 |             |              |         |
+    | R12      | Ethernet0/0 |             |              |         |
+    |          | Ethernet0/1 |             |              |         |
+    |          | Ethernet0/2 |             |              |         |
+    |          | Ethernet0/3 |             |              |         |
+    | R13      | Ethernet0/0 |             |              |         |
+    |          | Ethernet0/1 |             |              |         |
+    |          | Ethernet0/2 |             |              |         |
+    |          | Ethernet0/3 |             |              |         |
+    | R20      | Ethernet0/0 |             |              |         |
+    |          | Ethernet0/1 |             |              |         |
+    |          | Ethernet0/2 |             |              |         |
+    |          | Ethernet0/3 |             |              |         |
+    | VPC1     | Ethernet0/0 |             |              |         |
+    | VPC2     | Ethernet0/1 |             |              |         |
