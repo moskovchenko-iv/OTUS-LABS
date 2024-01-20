@@ -121,12 +121,12 @@
     | ✔ **SW3**  | Loopback0     |                  | 10.10.0.3      |                |
     |            | Ethernet0/0   | link-to-SW4      |                |                |
     |            | Ethernet0/1   | link-to-SW5      |                |                |
-    |            | Ethernet0/2   | link-to-VPC1     |                |                |
+    |            | ⬇ Ethernet0/2 | link-to-VPC1     |                |                |
     |            | Ethernet0/3   | free             |                |                |
     | ✔ **SW2**  | Loopback0     |                  | 10.10.0.2      |                |
     |            | Ethernet0/0   | link-to-SW5      |                |                |
     |            | Ethernet0/1   | link-to-SW4      |                |                |
-    |            | Ethernet0/2   | link-to-VPC7     |                |                |
+    |            | ⬇ Ethernet0/2 | link-to-VPC7     |                |                |
     |            | Ethernet0/3   | free             |                |                |
     | ✔ **VPC1** | VPCS1         | 10.10.101.100/24 |                | 10.10.101.1/24 |
     | ✔ **VPC7** | VPCS1         | 10.10.102.100/24 |                | 10.10.102.1/24 |
@@ -162,13 +162,13 @@
     | ✔ **SW9**  | Loopback0     |                  | 10.20.0.9      |                |
     |            | Ethernet0/0   | po1.link-to-SW10 |                |                |
     |            | Ethernet0/1   | po1.link-to-SW10 |                |                |
-    |            | Ethernet0/2   | link-to-VPC8     |                |                |
+    |            | ⬇ Ethernet0/2 | link-to-VPC8     |                |                |
     |            | Ethernet0/3   | link-to-R17      |                |                |
     |            | Ethernet1/0   | link-to-R16      |                |                |
     | ✔ **SW10** | Loopback0     |                  | 10.20.0.10     |                |
     |            | Ethernet0/0   | po1.link-to-SW9  |                |                |
     |            | Ethernet0/1   | po1.link-to-SW9  |                |                |
-    |            | Ethernet0/2   | link-to-VPC      |                |                |
+    |            | ⬇ Ethernet0/2 | link-to-VPC      |                |                |
     |            | Ethernet0/3   | link-to-R16      |                |                |
     |            | Ethernet1/0   | link-to-R17      |                |                |
     | ✔ **VPC8** | VPCS1         | 10.20.101.100/24 |                | 10.20.101.1/24 |
