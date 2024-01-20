@@ -60,14 +60,14 @@
       - ...
 2. Настраиваем ip адреса на каждом активном порту
 
-    Москва:
+   ### **Москва:**
 
     | Hostname   | Interface     | Description      | IPv4-address   | Gateway        |
     |------------|---------------|------------------|----------------|----------------|
     | ✔ **R14**  | Loopback0     |                  | 10.10.0.14     |                |
     |            | Ethernet0/0   | link-to-R12      | 10.10.2.5/31   |                |
     |            | Ethernet0/1   | link-to-R13      | 10.10.2.7/31   |                |
-    |            | Ethernet0/2   | link-to-R22      | 10.0.0.3/31    |                |
+    |            | ⬆ Ethernet0/2 | link-to-R22      | 10.0.0.3/31    |                |
     |            | Ethernet0/3   | link-to-R19      | 10.10.2.3/31   |                |
     | ✔ **R15**  | Loopback0     |                  | 10.10.0.15     |                |
     |            | Ethernet0/0   | link-to-R13      | 10.10.2.11/31  |                |
@@ -130,6 +130,43 @@
     |            | Ethernet0/3   | free             |                |                |
     | ✔ **VPC1** | VPCS1         | 10.10.101.100/24 |                | 10.10.101.1/24 |
     | ✔ **VPC2** | VPCS1         | 10.10.102.100/24 |                | 10.10.102.1/24 |
+
+   ###  **С.-Петербург:**
+
+    | Hostname   | Interface     | Description | IPv4-address | Gateway        |
+    |------------|---------------|-------------|--------------|----------------|
+    | ✔ **R18**  | Loopback0     |             | 10.20.0.18   |                |
+    |            | Ethernet0/0   |             |              |                |
+    |            | Ethernet0/1   |             |              |                |
+    |            | Ethernet0/2   |             |              |                |
+    |            | Ethernet0/3   |             |              |                |
+    | ✔ **R17**  | Loopback0     |             | 10.20.0.17   |                |
+    |            | Ethernet0/0   |             |              |                |
+    |            | Ethernet0/1   |             |              |                |
+    |            | Ethernet0/2   |             |              |                |
+    |            | Ethernet0/3   |             |              |                |
+    | ✔ **R16**  | Loopback0     |             | 10.20.0.16   |                |
+    |            | Ethernet0/0   |             |              |                |
+    |            | Ethernet0/1   |             |              |                |
+    |            | Ethernet0/2   |             |              |                |
+    |            | Ethernet0/3   |             |              |                |
+    | ✔ **R32**  | Loopback0     |             | 10.20.0.32   |                |
+    |            | Ethernet0/0   |             |              |                |
+    |            | Ethernet0/1   |             |              |                |
+    |            | Ethernet0/2   |             |              |                |
+    |            | Ethernet0/3   |             |              |                |
+    | ✔ **SW9**  | Loopback0     |             | 10.20.0.9    |                |
+    |            | Ethernet0/0   |             |              |                |
+    |            | Ethernet0/1   |             |              |                |
+    |            | Ethernet0/2   |             |              |                |
+    |            | Ethernet0/3   |             |              |                |
+    | ✔ **SW10** | Loopback0     |             | 10.20.0.10   |                |
+    |            | Ethernet0/0   |             |              |                |
+    |            | Ethernet0/1   |             |              |                |
+    |            | Ethernet0/2   |             |              |                |
+    |            | Ethernet0/3   |             |              |                |
+
+
 3. Настроиv каждый VPC в каждом офисе в своем VLAN
     ```
     SW3# sh run int e0/2
