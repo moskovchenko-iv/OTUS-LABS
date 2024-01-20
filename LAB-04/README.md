@@ -174,6 +174,61 @@
     | ✔ **VPC8** | VPCS1         | 10.20.101.100/24 |                | 10.20.101.1 |
     | ✔ **VPC**  | VPCS1         | 10.20.102.100/24 |                | 10.20.102.1 |
 
+   ###  **Киторн:**
+
+    | Hostname  | Interface     | Description | IPv4-address  | Gateway     |
+    |-----------|---------------|-------------|---------------|-------------|
+    | ✔ **R22** | Loopback0     |             | 10.30.0.22/24 |             |
+    |           | ⬆ Ethernet0/0 | link-to-R14 |               |             |
+    |           | ⬆ Ethernet0/1 | link-to-R21 |               |             |
+    |           | ⬆ Ethernet0/2 | link-to-R23 |               |             |
+    |           | Ethernet0/3   | free        |               |             |
+
+   ###  **Ламас:**
+
+   | Hostname  | Interface     | Description | IPv4-address  | Gateway     |
+   |-----------|---------------|-------------|---------------|-------------|
+   | ✔ **R21** | Loopback0     |             | 10.40.0.21/24 |             |
+   |           | ⬆ Ethernet0/0 | link-to-R15 |               |             |
+   |           | ⬆ Ethernet0/1 | link-to-R22 |               |             |
+   |           | ⬆ Ethernet0/2 | link-to-R24 |               |             |
+   |           | Ethernet0/3   | free        |               |             |
+
+   ###  **Триада:**
+
+   | Hostname  | Interface     | Description | IPv4-address  | Gateway     |
+   |-----------|---------------|-------------|---------------|-------------|
+   | ✔ **R23** | Loopback0     |             | 10.50.0.23/24 |             |
+   |           | ⬆ Ethernet0/0 | link-to-R22 |               |             |
+   |           | Ethernet0/1   | link-to-R25 |               |             |
+   |           | Ethernet0/2   | link-to-R24 |               |             |
+   |           | Ethernet0/3   | free        |               |             |
+   | ✔ **R24** | Loopback0     |             | 10.50.0.24/24 |             |
+   |           | ⬆ Ethernet0/0 | link-to-R21 |               |             |
+   |           | Ethernet0/1   | link-to-R26 |               |             |
+   |           | Ethernet0/2   | link-to-R23 |               |             |
+   |           | ⬆ Ethernet0/3 | link-to-R18 |               |             |
+   | ✔ **R25** | Loopback0     |             | 10.50.0.25/24 |             |
+   |           | Ethernet0/0   | link-to-R23 |               |             |
+   |           | ⬆ Ethernet0/1 | link-to-R27 |               |             |
+   |           | Ethernet0/2   | link-to-R26 |               |             |
+   |           | ⬆ Ethernet0/3 | link-to-R28 |               |             |
+   | ✔ **R26** | Loopback0     |             | 10.50.0.26/24 |             |
+   |           | Ethernet0/0   | link-to-R24 |               |             |
+   |           | ⬆ Ethernet0/1 | link-to-R28 |               |             |
+   |           | Ethernet0/2   | link-to-R25 |               |             |
+   |           | ⬆ Ethernet0/3 | link-to-R18 |               |             |
+
+   ###  **Лабынтанги:**
+
+   | Hostname  | Interface     | Description | IPv4-address  | Gateway     |
+   |-----------|---------------|-------------|---------------|-------------|
+   | ✔ **R27** | Loopback0     |             | 10.60.0.27/24 |             |
+   |           | ⬆ Ethernet0/0 | link-to-R25 |               |             |
+   |           | Ethernet0/1   | free        |               |             |
+   |           | Ethernet0/2   | free        |               |             |
+   |           | Ethernet0/3   | free        |               |             |
+
    ###  **Чокурдах:**
 
     | Hostname    | Interface       | Description      | IPv4-address  | Gateway     |
