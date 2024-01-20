@@ -130,3 +130,22 @@
     |            | Ethernet0/3   | free             |                |                |
     | ✔ **VPC1** | VPCS1         | 10.10.101.100/24 |                | 10.10.101.1/24 |
     | ✔ **VPC2** | VPCS1         | 10.10.102.100/24 |                | 10.10.102.1/24 |
+3. Настроиv каждый VPC в каждом офисе в своем VLAN
+    ```
+    SW3# sh run int e0/2
+    !
+    interface Ethernet0/2
+      description link-to-VPC1
+      switchport access vlan 101
+      switchport mode access
+    end
+    
+   SW2# sh run int e0/2
+    !
+    interface Ethernet0/2
+      description link-to-VPC7
+      switchport access vlan 102
+      switchport mode access
+    end
+
+    ```
