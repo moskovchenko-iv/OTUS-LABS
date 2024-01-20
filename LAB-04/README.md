@@ -62,117 +62,135 @@
 
    ### **Москва:**
 
-    | Hostname   | Interface     | Description      | IPv4-address   | Gateway        |
-    |------------|---------------|------------------|----------------|----------------|
-    | ✔ **R14**  | Loopback0     |                  | 10.10.0.14/24  |                |
-    |            | Ethernet0/0   | link-to-R12      | 10.10.2.5/31   |                |
-    |            | Ethernet0/1   | link-to-R13      | 10.10.2.7/31   |                |
-    |            | ⬆ Ethernet0/2 | link-to-R22      | 10.0.0.3/31    |                |
-    |            | Ethernet0/3   | link-to-R19      | 10.10.2.3/31   |                |
-    | ✔ **R15**  | Loopback0     |                  | 10.10.0.15/24  |                |
-    |            | Ethernet0/0   | link-to-R13      | 10.10.2.11/31  |                |
-    |            | Ethernet0/1   | link-to-R12      | 10.10.2.9/31   |                |
-    |            | ⬆ Ethernet0/2 | link-to-R21      | 10.0.0.5/31    |                |
-    |            | Ethernet0/3   | link-to-R20      | 10.10.2.13/31  |                |
-    | ✔ **R19**  | Loopback0     |                  | 10.10.0.19/24  |                |
-    |            | Ethernet0/0   | link-to-R14      | 10.10.2.2/31   |                |
-    |            | Ethernet0/1   | free             |                |                |
-    |            | Ethernet0/2   | free             |                |                |
-    |            | Ethernet0/3   | free             |                |                |
-    | ✔ **R12**  | Loopback0     |                  | 10.10.0.12/24  |                |
-    |            | Ethernet0/0   | link-to-SW4      | 10.10.2.15/31  |                |
-    |            | Ethernet0/1   | link-to-SW5      | 10.10.2.17/31  |                |
-    |            | Ethernet0/2   | link-to-R14      | 10.10.2.4/31   |                |
-    |            | Ethernet0/3   | link-to-R15      | 10.10.2.8/31   |                |
-    | ✔ **R13**  | Loopback0     |                  | 10.10.0.13/24  |                |
-    |            | Ethernet0/0   | link-to-SW5      | 10.10.2.21/31  |                |
-    |            | Ethernet0/1   | link-to-SW4      | 10.10.2.19/31  |                |
-    |            | Ethernet0/2   | link-to-R15      | 10.10.2.10/31  |                |
-    |            | Ethernet0/3   | link-to-R14      | 10.10.2.6/31   |                |
-    | ✔ **R20**  | Loopback0     |                  | 10.10.0.20/24  |                |
-    |            | Ethernet0/0   | link-to-R15      | 10.10.2.12/31  |                |
-    |            | Ethernet0/1   | free             |                |                |
-    |            | Ethernet0/2   | free             |                |                |
-    |            | Ethernet0/3   | free             |                |                |
-    | ✔ **SW4**  | Loopback0     |                  | 10.10.0.4/24   |                |
-    |            | Ethernet0/0   | link-to-SW3      | 10.10.2.12/31  |                |
-    |            | Ethernet0/1   | link-to-SW2      |                |                |
-    |            | Ethernet0/2   | po1.link-to-SW5  |                |                |
-    |            | Ethernet0/3   | po1.link-to-SW5  |                |                |
-    |            | Ethernet1/0   | link-to-R12      | 10.10.2.14/31  |                |
-    |            | Ethernet1/1   | link-to-R13      |                |                |
-    |            | Port-channel1 | po1.link-to-SW5  | 10.10.2.23/31  |                |
-    |            | Vlan101       | int vlan 101     | 10.10.101.2/24 |                |
-    |            |               | vrrp-101         | 10.10.101.1/24 |                |
-    |            | Vlan102       | int vlan 102     | 10.10.102.2/24 |                |
-    |            |               | vrrp-102         | 10.10.102.1/24 |                |
-    | ✔ **SW5**  | Loopback0     |                  | 10.10.0.5/24   |                |
-    |            | Ethernet0/0   | link-to-SW2      |                |                |
-    |            | Ethernet0/1   | link-to-SW3      |                |                |
-    |            | Ethernet0/2   | po1.link-to-SW4  |                |                |
-    |            | Ethernet0/3   | po1.link-to-SW4  |                |                |
-    |            | Ethernet1/0   | link-to-R13      |                |                |
-    |            | Ethernet1/1   | link-to-R12      |                |                |
-    |            | Port-channel1 | po1.link-to-SW4  | 10.10.2.22/31  |                |
-    |            | Vlan101       | int vlan 101     | 10.10.101.3/24 |                |
-    |            |               | vrrp-101         | 10.10.101.1/24 |                |
-    |            | Vlan102       | int vlan 102     | 10.10.102.3/24 |                |
-    |            |               | vrrp-102         | 10.10.102.1/24 |                |
-    | ✔ **SW3**  | Loopback0     |                  | 10.10.0.3/24   |                |
-    |            | Ethernet0/0   | link-to-SW4      |                |                |
-    |            | Ethernet0/1   | link-to-SW5      |                |                |
-    |            | ⬇ Ethernet0/2 | link-to-VPC1     |                |                |
-    |            | Ethernet0/3   | free             |                |                |
-    | ✔ **SW2**  | Loopback0     |                  | 10.10.0.2/24   |                |
-    |            | Ethernet0/0   | link-to-SW5      |                |                |
-    |            | Ethernet0/1   | link-to-SW4      |                |                |
-    |            | ⬇ Ethernet0/2 | link-to-VPC7     |                |                |
-    |            | Ethernet0/3   | free             |                |                |
-    | ✔ **VPC1** | VPCS1         | 10.10.101.100/24 |                | 10.10.101.1/24 |
-    | ✔ **VPC7** | VPCS1         | 10.10.102.100/24 |                | 10.10.102.1/24 |
+    | Hostname   | Interface     | Description      | IPv4-address   | Gateway     |
+    |------------|---------------|------------------|----------------|-------------|
+    | ✔ **R14**  | Loopback0     |                  | 10.10.0.14/24  |             |
+    |            | Ethernet0/0   | link-to-R12      | 10.10.2.5/31   |             |
+    |            | Ethernet0/1   | link-to-R13      | 10.10.2.7/31   |             |
+    |            | ⬆ Ethernet0/2 | link-to-R22      | 10.0.0.3/31    |             |
+    |            | Ethernet0/3   | link-to-R19      | 10.10.2.3/31   |             |
+    | ✔ **R15**  | Loopback0     |                  | 10.10.0.15/24  |             |
+    |            | Ethernet0/0   | link-to-R13      | 10.10.2.11/31  |             |
+    |            | Ethernet0/1   | link-to-R12      | 10.10.2.9/31   |             |
+    |            | ⬆ Ethernet0/2 | link-to-R21      | 10.0.0.5/31    |             |
+    |            | Ethernet0/3   | link-to-R20      | 10.10.2.13/31  |             |
+    | ✔ **R19**  | Loopback0     |                  | 10.10.0.19/24  |             |
+    |            | Ethernet0/0   | link-to-R14      | 10.10.2.2/31   |             |
+    |            | Ethernet0/1   | free             |                |             |
+    |            | Ethernet0/2   | free             |                |             |
+    |            | Ethernet0/3   | free             |                |             |
+    | ✔ **R12**  | Loopback0     |                  | 10.10.0.12/24  |             |
+    |            | Ethernet0/0   | link-to-SW4      | 10.10.2.15/31  |             |
+    |            | Ethernet0/1   | link-to-SW5      | 10.10.2.17/31  |             |
+    |            | Ethernet0/2   | link-to-R14      | 10.10.2.4/31   |             |
+    |            | Ethernet0/3   | link-to-R15      | 10.10.2.8/31   |             |
+    | ✔ **R13**  | Loopback0     |                  | 10.10.0.13/24  |             |
+    |            | Ethernet0/0   | link-to-SW5      | 10.10.2.21/31  |             |
+    |            | Ethernet0/1   | link-to-SW4      | 10.10.2.19/31  |             |
+    |            | Ethernet0/2   | link-to-R15      | 10.10.2.10/31  |             |
+    |            | Ethernet0/3   | link-to-R14      | 10.10.2.6/31   |             |
+    | ✔ **R20**  | Loopback0     |                  | 10.10.0.20/24  |             |
+    |            | Ethernet0/0   | link-to-R15      | 10.10.2.12/31  |             |
+    |            | Ethernet0/1   | free             |                |             |
+    |            | Ethernet0/2   | free             |                |             |
+    |            | Ethernet0/3   | free             |                |             |
+    | ✔ **SW4**  | Loopback0     |                  | 10.10.0.4/24   |             |
+    |            | Ethernet0/0   | link-to-SW3      | 10.10.2.12/31  |             |
+    |            | Ethernet0/1   | link-to-SW2      |                |             |
+    |            | Ethernet0/2   | po1.link-to-SW5  |                |             |
+    |            | Ethernet0/3   | po1.link-to-SW5  |                |             |
+    |            | Ethernet1/0   | link-to-R12      | 10.10.2.14/31  |             |
+    |            | Ethernet1/1   | link-to-R13      |                |             |
+    |            | Port-channel1 | po1.link-to-SW5  | 10.10.2.23/31  |             |
+    |            | Vlan101       | int vlan 101     | 10.10.101.2/24 |             |
+    |            |               | vrrp-101         | 10.10.101.1/24 |             |
+    |            | Vlan102       | int vlan 102     | 10.10.102.2/24 |             |
+    |            |               | vrrp-102         | 10.10.102.1/24 |             |
+    | ✔ **SW5**  | Loopback0     |                  | 10.10.0.5/24   |             |
+    |            | Ethernet0/0   | link-to-SW2      |                |             |
+    |            | Ethernet0/1   | link-to-SW3      |                |             |
+    |            | Ethernet0/2   | po1.link-to-SW4  |                |             |
+    |            | Ethernet0/3   | po1.link-to-SW4  |                |             |
+    |            | Ethernet1/0   | link-to-R13      |                |             |
+    |            | Ethernet1/1   | link-to-R12      |                |             |
+    |            | Port-channel1 | po1.link-to-SW4  | 10.10.2.22/31  |             |
+    |            | Vlan101       | int vlan 101     | 10.10.101.3/24 |             |
+    |            |               | vrrp-101         | 10.10.101.1/24 |             |
+    |            | Vlan102       | int vlan 102     | 10.10.102.3/24 |             |
+    |            |               | vrrp-102         | 10.10.102.1/24 |             |
+    | ✔ **SW3**  | Loopback0     |                  | 10.10.0.3/24   |             |
+    |            | Ethernet0/0   | link-to-SW4      |                |             |
+    |            | Ethernet0/1   | link-to-SW5      |                |             |
+    |            | ⬇ Ethernet0/2 | link-to-VPC1     |                |             |
+    |            | Ethernet0/3   | free             |                |             |
+    | ✔ **SW2**  | Loopback0     |                  | 10.10.0.2/24   |             |
+    |            | Ethernet0/0   | link-to-SW5      |                |             |
+    |            | Ethernet0/1   | link-to-SW4      |                |             |
+    |            | ⬇ Ethernet0/2 | link-to-VPC7     |                |             |
+    |            | Ethernet0/3   | free             |                |             |
+    | ✔ **VPC1** | VPCS1         | 10.10.101.100/24 |                | 10.10.101.1 |
+    | ✔ **VPC7** | VPCS1         | 10.10.102.100/24 |                | 10.10.102.1 |
 
    ###  **С.-Петербург:**
 
-    | Hostname   | Interface     | Description      | IPv4-address   | Gateway        |
-    |------------|---------------|------------------|----------------|----------------|
-    | ✔ **R18**  | Loopback0     |                  | 10.20.0.18/24  |                |
-    |            | Ethernet0/0   | link-to-R16      | 10.20.2.5/31   |                |
-    |            | Ethernet0/1   | link-to-R17      | 10.20.2.3/31   |                |
-    |            | ⬆ Ethernet0/2 | link-to-R24      | 10.0.0.7/31    |                |
-    |            | ⬆ Ethernet0/3 | link-to-R26      | 10.0.0.9/31    |                |
-    | ✔ **R17**  | Loopback0     |                  | 10.20.0.17/24  |                |
-    |            | Ethernet0/0   | link-to-SW9      | 10.20.101.2/24 |                |
-    |            |               | vrrp-101         | 10.20.101.1/24 |                |
-    |            | Ethernet0/1   | link-to-R18      | 10.20.2.2/31   |                |
-    |            | Ethernet0/2   | link-to-SW10     | 10.20.102.2/24 |                |
-    |            |               | vrrp-102         | 10.20.102.1/24 |                |
-    |            | Ethernet0/3   | free             |                |                |
-    | ✔ **R16**  | Loopback0     |                  | 10.20.0.16/24  |                |
-    |            | Ethernet0/0   | link-to-SW10     | 10.20.102.3/24 |                |
-    |            |               | vrrp-102         | 10.20.102.1/24 |                |
-    |            | Ethernet0/1   | link-to-R18      | 10.20.2.4/31   |                |
-    |            | Ethernet0/2   | link-to-SW9      | 10.20.101.3/24 |                |
-    |            |               | vrrp-101         | 10.20.101.1/24 |                |
-    |            | Ethernet0/3   | link-to-R32      | 10.20.2.6/31   |                |
-    | ✔ **R32**  | Loopback0     |                  | 10.20.0.32/24  |                |
-    |            | Ethernet0/0   | link-to-R16      | 10.20.2.7/31   |                |
-    |            | Ethernet0/1   |                  |                |                |
-    |            | Ethernet0/2   |                  |                |                |
-    |            | Ethernet0/3   |                  |                |                |
-    | ✔ **SW9**  | Loopback0     |                  | 10.20.0.9/24   |                |
-    |            | Ethernet0/0   | po1.link-to-SW10 |                |                |
-    |            | Ethernet0/1   | po1.link-to-SW10 |                |                |
-    |            | ⬇ Ethernet0/2 | link-to-VPC8     |                |                |
-    |            | Ethernet0/3   | link-to-R17      |                |                |
-    |            | Ethernet1/0   | link-to-R16      |                |                |
-    | ✔ **SW10** | Loopback0     |                  | 10.20.0.10/24  |                |
-    |            | Ethernet0/0   | po1.link-to-SW9  |                |                |
-    |            | Ethernet0/1   | po1.link-to-SW9  |                |                |
-    |            | ⬇ Ethernet0/2 | link-to-VPC      |                |                |
-    |            | Ethernet0/3   | link-to-R16      |                |                |
-    |            | Ethernet1/0   | link-to-R17      |                |                |
-    | ✔ **VPC8** | VPCS1         | 10.20.101.100/24 |                | 10.20.101.1/24 |
-    | ✔ **VPC**  | VPCS1         | 10.20.102.100/24 |                | 10.20.102.1/24 |
+    | Hostname   | Interface     | Description      | IPv4-address   | Gateway     |
+    |------------|---------------|------------------|----------------|-------------|
+    | ✔ **R18**  | Loopback0     |                  | 10.20.0.18/24  |             |
+    |            | Ethernet0/0   | link-to-R16      | 10.20.2.5/31   |             |
+    |            | Ethernet0/1   | link-to-R17      | 10.20.2.3/31   |             |
+    |            | ⬆ Ethernet0/2 | link-to-R24      | 10.0.0.7/31    |             |
+    |            | ⬆ Ethernet0/3 | link-to-R26      | 10.0.0.9/31    |             |
+    | ✔ **R17**  | Loopback0     |                  | 10.20.0.17/24  |             |
+    |            | Ethernet0/0   | link-to-SW9      | 10.20.101.2/24 |             |
+    |            |               | vrrp-101         | 10.20.101.1/24 |             |
+    |            | Ethernet0/1   | link-to-R18      | 10.20.2.2/31   |             |
+    |            | Ethernet0/2   | link-to-SW10     | 10.20.102.2/24 |             |
+    |            |               | vrrp-102         | 10.20.102.1/24 |             |
+    |            | Ethernet0/3   | free             |                |             |
+    | ✔ **R16**  | Loopback0     |                  | 10.20.0.16/24  |             |
+    |            | Ethernet0/0   | link-to-SW10     | 10.20.102.3/24 |             |
+    |            |               | vrrp-102         | 10.20.102.1/24 |             |
+    |            | Ethernet0/1   | link-to-R18      | 10.20.2.4/31   |             |
+    |            | Ethernet0/2   | link-to-SW9      | 10.20.101.3/24 |             |
+    |            |               | vrrp-101         | 10.20.101.1/24 |             |
+    |            | Ethernet0/3   | link-to-R32      | 10.20.2.6/31   |             |
+    | ✔ **R32**  | Loopback0     |                  | 10.20.0.32/24  |             |
+    |            | Ethernet0/0   | link-to-R16      | 10.20.2.7/31   |             |
+    |            | Ethernet0/1   |                  |                |             |
+    |            | Ethernet0/2   |                  |                |             |
+    |            | Ethernet0/3   |                  |                |             |
+    | ✔ **SW9**  | Loopback0     |                  | 10.20.0.9/24   |             |
+    |            | Ethernet0/0   | po1.link-to-SW10 |                |             |
+    |            | Ethernet0/1   | po1.link-to-SW10 |                |             |
+    |            | ⬇ Ethernet0/2 | link-to-VPC8     |                |             |
+    |            | Ethernet0/3   | link-to-R17      |                |             |
+    |            | Ethernet1/0   | link-to-R16      |                |             |
+    | ✔ **SW10** | Loopback0     |                  | 10.20.0.10/24  |             |
+    |            | Ethernet0/0   | po1.link-to-SW9  |                |             |
+    |            | Ethernet0/1   | po1.link-to-SW9  |                |             |
+    |            | ⬇ Ethernet0/2 | link-to-VPC      |                |             |
+    |            | Ethernet0/3   | link-to-R16      |                |             |
+    |            | Ethernet1/0   | link-to-R17      |                |             |
+    | ✔ **VPC8** | VPCS1         | 10.20.101.100/24 |                | 10.20.101.1 |
+    | ✔ **VPC**  | VPCS1         | 10.20.102.100/24 |                | 10.20.102.1 |
+
+   ###  **Чокурдах:**
+
+    | Hostname    | Interface       | Description      | IPv4-address  | Gateway     |
+    |-------------|-----------------|------------------|---------------|-------------|
+    | ✔ **R28**   | Loopback0       |                  | 10.70.0.28/24 |             |
+    |             | ⬆ Ethernet0/0   | link-to-R26      | 10.0.0.11/31  |             |
+    |             | ⬆ Ethernet0/1   | link-to-R25      | 10.0.0.13/31  |             |
+    |             | Ethernet0/2     | link-to-SW29     |               |             |
+    |             | Ethernet0/2.101 | int-for-VPC30    | 10.70.101.1/24 |             |
+    |             | Ethernet0/2.102 | int-for-VPC31    | 10.70.102.1/24 |             |
+    |             | Ethernet0/3     | free             |               |             |
+    | ✔ **SW29**  | Loopback0       |                  | 10.70.0.29/24 |             |
+    |             | ⬇ Ethernet0/0   | link-to-VPC30    |               |             |
+    |             | ⬇ Ethernet0/1   | link-to-VPC31    |               |             |
+    |             | Ethernet0/2     | link-to-R28      |               |             |
+    | ✔ **VPC30** | VPCS1         | 10.70.101.100/24 |                | 10.70.101.1 |
+    | ✔ **VPC31** | VPCS1         | 10.70.102.100/24 |                | 10.70.102.1 |
 
 
 3. Настроим каждый VPC в каждом офисе в своем VLAN
