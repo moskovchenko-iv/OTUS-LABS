@@ -62,7 +62,8 @@
 
     | Hostname   | Interface   | Description | IPv4-address | Gateway |
     |------------|-------------|-------------|--------------|---------|
-    | ✔ **R14**  | Ethernet0/0 | link-to-R12 | 10.10.2.5/31 |         |
+    | ✔ **R14**  | Loopback0   |             | 10.10.0.14   |         |
+    |            | Ethernet0/0 | link-to-R12 | 10.10.2.5/31 |         |
     |            | Ethernet0/1 | link-to-R13 | 10.10.2.7/31 |         |
     |            | Ethernet0/2 | link-to-R22 |              |         |
     |            | Ethernet0/3 | link-to-R19 | 10.10.2.3/31 |         |
