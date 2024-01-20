@@ -97,6 +97,8 @@
     | ✔ **SW4**  | Loopback0     |                 | 10.10.0.4      |         |
     |            | Ethernet0/0   | link-to-SW3     | 10.10.2.12/31  |         |
     |            | Ethernet0/1   | link-to-SW2     |                |         |
+    |            | Ethernet0/2   | po1.link-to-SW5 |                |         |
+    |            | Ethernet0/3   | po1.link-to-SW5 |                |         |
     |            | Ethernet1/0   | link-to-R12     | 10.10.2.14/31  |         |
     |            | Ethernet1/1   | link-to-R13     |                |         |
     |            | Port-channel1 | po1.link-to-SW5 | 10.10.2.23/31  |         |
@@ -105,17 +107,24 @@
     |            | Vlan102       | int vlan 102    | 10.10.102.2/24 |         |
     |            |               | vrrp-102        | 10.10.102.1/24 |         |
     | ✔ **SW5**  | Loopback0     |                 | 10.10.0.5      |         |
-    |            | Ethernet0/0   | link-to-R15     | 10.10.2.12/31  |         |
-    |            | Ethernet0/1   | free            |                |         |
-    |            | Ethernet0/2   | free            |                |         |
-    |            | Ethernet0/3   | free            |                |         |
+    |            | Ethernet0/0   | link-to-SW2     |                |         |
+    |            | Ethernet0/1   | link-to-SW3     |                |         |
+    |            | Ethernet0/2   | po1.link-to-SW4 |                |         |
+    |            | Ethernet0/3   | po1.link-to-SW4 |                |         |
+    |            | Ethernet1/0   | link-to-R13     |                |         |
+    |            | Ethernet1/1   | link-to-R12     |                |         |
+    |            | Port-channel1 | po1.link-to-SW4 | 10.10.2.22/31  |         |
+    |            | Vlan101       | int vlan 101    | 10.10.101.3/24 |         |
+    |            |               | vrrp-101        | 10.10.101.1/24 |         |
+    |            | Vlan102       | int vlan 102    | 10.10.102.3/24 |         |
+    |            |               | vrrp-102        | 10.10.102.1/24 |         |
     | ✔ **SW3**  | Loopback0     |                 | 10.10.0.3      |         |
-    |            | Ethernet0/0   | link-to-R15     | 10.10.2.12/31  |         |
+    |            | Ethernet0/0   | link-to-R15     |                |         |
     |            | Ethernet0/1   | free            |                |         |
     |            | Ethernet0/2   | free            |                |         |
     |            | Ethernet0/3   | free            |                |         |
     | ✔ **SW2**  | Loopback0     |                 | 10.10.0.2      |         |
-    |            | Ethernet0/0   | link-to-R15     | 10.10.2.12/31  |         |
+    |            | Ethernet0/0   | link-to-R15     |                |         |
     |            | Ethernet0/1   | free            |                |         |
     |            | Ethernet0/2   | free            |                |         |
     |            | Ethernet0/3   | free            |                |         |
