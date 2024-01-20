@@ -60,31 +60,31 @@
 
     Москва:
 
-    | Hostname | Interface   | Description | IPv4-address | Gateway |
-    |----------|-------------|-------------|--------------|---------|
-    | R14      | Ethernet0/0 | link-to-R12 | 10.10.2.5/31 |         |
-    |          | Ethernet0/1 | link-to-R13 | 10.10.2.7/31 |         |
-    |          | Ethernet0/2 | link-to-R22 |              |         |
-    |          | Ethernet0/3 | link-to-R19 | 10.10.2.3/31 |         |
-    | R15      | Ethernet0/0 |             |              |         |
-    |          | Ethernet0/1 |             |              |         |
-    |          | Ethernet0/2 |             |              |         |
-    |          | Ethernet0/3 |             |              |         |
-    | R19      | Ethernet0/0 |             |              |         |
-    |          | Ethernet0/1 |             |              |         |
-    |          | Ethernet0/2 |             |              |         |
-    |          | Ethernet0/3 |             |              |         |
-    | R12      | Ethernet0/0 |             |              |         |
-    |          | Ethernet0/1 |             |              |         |
-    |          | Ethernet0/2 |             |              |         |
-    |          | Ethernet0/3 |             |              |         |
-    | R13      | Ethernet0/0 |             |              |         |
-    |          | Ethernet0/1 |             |              |         |
-    |          | Ethernet0/2 |             |              |         |
-    |          | Ethernet0/3 |             |              |         |
-    | R20      | Ethernet0/0 |             |              |         |
-    |          | Ethernet0/1 |             |              |         |
-    |          | Ethernet0/2 |             |              |         |
-    |          | Ethernet0/3 |             |              |         |
-    | VPC1     | Ethernet0/0 |             |              |         |
-    | VPC2     | Ethernet0/1 |             |              |         |
+    | Hostname   | Interface   | Description | IPv4-address | Gateway |
+    |------------|-------------|-------------|--------------|---------|
+    | ✔ **R14**  | Ethernet0/0 | link-to-R12 | 10.10.2.5/31 |         |
+    |            | Ethernet0/1 | link-to-R13 | 10.10.2.7/31 |         |
+    |            | Ethernet0/2 | link-to-R22 |              |         |
+    |            | Ethernet0/3 | link-to-R19 | 10.10.2.3/31 |         |
+    | ✔ **R15**  | Ethernet0/0 |             |              |         |
+    |            | Ethernet0/1 |             |              |         |
+    |            | Ethernet0/2 |             |              |         |
+    |            | Ethernet0/3 |             |              |         |
+    | ✔ **R19**  | Ethernet0/0 |             |              |         |
+    |            | Ethernet0/1 |             |              |         |
+    |            | Ethernet0/2 |             |              |         |
+    |            | Ethernet0/3 |             |              |         |
+    | ✔ **R12**  | Ethernet0/0 |             |              |         |
+    |            | Ethernet0/1 |             |              |         |
+    |            | Ethernet0/2 |             |              |         |
+    |            | Ethernet0/3 |             |              |         |
+    | ✔ **R13**  | Ethernet0/0 |             |              |         |
+    |            | Ethernet0/1 |             |              |         |
+    |            | Ethernet0/2 |             |              |         |
+    |            | Ethernet0/3 |             |              |         |
+    | ✔ **R20**  | Ethernet0/0 |             |              |         |
+    |            | Ethernet0/1 |             |              |         |
+    |            | Ethernet0/2 |             |              |         |
+    |            | Ethernet0/3 |             |              |         |
+    | ✔ **VPC1** | Ethernet0/0 |             |              |         |
+    | ✔ **VPC2** | Ethernet0/1 |             |              |         |
