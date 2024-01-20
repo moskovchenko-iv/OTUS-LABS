@@ -1,0 +1,146 @@
+
+!
+! Last configuration change at 22:17:26 UTC Sat Jan 20 2024
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+service compress-config
+!
+hostname SW4
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+!
+!
+spanning-tree mode mst
+spanning-tree extend system-id
+spanning-tree mst 0 priority 24576
+!
+vlan internal allocation policy ascending
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ no shutdown
+ ip address 10.10.0.4 255.255.255.0
+!
+interface Port-channel1
+ no shutdown
+ no switchport
+ ip address 10.10.2.23 255.255.255.254
+!
+interface Ethernet0/0
+ no shutdown
+ description link-to-SW3
+ switchport trunk allowed vlan 101
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ load-interval 60
+ spanning-tree bpdufilter enable
+!
+interface Ethernet0/1
+ no shutdown
+ description link-to-SW2
+ switchport trunk allowed vlan 102
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ load-interval 60
+ spanning-tree bpdufilter enable
+!
+interface Ethernet0/2
+ no shutdown
+ description po1.link-to-SW5
+ no switchport
+ no ip address
+ duplex auto
+ channel-group 1 mode on
+!
+interface Ethernet0/3
+ no shutdown
+ description po1.link-to-SW5
+ no switchport
+ no ip address
+ duplex auto
+ channel-group 1 mode on
+!
+interface Ethernet1/0
+ no shutdown
+ description link-to-R12
+ no switchport
+ ip address 10.10.2.14 255.255.255.254
+ duplex auto
+!
+interface Ethernet1/1
+ no shutdown
+ description link-to-R13
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ load-interval 60
+!
+interface Ethernet1/2
+ no shutdown
+!
+interface Ethernet1/3
+ no shutdown
+!
+interface Vlan101
+ no shutdown
+ ip address 10.10.101.2 255.255.255.0
+ vrrp 101 ip 10.10.101.1
+ vrrp 101 priority 110
+!
+interface Vlan102
+ no shutdown
+ ip address 10.10.102.2 255.255.255.0
+ vrrp 102 ip 10.10.102.1
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+!
+!
+end
+
