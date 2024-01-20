@@ -147,5 +147,12 @@
       switchport access vlan 102
       switchport mode access
     end
-
     ```
+4. Настроиваем VLAN/Loopbackup interface управления для сетевых устройств.
+   ```
+   R14# sh run int l0
+   !
+   interface Loopback0
+     ip address 10.10.0.14 255.255.255.0
+   end
+   ```
