@@ -150,7 +150,7 @@
     ```
 4. Настроиваем VLAN/Loopbackup interface управления для сетевых устройств.
    ```
-   R14# sh run int l0
+   R14# sh run int Loopback0
    !
    interface Loopback0
      ip address 10.10.0.14 255.255.255.0
