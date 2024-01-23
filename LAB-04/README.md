@@ -100,7 +100,7 @@
     |            | Ethernet0/2   | po1.link-to-SW5  |                |             |
     |            | Ethernet0/3   | po1.link-to-SW5  |                |             |
     |            | Ethernet1/0   | link-to-R12      | 10.10.2.14/31  |             |
-    |            | Ethernet1/1   | link-to-R13      | пропустил l3   |             |
+    |            | Ethernet1/1   | link-to-R13      | 10.10.2.24/31  |             |
     |            | Port-channel1 | po1.link-to-SW5  | 10.10.2.23/31  |             |
     |            | Vlan101       | int vlan 101     | 10.10.101.2/24 |             |
     |            |               | vrrp-101         | 10.10.101.1/24 |             |
