@@ -36,7 +36,7 @@
    R24            L2   Et0/2       10.50.2.2       UP    8        R24.02
    R25            L1   Et0/1       10.50.2.4       UP    7        R25.01
    R25            L2   Et0/1       10.50.2.4       UP    8        R25.01
-    
+          
    R24# show isis neighbors
    System Id      Type Interface   IP Address      State Holdtime Circuit Id
    R23            L2   Et0/2       10.50.2.3       UP    25       R24.02
@@ -63,7 +63,14 @@
                           [115/30] via 10.50.2.2, 00:40:58, Ethernet0/2
    i L2     10.50.2.6/31 [115/20] via 10.50.2.2, 00:41:24, Ethernet0/2
    i L1     10.50.2.8/31 [115/20] via 10.50.2.4, 00:51:11, Ethernet0/1
-    
+   
+   R23# show ipv6 route isis
+   I2  FD00::10:50:2:6/127 [115/20]
+   via FE80::2, Ethernet0/2
+   I1  FD00::10:50:2:8/127 [115/20]
+   via FE80::1, Ethernet0/1
+
+
    R24# show ip route isis
          10.0.0.0/8 is variably subnetted, 14 subnets, 2 masks
    i L2     10.50.0.23/32 [115/20] via 10.50.2.3, 00:42:54, Ethernet0/2
@@ -72,7 +79,14 @@
    i L2     10.50.0.26/32 [115/20] via 10.50.2.6, 00:42:28, Ethernet0/1
    i L2     10.50.2.4/31 [115/20] via 10.50.2.3, 00:42:54, Ethernet0/2
    i L2     10.50.2.8/31 [115/20] via 10.50.2.6, 00:42:28, Ethernet0/1
-    
+
+   R24# show ipv6 route isis
+   I2  FD00::10:50:2:4/127 [115/20]
+   via FE80::1, Ethernet0/2
+   I2  FD00::10:50:2:8/127 [115/20]
+   via FE80::2, Ethernet0/1
+
+
    R25# show ip route isis
          10.0.0.0/8 is variably subnetted, 16 subnets, 3 masks
    i L1     10.50.0.23/32 [115/20] via 10.50.2.5, 00:53:42, Ethernet0/0
@@ -81,7 +95,14 @@
    i L2     10.50.0.26/32 [115/20] via 10.50.2.8, 00:43:07, Ethernet0/2
    i L1     10.50.2.2/31 [115/20] via 10.50.2.5, 00:53:42, Ethernet0/0
    i L2     10.50.2.6/31 [115/20] via 10.50.2.8, 00:43:07, Ethernet0/2
-    
+   
+   R25# show ipv6 route isis
+   I1  FD00::10:50:2:2/127 [115/20]
+   via FE80::2, Ethernet0/0
+   I2  FD00::10:50:2:6/127 [115/20]
+   via FE80::1, Ethernet0/2
+
+
    R26# show ip route isis
          10.0.0.0/8 is variably subnetted, 16 subnets, 3 masks
    i L2     10.50.0.23/32 [115/30] via 10.50.2.9, 00:43:39, Ethernet0/2
@@ -90,5 +111,11 @@
    i L2     10.50.0.25/32 [115/20] via 10.50.2.9, 00:43:39, Ethernet0/2
    i L2     10.50.2.2/31 [115/20] via 10.50.2.7, 00:43:39, Ethernet0/0
    i L2     10.50.2.4/31 [115/20] via 10.50.2.9, 00:43:39, Ethernet0/2
-    
+
+   R26# show ipv6 route isis
+   I2  FD00::10:50:2:2/127 [115/20]
+   via FE80::1, Ethernet0/0
+   I2  FD00::10:50:2:4/127 [115/20]
+   via FE80::2, Ethernet0/2
+
     ```
