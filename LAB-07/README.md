@@ -27,7 +27,8 @@
    is-type level-2-only
    
    На интерфейсах:
-   ip router isis 
+   ip router isis
+   ipv6 router isis
    ```
    Проверим соседство:
    ```
