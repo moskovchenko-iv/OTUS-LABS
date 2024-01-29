@@ -1,0 +1,146 @@
+
+!
+! Last configuration change at 07:59:27 UTC Sun Jan 28 2024
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname R26
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ no shutdown
+ ip address 10.50.0.26 255.255.255.255
+ ip router isis
+!
+interface Ethernet0/0
+ no shutdown
+ description link-to-R24
+ ip address 10.50.2.6 255.255.255.254
+ ip router isis
+!
+interface Ethernet0/1
+ no shutdown
+ description link-to-R28
+ ip address 10.0.0.21 255.255.255.254
+!
+interface Ethernet0/2
+ no shutdown
+ description link-to-R25
+ ip address 10.50.2.8 255.255.255.254
+ ip router isis
+!
+interface Ethernet0/3
+ no shutdown
+ description link-to-R18
+ ip address 10.0.0.8 255.255.255.254
+!
+interface Ethernet1/0
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/1
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no shutdown
+ no ip address
+ shutdown
+!
+router isis
+ net 49.0026.0026.0026.0026.00
+ is-type level-2-only
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+ip route 10.70.101.0 255.255.255.0 10.0.0.20
+ip route 10.70.102.0 255.255.255.0 10.0.0.20
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+ transport input none
+!
+!
+end
+
+
