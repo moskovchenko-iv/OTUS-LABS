@@ -56,7 +56,7 @@
    ```
    Проверим таблицы маршрутизации:
    ```
-    R23# show ip route isis
+   R23# show ip route isis
          10.0.0.0/8 is variably subnetted, 12 subnets, 2 masks
    i L2     10.50.0.24/32 [115/20] via 10.50.2.2, 00:41:24, Ethernet0/2
    i L1     10.50.0.25/32 [115/20] via 10.50.2.4, 00:51:11, Ethernet0/1
