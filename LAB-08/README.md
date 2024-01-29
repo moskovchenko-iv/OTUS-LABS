@@ -14,24 +14,39 @@ router eigrp named
  address-family ipv4 unicast autonomous-system 2
   !
   af-interface Ethernet0/3
-   summary-address 0.0.0.0 0.0.0.0              # R32 получает только маршрут по умолчанию
+   summary-address 0.0.0.0 0.0.0.0
   exit-af-interface
   !
   af-interface Ethernet0/1
-   summary-address 10.20.0.0 255.255.0.0        # R16-17 анонсируют только суммарные префиксы
+   summary-address 10.20.0.0 255.255.0.0
   exit-af-interface
   !
   af-interface Ethernet0/0
-   passive-interface                            # не шлем пакеты в сторону пользователей
+   passive-interface
   exit-af-interface
   !
   af-interface Ethernet0/2
-   passive-interface                            # не шлем пакеты в сторону пользователей
+   passive-interface
   exit-af-interface
   !
   topology base
   exit-af-topology
-  network 10.20.0.0 0.0.255.255                 # указываем сети для анонса
+  network 10.20.0.0 0.0.255.255
+  eigrp router-id 16.16.16.16
+ exit-address-family
+ !
+ address-family ipv6 unicast autonomous-system 2
+  !
+  af-interface Ethernet0/3
+   summary-address ::/0
+  exit-af-interface
+  !
+  af-interface Ethernet0/1
+   summary-address FD00::10:20:0:0/96
+  exit-af-interface
+  !
+  topology base
+  exit-af-topology
   eigrp router-id 16.16.16.16
  exit-address-family
  
@@ -44,6 +59,17 @@ D        10.20.0.18/32 [90/1024640] via 10.20.2.5, 01:04:52, Ethernet0/1
 D        10.20.0.32/32 [90/1024640] via 10.20.2.7, 01:05:21, Ethernet0/3
 D        10.20.2.2/31 [90/1536000] via 10.20.2.5, 01:03:51, Ethernet0/1
 
+R16# show ipv6 route eigrp
+D   ::/0 [5/1280]
+     via Null0, directly connected
+D   FD00::10:20:0:0/96 [5/1280]
+     via Null0, directly connected
+D   FD00::10:20:0:18/128 [90/1024640]
+     via FE80::1, Ethernet0/1
+D   FD00::10:20:0:32/128 [90/1024640]
+     via FE80::2, Ethernet0/3
+D   FD00::10:20:2:2/127 [90/1536000]
+     via FE80::1, Ethernet0/1
 ```
 ```
 R17
@@ -53,20 +79,31 @@ router eigrp named
  address-family ipv4 unicast autonomous-system 2
   !
   af-interface Ethernet0/1
-   summary-address 10.20.0.0 255.255.0.0        # R16-17 анонсируют только суммарные префиксы
+   summary-address 10.20.0.0 255.255.0.0
   exit-af-interface
   !
   af-interface Ethernet0/0
-   passive-interface                            # не шлем пакеты в сторону пользователей
+   passive-interface
   exit-af-interface
   !
   af-interface Ethernet0/2
-   passive-interface                            # не шлем пакеты в сторону пользователей
+   passive-interface
   exit-af-interface
   !
   topology base
   exit-af-topology
-  network 10.20.0.0 0.0.255.255                 # указываем сети для анонса
+  network 10.20.0.0 0.0.255.255
+  eigrp router-id 17.17.17.17
+ exit-address-family
+ !
+ address-family ipv6 unicast autonomous-system 2
+  !
+  af-interface Ethernet0/1
+   summary-address FD00::10:20:0:0/96
+  exit-af-interface
+  !
+  topology base
+  exit-af-topology
   eigrp router-id 17.17.17.17
  exit-address-family
 
@@ -77,6 +114,13 @@ D        10.20.0.0/16 is a summary, 01:04:21, Null0
 D        10.20.0.18/32 [90/1024640] via 10.20.2.3, 01:03:48, Ethernet0/1
 D        10.20.2.4/31 [90/1536000] via 10.20.2.3, 01:02:47, Ethernet0/1
 
+R17# show ipv6 route eigrp
+D   FD00::10:20:0:0/96 [5/1280]
+     via Null0, directly connected
+D   FD00::10:20:0:18/128 [90/1024640]
+     via FE80::1, Ethernet0/1
+D   FD00::10:20:2:4/127 [90/1536000]
+     via FE80::1, Ethernet0/1
 ```
 ```
 R18
