@@ -1,0 +1,186 @@
+
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname R16
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ no shutdown
+ ip address 10.20.0.16 255.255.255.255
+ ipv6 address FE80::10:20:0:16 link-local
+ ipv6 address FD00::10:20:0:16/128
+ ipv6 enable
+ ipv6 eigrp 2
+!
+interface Ethernet0/0
+ no shutdown
+ description link-to-SW10
+ ip address 10.20.102.3 255.255.255.0
+ ipv6 address FD00::10:20:102:1/112 anycast
+ ipv6 enable
+ ipv6 eigrp 2
+ vrrp 102 ip 10.20.102.1
+ vrrp 102 priority 110
+!
+interface Ethernet0/1
+ no shutdown
+ description link-to-R18
+ ip address 10.20.2.4 255.255.255.254
+ ip summary-address eigrp 1 10.20.0.0 255.255.0.0
+ ipv6 address FE80::2 link-local
+ ipv6 address FD00::10:20:2:4/127
+ ipv6 enable
+ ipv6 eigrp 2
+!
+interface Ethernet0/2
+ no shutdown
+ description link-to-SW9
+ ip address 10.20.101.3 255.255.255.0
+ ipv6 address FD00::10:20:101:1/112 anycast
+ ipv6 enable
+ ipv6 eigrp 2
+ vrrp 101 ip 10.20.101.1
+!
+interface Ethernet0/3
+ no shutdown
+ description link-to-R32
+ ip address 10.20.2.6 255.255.255.254
+ ip summary-address eigrp 1 0.0.0.0 0.0.0.0
+ ipv6 address FE80::1 link-local
+ ipv6 address FD00::10:20:2:6/127
+ ipv6 enable
+ ipv6 eigrp 2
+!
+!
+router eigrp 1
+ network 10.20.0.0 0.0.255.255
+ passive-interface Ethernet0/2
+ passive-interface Ethernet0/0
+ shutdown
+!
+!
+router eigrp named
+ !
+ address-family ipv4 unicast autonomous-system 2
+  !
+  af-interface Ethernet0/3
+   summary-address 0.0.0.0 0.0.0.0
+  exit-af-interface
+  !
+  af-interface Ethernet0/1
+   summary-address 10.20.0.0 255.255.0.0
+  exit-af-interface
+  !
+  af-interface Ethernet0/0
+   passive-interface
+  exit-af-interface
+  !
+  af-interface Ethernet0/2
+   passive-interface
+  exit-af-interface
+  !
+  topology base
+  exit-af-topology
+  network 10.20.0.0 0.0.255.255
+  eigrp router-id 16.16.16.16
+ exit-address-family
+ !
+ address-family ipv6 unicast autonomous-system 2
+  !
+  af-interface Ethernet0/3
+   summary-address ::/0
+  exit-af-interface
+  !
+  af-interface Ethernet0/1
+   summary-address FD00::10:20:0:0/96
+  exit-af-interface
+  !
+  topology base
+  exit-af-topology
+  eigrp router-id 16.16.16.16
+ exit-address-family
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+ transport input none
+!
+!
+end
