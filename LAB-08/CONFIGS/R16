@@ -1,5 +1,7 @@
 
 !
+! Last configuration change at 12:06:46 UTC Tue Jan 30 2024
+!
 version 15.4
 service timestamps debug datetime msec
 service timestamps log datetime msec
@@ -120,12 +122,9 @@ router eigrp named
  !
  address-family ipv4 unicast autonomous-system 2
   !
-  af-interface Ethernet0/3
-   summary-address 0.0.0.0 0.0.0.0
-  exit-af-interface
-  !
   af-interface Ethernet0/1
-   summary-address 10.20.0.0 255.255.0.0
+   summary-address 10.20.2.0 255.255.255.0
+   summary-address 10.20.100.0 255.255.252.0
   exit-af-interface
   !
   af-interface Ethernet0/0
@@ -137,6 +136,7 @@ router eigrp named
   exit-af-interface
   !
   topology base
+   distribute-list prefix sum_default_ipv4 out Ethernet0/3
   exit-af-topology
   network 10.20.0.0 0.0.255.255
   eigrp router-id 16.16.16.16
@@ -144,15 +144,21 @@ router eigrp named
  !
  address-family ipv6 unicast autonomous-system 2
   !
-  af-interface Ethernet0/3
-   summary-address ::/0
+  af-interface Ethernet0/1
+   summary-address FD00::10:20:100:0/104
+   summary-address FD00::10:20:2:0/112
   exit-af-interface
   !
-  af-interface Ethernet0/1
-   summary-address FD00::10:20:0:0/96
+  af-interface Ethernet0/0
+   passive-interface
+  exit-af-interface
+  !
+  af-interface Ethernet0/2
+   passive-interface
   exit-af-interface
   !
   topology base
+   distribute-list prefix-list sum_default_ipv6 out Ethernet0/3
   exit-af-topology
   eigrp router-id 16.16.16.16
  exit-address-family
@@ -164,6 +170,10 @@ no ip http server
 no ip http secure-server
 !
 !
+ip prefix-list sum_default_ipv4 seq 10 permit 0.0.0.0/0
+!
+!
+ipv6 prefix-list sum_default_ipv6 seq 10 permit ::/0
 !
 !
 control-plane

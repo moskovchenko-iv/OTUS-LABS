@@ -1,5 +1,7 @@
 
 !
+! Last configuration change at 12:30:53 UTC Tue Jan 30 2024
+!
 version 15.4
 service timestamps debug datetime msec
 service timestamps log datetime msec
@@ -114,6 +116,7 @@ router eigrp named
  address-family ipv4 unicast autonomous-system 2
   !
   topology base
+   redistribute static metric 100000 1000 255 1 1500
   exit-af-topology
   network 10.20.0.0 0.0.255.255
   eigrp router-id 18.18.18.18
@@ -122,6 +125,7 @@ router eigrp named
  address-family ipv6 unicast autonomous-system 2
   !
   topology base
+   redistribute static metric 100000 1000 255 1 1500
   exit-af-topology
   eigrp router-id 18.18.18.18
  exit-address-family
@@ -131,7 +135,9 @@ ip forward-protocol nd
 !
 no ip http server
 no ip http secure-server
+ip route 0.0.0.0 0.0.0.0 Null0
 !
+ipv6 route ::/0 Null0
 !
 !
 !

@@ -1,5 +1,7 @@
 
 !
+! Last configuration change at 12:32:02 UTC Tue Jan 30 2024
+!
 version 15.4
 service timestamps debug datetime msec
 service timestamps log datetime msec
@@ -114,6 +116,7 @@ router eigrp named
   !
   topology base
   exit-af-topology
+  eigrp router-id 32.32.32.32
  exit-address-family
 !
 ip forward-protocol nd
