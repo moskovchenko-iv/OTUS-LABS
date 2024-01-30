@@ -56,8 +56,6 @@ router eigrp named
 !
 ip prefix-list sum_default_ipv4 seq 10 permit 0.0.0.0/0
 ipv6 prefix-list sum_default_ipv6 seq 10 permit ::/0
-
-
  
 R16# show ip route eigrp
 D*EX  0.0.0.0/0 [170/6144000] via 10.20.2.5, 00:12:54, Ethernet0/1
@@ -186,7 +184,6 @@ D   FD00::10:20:2:0/112 [90/1536000]   via FE80::2, Ethernet0/1
                                        via FE80::2, Ethernet0/0
 D   FD00::10:20:100:0/104 [90/1536000] via FE80::2, Ethernet0/1
                                        via FE80::2, Ethernet0/0
-
 ```
 ```
 R32
