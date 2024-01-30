@@ -213,5 +213,4 @@ D*EX  0.0.0.0/0 [170/6656000] via 10.20.2.6, 00:36:11, Ethernet0/0
 
 R32# show ipv6 route eigrp
 EX  ::/0 [170/6656000] via FE80::1, Ethernet0/0
-
 ```
