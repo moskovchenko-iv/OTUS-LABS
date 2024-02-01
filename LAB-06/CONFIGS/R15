@@ -1,0 +1,148 @@
+
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname R15
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ no shutdown
+ ip address 10.10.0.15 255.255.255.255
+ ip ospf 1 area 0
+ ipv6 address FD00::A0A:F/128
+ ipv6 enable
+ ipv6 ospf 1 area 0
+!
+interface Ethernet0/0
+ no shutdown
+ description link-to-R13
+ ip address 10.10.2.11 255.255.255.254
+ ip ospf 1 area 0
+ ipv6 address FE80::1 link-local
+ ipv6 address FD00::10:10:2:11/127
+ ipv6 enable
+ ipv6 ospf 1 area 0
+!
+interface Ethernet0/1
+ no shutdown
+ description link-to-R12
+ ip address 10.10.2.9 255.255.255.254
+ ip ospf 1 area 0
+ ipv6 address FE80::1 link-local
+ ipv6 address FD00::10:10:2:9/127
+ ipv6 enable
+ ipv6 ospf 1 area 0
+!
+interface Ethernet0/2
+ no shutdown
+ ip address 10.0.0.5 255.255.255.254
+!
+interface Ethernet0/3
+ no shutdown
+ description link-to-R20
+ ip address 10.10.2.13 255.255.255.254
+ ip ospf 1 area 102
+ ipv6 address FE80::1 link-local
+ ipv6 address FD00::10:10:2:13/127
+ ipv6 enable
+ ipv6 ospf 1 area 102
+!
+router ospf 1
+ router-id 15.15.15.15
+ area 102 filter-list prefix FILTER_IPV4-AREA_101 in
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+!
+!
+ip prefix-list FILTER_IPV4-AREA_101 seq 5 deny 10.10.0.19/32
+ip prefix-list FILTER_IPV4-AREA_101 seq 10 deny 10.10.2.2/31
+ip prefix-list FILTER_IPV4-AREA_101 seq 15 permit 0.0.0.0/0 le 32
+ipv6 router ospf 1
+ router-id 15.15.15.15
+ area 102 filter-list prefix FILTER_IPV6-AREA_101 in
+!
+!
+!
+ipv6 prefix-list FILTER_IPV6-AREA_101 seq 5 deny FD00::10:10:0:19/128
+ipv6 prefix-list FILTER_IPV6-AREA_101 seq 10 deny FD00::10:10:2:2/127
+ipv6 prefix-list FILTER_IPV6-AREA_101 seq 15 permit ::/0 le 128
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+ transport input none
+!
+!
+end
