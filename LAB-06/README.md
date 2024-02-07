@@ -9,10 +9,16 @@
 2. Отобразим на роутерах пункты задания относительно принадлежности зон, а также укажем типы Area
    ```
    Настройки на R14:
-   
+
    router ospf 1
    router-id 14.14.14.14
    area 101 stub no-summary
+   passive-interface default
+   no passive-interface Ethernet0/0
+   no passive-interface Ethernet0/1
+   no passive-interface Ethernet0/3
+   no passive-interface Loopback0
+   no passive-interface Loopback1
    default-information originate
    !
    ip route 0.0.0.0 0.0.0.0 Null0
@@ -23,6 +29,12 @@
    router-id 14.14.14.14
    area 101 stub no-summary
    default-information originate
+   passive-interface default
+   no passive-interface Ethernet0/0
+   no passive-interface Ethernet0/1
+   no passive-interface Ethernet0/3
+   no passive-interface Loopback0
+   no passive-interface Loopback1
    
    R14# show ip route ospf
    O IA     10.10.0.4/32 [110/21] via 10.10.2.6, 03:12:47, Ethernet0/1
@@ -76,14 +88,29 @@
    ```
    ```
    Настройки на R15:
-   
+
    router ospf 1
    router-id 15.15.15.15
    area 102 filter-list prefix FILTER_IPV4-AREA_101 in
+   redistribute bgp 1001 subnets
+   passive-interface default
+   no passive-interface Ethernet0/0
+   no passive-interface Ethernet0/1
+   no passive-interface Ethernet0/3
+   no passive-interface Ethernet1/0
+   no passive-interface Loopback0
+   no passive-interface Loopback1
    !
    ipv6 router ospf 1
    router-id 15.15.15.15
    area 102 filter-list prefix FILTER_IPV6-AREA_101 in
+   passive-interface default
+   no passive-interface Ethernet0/0
+   no passive-interface Ethernet0/1
+   no passive-interface Ethernet0/3
+   no passive-interface Ethernet1/0
+   no passive-interface Loopback0
+   no passive-interface Loopback1
    !
    ip prefix-list FILTER_IPV4-AREA_101 seq 5 deny 10.10.0.19/32
    ip prefix-list FILTER_IPV4-AREA_101 seq 10 deny 10.10.2.2/31
@@ -153,10 +180,16 @@
    router ospf 1
    router-id 19.19.19.19
    area 101 stub
+   passive-interface default
+   no passive-interface Ethernet0/0
+   no passive-interface Loopback0
    !
    ipv6 router ospf 1
    router-id 19.19.19.19
    area 101 stub
+   passive-interface default
+   no passive-interface Ethernet0/0
+   no passive-interface Loopback0
 
    Маршруты на R19:
    
@@ -168,12 +201,18 @@
    ```
    ```
    Настройки на R20
-   
+
    router ospf 1
    router-id 20.20.20.20
+   passive-interface default
+   no passive-interface Ethernet0/0
+   no passive-interface Loopback0
    !
    ipv6 router ospf 1
    router-id 20.20.20.20
+   passive-interface default
+   no passive-interface Ethernet0/0
+   no passive-interface Loopback0
 
    Маршруты на R20:
    
@@ -215,13 +254,28 @@
    ```
    ```
    Настройки на R12:
+
    router ospf 1
    router-id 12.12.12.12
    area 10 stub
+   passive-interface default
+   no passive-interface Ethernet0/0
+   no passive-interface Ethernet0/1
+   no passive-interface Ethernet0/2
+   no passive-interface Ethernet0/3
+   no passive-interface Ethernet1/0
+   no passive-interface Loopback0
    !
    ipv6 router ospf 1
    router-id 12.12.12.12
    area 10 stub
+   passive-interface default
+   no passive-interface Ethernet0/0
+   no passive-interface Ethernet0/1
+   no passive-interface Ethernet0/2
+   no passive-interface Ethernet0/3
+   no passive-interface Ethernet1/0
+   no passive-interface Loopback0
 
    Маршруты на R12:
    
@@ -269,20 +323,28 @@
    ```
    ```
    Настройки на R13:
-   
+
    router ospf 1
    router-id 13.13.13.13
    area 10 stub
-   !
-   ip forward-protocol nd
-   !
-   !
-   no ip http server
-   no ip http secure-server
+   passive-interface default
+   no passive-interface Ethernet0/0
+   no passive-interface Ethernet0/1
+   no passive-interface Ethernet0/2
+   no passive-interface Ethernet0/3
+   no passive-interface Ethernet1/0
+   no passive-interface Loopback0
    !
    ipv6 router ospf 1
    router-id 13.13.13.13
    area 10 stub
+   passive-interface default
+   no passive-interface Ethernet0/0
+   no passive-interface Ethernet0/1
+   no passive-interface Ethernet0/2
+   no passive-interface Ethernet0/3
+   no passive-interface Ethernet1/0
+   no passive-interface Loopback0
    
    Маршруты на R13:
    
@@ -327,14 +389,26 @@
    ```
    ```
    Настройки на SW4:
-   
+
    router ospf 1
    router-id 4.4.4.4
    area 10 stub
+   passive-interface default
+   no passive-interface Ethernet0/0
+   no passive-interface Ethernet0/1
+   no passive-interface Ethernet1/0
+   no passive-interface Ethernet1/1
+   no passive-interface Loopback0
    !
    ipv6 router ospf 1
    router-id 4.4.4.4
    area 10 stub
+   passive-interface default
+   no passive-interface Ethernet0/0
+   no passive-interface Ethernet0/1
+   no passive-interface Ethernet1/0
+   no passive-interface Ethernet1/1
+   no passive-interface Loopback0
    
    Маршруты на SW4:
    
@@ -397,20 +471,26 @@
    ```
    ```
    Настройки на SW5:
-   
+
    router ospf 1
    router-id 5.5.5.5
    area 10 stub
-   !
-   ip forward-protocol nd
-   !
-   !
-   no ip http server
-   no ip http secure-server
+   passive-interface default
+   no passive-interface Ethernet0/0
+   no passive-interface Ethernet0/1
+   no passive-interface Ethernet1/0
+   no passive-interface Ethernet1/1
+   no passive-interface Loopback0
    !
    ipv6 router ospf 1
    router-id 5.5.5.5
    area 10 stub
+   passive-interface default
+   no passive-interface Ethernet0/0
+   no passive-interface Ethernet0/1
+   no passive-interface Ethernet1/0
+   no passive-interface Ethernet1/1
+   no passive-interface Loopback0
 
    Маршруты на SW5:
 
