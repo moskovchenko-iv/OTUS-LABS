@@ -1,5 +1,7 @@
 
 !
+! Last configuration change at 16:42:55 UTC Wed Feb 7 2024
+!
 version 15.4
 service timestamps debug datetime msec
 service timestamps log datetime msec
@@ -97,6 +99,9 @@ interface Ethernet0/3
 router ospf 1
  router-id 19.19.19.19
  area 101 stub
+ passive-interface default
+ no passive-interface Ethernet0/0
+ no passive-interface Loopback0
 !
 ip forward-protocol nd
 !
@@ -107,6 +112,9 @@ no ip http secure-server
 ipv6 router ospf 1
  router-id 19.19.19.19
  area 101 stub
+ passive-interface default
+ no passive-interface Ethernet0/0
+ no passive-interface Loopback0
 !
 !
 !
@@ -129,3 +137,5 @@ line vty 0 4
 !
 !
 end
+
+

@@ -1,6 +1,6 @@
-
+        
 !
-! Last configuration change at 07:14:58 UTC Thu Feb 1 2024
+! Last configuration change at 13:58:12 UTC Wed Feb 7 2024
 !
 version 15.4
 service timestamps debug datetime msec
@@ -51,7 +51,7 @@ multilink bundle-name authenticated
 redundancy
 !
 !
-!
+! 
 !
 !
 !
@@ -147,6 +147,12 @@ interface Ethernet1/3
 router ospf 1
  router-id 5.5.5.5
  area 10 stub
+ passive-interface default
+ no passive-interface Ethernet0/0
+ no passive-interface Ethernet0/1
+ no passive-interface Ethernet1/0
+ no passive-interface Ethernet1/1
+ no passive-interface Loopback0
 !
 ip forward-protocol nd
 !
@@ -157,6 +163,12 @@ no ip http secure-server
 ipv6 router ospf 1
  router-id 5.5.5.5
  area 10 stub
+ passive-interface default
+ no passive-interface Ethernet0/0
+ no passive-interface Ethernet0/1
+ no passive-interface Ethernet1/0
+ no passive-interface Ethernet1/1
+ no passive-interface Loopback0
 !
 !
 !
@@ -179,3 +191,5 @@ line vty 0 4
 !
 !
 end
+
+    

@@ -1,4 +1,6 @@
-
+        
+!
+! Last configuration change at 13:52:14 UTC Wed Feb 7 2024
 !
 version 15.4
 service timestamps debug datetime msec
@@ -48,7 +50,7 @@ multilink bundle-name authenticated
 redundancy
 !
 !
-!
+! 
 !
 !
 !
@@ -109,8 +111,13 @@ interface Ethernet0/3
 !
 interface Ethernet1/0
  no shutdown
- no ip address
- shutdown
+ description link-to-R13
+ ip address 10.10.2.26 255.255.255.254
+ ip ospf 1 area 0
+ ipv6 address FE80::1 link-local
+ ipv6 address FD00::10:10:2:26/127
+ ipv6 enable
+ ipv6 ospf 1 area 0
 !
 interface Ethernet1/1
  no shutdown
@@ -130,6 +137,13 @@ interface Ethernet1/3
 router ospf 1
  router-id 12.12.12.12
  area 10 stub
+ passive-interface default
+ no passive-interface Ethernet0/0
+ no passive-interface Ethernet0/1
+ no passive-interface Ethernet0/2
+ no passive-interface Ethernet0/3
+ no passive-interface Ethernet1/0
+ no passive-interface Loopback0
 !
 ip forward-protocol nd
 !
@@ -140,6 +154,13 @@ no ip http secure-server
 ipv6 router ospf 1
  router-id 12.12.12.12
  area 10 stub
+ passive-interface default
+ no passive-interface Ethernet0/0
+ no passive-interface Ethernet0/1
+ no passive-interface Ethernet0/2
+ no passive-interface Ethernet0/3
+ no passive-interface Ethernet1/0
+ no passive-interface Loopback0
 !
 !
 !
@@ -162,3 +183,5 @@ line vty 0 4
 !
 !
 end
+
+    

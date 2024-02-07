@@ -1,5 +1,7 @@
 
 !
+! Last configuration change at 13:48:45 UTC Wed Feb 7 2024
+!
 version 15.4
 service timestamps debug datetime msec
 service timestamps log datetime msec
@@ -69,6 +71,14 @@ interface Loopback0
  ipv6 enable
  ipv6 ospf 1 area 0
 !
+interface Loopback1
+ no shutdown
+ description REAL-IP-FOR-TEST
+ ip address 123.15.15.1 255.255.255.0
+ ip ospf 1 area 0
+ ipv6 address 2001::123:15:15:1/112
+ ipv6 enable
+!
 interface Ethernet0/0
  no shutdown
  description link-to-R13
@@ -91,6 +101,7 @@ interface Ethernet0/1
 !
 interface Ethernet0/2
  no shutdown
+ description link-to-R21-LAMAS
  ip address 10.0.0.5 255.255.255.254
 !
 interface Ethernet0/3
@@ -103,23 +114,78 @@ interface Ethernet0/3
  ipv6 enable
  ipv6 ospf 1 area 102
 !
+interface Ethernet1/0
+ no shutdown
+ description link-to-R14
+ ip address 10.10.2.25 255.255.255.254
+ ip ospf 1 area 0
+ ipv6 address FE80::2 link-local
+ ipv6 address FD00::10:10:2:25/127
+ ipv6 enable
+ ipv6 ospf 1 area 0
+!
+interface Ethernet1/1
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no shutdown
+ no ip address
+ shutdown
+!
 router ospf 1
  router-id 15.15.15.15
  area 102 filter-list prefix FILTER_IPV4-AREA_101 in
+ redistribute bgp 1001 subnets
+ passive-interface default
+ no passive-interface Ethernet0/0
+ no passive-interface Ethernet0/1
+ no passive-interface Ethernet0/3
+ no passive-interface Ethernet1/0
+ no passive-interface Loopback0
+ no passive-interface Loopback1
+!
+router bgp 1001
+ bgp log-neighbor-changes
+ neighbor 10.0.0.4 remote-as 301
+ neighbor 10.10.0.14 remote-as 1001
+ neighbor 10.10.0.14 update-source Loopback0
+ !
+ address-family ipv4
+  network 123.15.15.0 mask 255.255.255.0
+  neighbor 10.0.0.4 activate
+  neighbor 10.10.0.14 activate
+  neighbor 10.10.0.14 next-hop-self
+ exit-address-family
 !
 ip forward-protocol nd
 !
 !
 no ip http server
 no ip http secure-server
+ip route 0.0.0.0 0.0.0.0 Null0
 !
 !
 ip prefix-list FILTER_IPV4-AREA_101 seq 5 deny 10.10.0.19/32
 ip prefix-list FILTER_IPV4-AREA_101 seq 10 deny 10.10.2.2/31
 ip prefix-list FILTER_IPV4-AREA_101 seq 15 permit 0.0.0.0/0 le 32
+ipv6 route ::/0 Null0
 ipv6 router ospf 1
  router-id 15.15.15.15
  area 102 filter-list prefix FILTER_IPV6-AREA_101 in
+ passive-interface default
+ no passive-interface Ethernet0/0
+ no passive-interface Ethernet0/1
+ no passive-interface Ethernet0/3
+ no passive-interface Ethernet1/0
+ no passive-interface Loopback0
+ no passive-interface Loopback1
 !
 !
 !
@@ -146,3 +212,5 @@ line vty 0 4
 !
 !
 end
+
+
