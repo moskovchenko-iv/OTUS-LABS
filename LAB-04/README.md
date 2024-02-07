@@ -69,11 +69,13 @@
     |            | Ethernet0/1   | link-to-R13      | 10.10.2.7/31   |             |
     |            | ⬆ Ethernet0/2 | link-to-R22      | 10.0.0.3/31    |             |
     |            | Ethernet0/3   | link-to-R19      | 10.10.2.3/31   |             |
+    |            | Ethernet1/0   | link-to-R15      | 10.10.2.10/31  |             |
     | ✔ **R15**  | Loopback0     |                  | 10.10.0.15/32  |             |
     |            | Ethernet0/0   | link-to-R13      | 10.10.2.11/31  |             |
     |            | Ethernet0/1   | link-to-R12      | 10.10.2.9/31   |             |
     |            | ⬆ Ethernet0/2 | link-to-R21      | 10.0.0.5/31    |             |
     |            | Ethernet0/3   | link-to-R20      | 10.10.2.13/31  |             |
+    |            | Ethernet1/0   | link-to-R14      | 10.10.2.11/31  |             |
     | ✔ **R19**  | Loopback0     |                  | 10.10.0.19/32  |             |
     |            | Ethernet0/0   | link-to-R14      | 10.10.2.2/31   |             |
     |            | Ethernet0/1   | free             |                |             |
@@ -84,11 +86,13 @@
     |            | Ethernet0/1   | link-to-SW5      | 10.10.2.17/31  |             |
     |            | Ethernet0/2   | link-to-R14      | 10.10.2.4/31   |             |
     |            | Ethernet0/3   | link-to-R15      | 10.10.2.8/31   |             |
+    |            | Ethernet1/0   | link-to-R13      | 10.10.2.12/31  |             |
     | ✔ **R13**  | Loopback0     |                  | 10.10.0.13/32  |             |
     |            | Ethernet0/0   | link-to-SW5      | 10.10.2.21/31  |             |
     |            | Ethernet0/1   | link-to-SW4      | 10.10.2.19/31  |             |
     |            | Ethernet0/2   | link-to-R15      | 10.10.2.10/31  |             |
     |            | Ethernet0/3   | link-to-R14      | 10.10.2.6/31   |             |
+    |            | Ethernet1/0   | link-to-R12      | 10.10.2.13/31  |             |
     | ✔ **R20**  | Loopback0     |                  | 10.10.0.20/32  |             |
     |            | Ethernet0/0   | link-to-R15      | 10.10.2.12/31  |             |
     |            | Ethernet0/1   | free             |                |             |
