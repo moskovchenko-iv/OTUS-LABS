@@ -207,3 +207,112 @@
    ```
 3. Настроим eBGP между Ламас и Триада
    По аналогии настраиваем сессии между R24 и R21 проверяем сессии, анонсы, связность:
+   ```
+   R21# show ip bgp ipv4 unicast summary
+   Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+   10.0.0.5        4         1001     122     122       10    0    0 01:42:20        3
+   10.0.0.13       4          101     123     123       10    0    0 01:42:20        3
+   10.0.0.14       4          520      42      49       10    0    0 00:34:42        1
+   
+   R21# show ip bgp ipv6 unicast summary
+   Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+   FD00::10:0:0:5  4         1001     113     128       23    0    0 01:37:29        1
+   FD00::10:0:0:13 4          101      93      99       23    0    0 01:09:43        2
+   FD00::10:0:0:14 4          520      42      52       23    0    0 00:34:54        1
+
+   R24# show ip bgp ipv4 unicast summary
+   Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+   10.0.0.15       4          301      51      44        7    0    0 00:36:36        4
+   
+   R24# show ip bgp ipv6 unicast summary
+   Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+   FD00::10:0:0:15 4          301      54      44        6    0    0 00:36:42        4
+
+   R21# ping 123.24.24.1
+   Sending 5, 100-byte ICMP Echos to 123.24.24.1, timeout is 2 seconds:
+   !!!!!
+   Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+   
+   R21# ping 2001::123:24:24:1
+   Sending 5, 100-byte ICMP Echos to 2001::123:24:24:1, timeout is 2 seconds:
+   !!!!!
+   Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+
+   R24# ping 123.21.21.1
+   Sending 5, 100-byte ICMP Echos to 123.21.21.1, timeout is 2 seconds:
+   !!!!!
+   Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+   
+   R24# ping 2001::123:21:21:1
+   Sending 5, 100-byte ICMP Echos to 2001::123:21:21:1, timeout is 2 seconds:
+   !!!!!
+   Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+   ```
+4. Настроим eBGP между офисом С.-Петербург и провайдером Триада.
+   По аналогии настраиваем сессии между R24 и R18 проверяем сессии, анонсы, связность:
+   ```
+   R18# show ip bgp ipv4 unicast summary
+   Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+   10.0.0.6        4          520      20      15        7    0    0 00:09:50        5
+   
+   R18# show ip bgp ipv6 unicast summary
+   Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+   FD00::10:0:0:6  4          520      17      11        7    0    0 00:06:44        5
+
+   R24# show ip bgp ipv4 unicast summary
+   Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+   10.0.0.7        4         2042      16      21        7    0    0 00:11:12        1
+   10.0.0.15       4          301      35      32        7    0    0 00:24:44        4
+   
+   R24# show ip bgp ipv6 unicast summary
+   Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+   FD00::10:0:0:7  4         2042      13      19        7    0    0 00:08:10        1
+   FD00::10:0:0:15 4          301      35      31        7    0    0 00:24:51        4
+
+   R18# ping 123.24.24.1
+   Sending 5, 100-byte ICMP Echos to 123.24.24.1, timeout is 2 seconds:
+   !!!!!
+   Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/2 ms
+   
+   R18# ping 2001::123:24:24:1
+   Sending 5, 100-byte ICMP Echos to 2001::123:24:24:1, timeout is 2 seconds:
+   !!!!!
+   Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+
+   R24# ping 123.18.18.1
+   Sending 5, 100-byte ICMP Echos to 123.18.18.1, timeout is 2 seconds:
+   !!!!!
+   Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/2 ms
+   
+   R24# ping 2001::123:18:18:1
+   Sending 5, 100-byte ICMP Echos to 2001::123:18:18:1, timeout is 2 seconds:
+   !!!!!
+   Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+   ```
+5. Организуем IP доступность между пограничным роутерами офисами Москва и С.-Петербург.
+   Проверим доступность между роутерами R14, R15 (Москва) и R18 (Петербург)
+   ```
+   R18# ping 123.14.14.1 source l1
+   Sending 5, 100-byte ICMP Echos to 123.14.14.1, timeout is 2 seconds:
+   Packet sent with a source address of 123.18.18.1
+   !!!!!
+   Success rate is 100 percent (5/5), round-trip min/avg/max = 1/2/5 ms
+
+   R18# ping 2001::123:14:14:1 source l1
+   Sending 5, 100-byte ICMP Echos to 2001::123:14:14:1, timeout is 2 seconds:
+   Packet sent with a source address of 2001::123:18:18:1
+   !!!!!
+   Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/2 ms
+
+   R18# ping 123.15.15.1 source l1
+   Sending 5, 100-byte ICMP Echos to 123.15.15.1, timeout is 2 seconds:
+   Packet sent with a source address of 123.18.18.1
+   !!!!!
+   Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/2 ms
+   
+   R18# ping 2001::123:15:15:1 source l1
+   Sending 5, 100-byte ICMP Echos to 2001::123:15:15:1, timeout is 2 seconds:
+   Packet sent with a source address of 2001::123:18:18:1
+   !!!!!
+   Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/2 ms
+   ```
