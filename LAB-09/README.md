@@ -205,7 +205,7 @@
    !!!!!
    Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
    ```
-3. Настроим eBGP между Ламас и Триада
+3. Настроим eBGP между Ламас и Триада.
    По аналогии настраиваем сессии между R24 и R21 проверяем сессии, анонсы, связность:
    ```
    R21# show ip bgp ipv4 unicast summary
