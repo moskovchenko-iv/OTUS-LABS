@@ -27,9 +27,9 @@
    ipv6 address FD00::10:0:0:2/127
    ipv6 enable
    end
-   
+   ```
    Настроим eBGP между R14 и R22:
-   
+   ```
    R14# show running-config | section bgp
    router bgp 1001
    bgp log-neighbor-changes
@@ -63,9 +63,9 @@
    network 2001::123:22:22:0/112
    neighbor FD00::10:0:0:3 activate
    exit-address-family
-   
+   ```
    Проверим установление сессии eBGP:
-
+   ```
    R14# show ip bgp ipv4 unicast summary
    Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
    10.0.0.2        4          101      51      50        7    0    0 00:40:15        2
@@ -81,9 +81,9 @@
    R22# show ip bgp ipv6 unicast summary
    Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
    FD00::10:0:0:3  4         1001      39      38        4    0    0 00:31:13        1
-   
+   ```
    Для проверки связности настроим loopback 1 с ip из анонсируемых сетей
-   
+   ```
    R14# show running-config interface loopback 1
    interface Loopback1
    description REAL-IP-FOR-TEST
@@ -99,9 +99,9 @@
    ipv6 address 2001::123:22:22:1/112
    ipv6 enable
    end
-
+   ```
    Проверим доступность ip между провайдерами
-   
+   ```
    R14# ping 123.22.22.1
    Type escape sequence to abort.
    Sending 5, 100-byte ICMP Echos to 123.22.22.1, timeout is 2 seconds:
@@ -121,6 +121,43 @@
    R22# ping 2001::123:14:14:1
    Type escape sequence to abort.
    Sending 5, 100-byte ICMP Echos to 2001::123:14:14:1, timeout is 2 seconds:
+   !!!!!
+   Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+   ```
+   По аналогии настраиваем сессии между R21 и R15 проверяем сессии, анонсы, связность:
+   ```   
+   R15# show ip bgp ipv4 unicast summary
+   Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+   10.0.0.4        4          301      18      17       10    0    0 00:10:02        2
+   
+   R15# show ip bgp ipv6 unicast summary
+   Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+   FD00::10:0:0:4  4          301      11      11        3    0    0 00:05:58        1
+   
+   R21# show ip bgp ipv4 unicast summary
+   Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+   10.0.0.5        4         1001      19      20        5    0    0 00:11:45        3
+
+   R21# show ip bgp ipv6 unicast summary
+   Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+   FD00::10:0:0:5  4         1001      12      12        5    0    0 00:06:47        1
+
+   R15# ping 123.21.21.1
+   !!!!!
+   Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/2 ms
+   R15# ping 2001::123:21:21:1
+   !
+   Sending 5, 100-byte ICMP Echos to 2001::123:21:21:1, timeout is 2 seconds:
+   !!!!!
+   Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+   !
+   R21# ping 123.15.15.1
+   Sending 5, 100-byte ICMP Echos to 123.15.15.1, timeout is 2 seconds:
+   !!!!!
+   Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+   R21# ping 2001::123:15:15:1
+   !
+   Sending 5, 100-byte ICMP Echos to 2001::123:15:15:1, timeout is 2 seconds:
    !!!!!
    Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
    ```
