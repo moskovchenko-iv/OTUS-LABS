@@ -6,9 +6,9 @@
 ![img.png](img.png)
 
 1. Настроим eBGP между офисом Москва и двумя провайдерами - Киторн и Ламас.
-   ```
+   
    Настроим пограничные интерфейсы на R14 и R22:
-
+   ```
    R14# show running-config interface ethernet 0/2
    interface Ethernet0/2
    description link-to-R22-KITORN
