@@ -1,0 +1,189 @@
+
+!
+! Last configuration change at 12:08:31 UTC Sun Feb 11 2024
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname R24
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ no shutdown
+ ip address 10.50.0.24 255.255.255.255
+ ip router isis
+ ipv6 address FD00::10:50:0:24/128
+ ipv6 enable
+ ipv6 router isis
+!
+interface Loopback1
+ no shutdown
+ description REAL-IP-FOR-TEST
+ ip address 123.24.24.1 255.255.255.0
+ ipv6 address 2001::123:24:24:1/112
+ ipv6 enable
+!
+interface Ethernet0/0
+ no shutdown
+ description link-to-R21-LAMAS
+ ip address 10.0.0.14 255.255.255.254
+ ipv6 address FE80::2 link-local
+ ipv6 address FD00::10:0:0:14/127
+ ipv6 enable
+!
+interface Ethernet0/1
+ no shutdown
+ description link-to-R26
+ ip address 10.50.2.7 255.255.255.254
+ ip router isis
+ ipv6 address FE80::1 link-local
+ ipv6 address FD00::10:50:2:7/127
+ ipv6 enable
+ ipv6 router isis
+!
+interface Ethernet0/2
+ no shutdown
+ description link-to-R23
+ ip address 10.50.2.2 255.255.255.254
+ ip router isis
+ ipv6 address FE80::2 link-local
+ ipv6 address FD00::10:50:2:2/127
+ ipv6 enable
+ ipv6 router isis
+!
+interface Ethernet0/3
+ no shutdown
+ description link-to-R18-PETERBURG
+ ip address 10.0.0.6 255.255.255.254
+ ipv6 address FE80::1 link-local
+ ipv6 address FD00::10:0:0:6/127
+ ipv6 enable
+!
+interface Ethernet1/0
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/1
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no shutdown
+ no ip address
+ shutdown
+!
+router isis
+ net 49.0024.0024.0024.0024.00
+ is-type level-2-only
+!
+router bgp 520
+ bgp log-neighbor-changes
+ neighbor 10.0.0.7 remote-as 2042
+ neighbor 10.0.0.15 remote-as 301
+ neighbor FD00::10:0:0:7 remote-as 2042
+ neighbor FD00::10:0:0:15 remote-as 301
+ !
+ address-family ipv4
+  network 123.24.24.0 mask 255.255.255.0
+  neighbor 10.0.0.7 activate
+  neighbor 10.0.0.15 activate
+  no neighbor FD00::10:0:0:7 activate
+  no neighbor FD00::10:0:0:15 activate
+ exit-address-family
+ !
+ address-family ipv6
+  network 2001::123:24:24:0/112
+  neighbor FD00::10:0:0:7 activate
+  neighbor FD00::10:0:0:15 activate
+ exit-address-family
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+ transport input none
+!
+!
+end
+
