@@ -1,0 +1,126 @@
+# BGP
+
+### Выполнение
+
+Лаботаторная схема сети
+![img.png](img.png)
+
+1. Настроим eBGP между офисом Москва и двумя провайдерами - Киторн и Ламас.
+   ```
+   Настроим пограничные интерфейсы на R14 и R22:
+
+   R14# show running-config interface ethernet 0/2
+   interface Ethernet0/2
+   description link-to-R22-KITORN
+   ip address 10.0.0.3 255.255.255.254
+   ipv6 address FE80::2 link-local
+   ipv6 address FD00::10:0:0:3/127
+   ipv6 enable
+   !
+   R22# show running-config interface ethernet 0/0
+   interface Ethernet0/0
+   description link-to-R14-MOSKOW
+   no switchport
+   ip address 10.0.0.2 255.255.255.254
+   duplex auto
+   ipv6 address FE80::1 link-local
+   ipv6 address FD00::10:0:0:2/127
+   ipv6 enable
+   end
+   
+   Настроим eBGP между R14 и R22:
+   
+   R14# show running-config | section bgp
+   router bgp 1001
+   bgp log-neighbor-changes
+   neighbor 10.0.0.2 remote-as 101
+   neighbor FD00::10:0:0:2 remote-as 101
+   !
+   address-family ipv4
+   network 123.14.14.0 mask 255.255.255.0
+   neighbor 10.0.0.2 activate
+   no neighbor FD00::10:0:0:2 activate
+   exit-address-family
+   !
+   address-family ipv6
+   network 2001::123:14:14:0/112
+   neighbor FD00::10:0:0:2 activate
+   exit-address-family
+   !
+   R22# show running-config | section bgp
+   router bgp 101
+   bgp log-neighbor-changes
+   neighbor 10.0.0.3 remote-as 1001
+   neighbor FD00::10:0:0:3 remote-as 1001
+   !
+   address-family ipv4
+   network 123.22.22.0 mask 255.255.255.0
+   neighbor 10.0.0.3 activate
+   no neighbor FD00::10:0:0:3 activate
+   exit-address-family
+   !
+   address-family ipv6
+   network 2001::123:22:22:0/112
+   neighbor FD00::10:0:0:3 activate
+   exit-address-family
+   
+   Проверим установление сессии eBGP:
+
+   R14# show ip bgp ipv4 unicast summary
+   Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+   10.0.0.2        4          101      51      50        7    0    0 00:40:15        2
+   
+   R14# show ip bgp ipv6 unicast summary
+   Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+   FD00::10:0:0:2  4          101      37      38        3    0    0 00:30:14        1
+
+   R22# show ip bgp ipv4 unicast summary
+   Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+   10.0.0.3        4         1001      51      53        6    0    0 00:41:40        3
+
+   R22# show ip bgp ipv6 unicast summary
+   Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+   FD00::10:0:0:3  4         1001      39      38        4    0    0 00:31:13        1
+   
+   Для проверки связности настроим loopback 1 с ip из анонсируемых сетей
+   
+   R14# show running-config interface loopback 1
+   interface Loopback1
+   description REAL-IP-FOR-TEST
+   ip address 123.14.14.1 255.255.255.0
+   ipv6 address 2001::123:14:14:1/112
+   ipv6 enable
+   end
+   
+   R22# show running-config interface loopback 1
+   interface Loopback1
+   description REAL-IP-FOR-TEST
+   ip address 123.22.22.1 255.255.255.0
+   ipv6 address 2001::123:22:22:1/112
+   ipv6 enable
+   end
+
+   Проверим доступность ip между провайдерами
+   
+   R14# ping 123.22.22.1
+   Type escape sequence to abort.
+   Sending 5, 100-byte ICMP Echos to 123.22.22.1, timeout is 2 seconds:
+   !!!!!
+   Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+   R14# ping 2001::123:22:22:1
+   Type escape sequence to abort.
+   Sending 5, 100-byte ICMP Echos to 2001::123:22:22:1, timeout is 2 seconds:
+   !!!!!
+   Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+   !
+   R22# ping 123.14.14.1
+   Type escape sequence to abort.
+   Sending 5, 100-byte ICMP Echos to 123.14.14.1, timeout is 2 seconds:
+   !!!!!
+   Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+   R22# ping 2001::123:14:14:1
+   Type escape sequence to abort.
+   Sending 5, 100-byte ICMP Echos to 2001::123:14:14:1, timeout is 2 seconds:
+   !!!!!
+   Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+   ```
