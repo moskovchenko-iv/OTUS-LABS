@@ -162,3 +162,46 @@
    Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
    ```
 2. Настроим eBGP между провайдерами Киторн и Ламас.
+   По аналогии настраиваем сессии между R22 и R21 проверяем сессии, анонсы, связность:
+   ```
+   R22# show ip bgp ipv4 unicast summary
+   Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+   10.0.0.3        4         1001     122     129        9    0    0 01:44:29        3
+   10.0.0.12       4          301      47      49        9    0    0 00:36:17        3
+   
+   R22# show ip bgp ipv6 unicast summary
+   Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+   FD00::10:0:0:3  4         1001     109     111       10    0    0 01:34:03        1
+   FD00::10:0:0:12 4          301      17      14       10    0    0 00:03:33        2
+
+   R21# show ip bgp ipv4 unicast summary
+   Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+   10.0.0.5        4         1001      48      48        5    0    0 00:37:19        3
+   10.0.0.13       4          101      50      48        5    0    0 00:37:19        3
+   
+   R21# show ip bgp ipv6 unicast summary
+   Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+   FD00::10:0:0:5  4         1001      41      46       11    0    0 00:32:20        1
+   FD00::10:0:0:13 4          101      15      18       11    0    0 00:04:34        2
+
+   R22# ping 123.21.21.1
+   Sending 5, 100-byte ICMP Echos to 123.21.21.1, timeout is 2 seconds:
+   !!!!!
+   Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+   
+   R22# ping 2001::123:21:21:1
+   Type escape sequence to abort.
+   Sending 5, 100-byte ICMP Echos to 2001::123:21:21:1, timeout is 2 seconds:
+   !!!!!
+   Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+
+   R21# ping 123.22.22.1
+   Sending 5, 100-byte ICMP Echos to 123.22.22.1, timeout is 2 seconds:
+   !!!!!
+   Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/5 ms
+   
+   R21# ping 2001::123:22:22:1
+   Sending 5, 100-byte ICMP Echos to 2001::123:22:22:1, timeout is 2 seconds:
+   !!!!!
+   Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+   ```
