@@ -85,6 +85,8 @@
    
    ip nat inside source static 10.10.0.20 123.15.15.7
    
+   Проверяем:
+   
    R20# ping 123.22.22.1 source l0
    Type escape sequence to abort.
    Sending 5, 100-byte ICMP Echos to 123.22.22.1, timeout is 2 seconds:
@@ -120,4 +122,36 @@
    *Feb 12 15:12:02.117: NAT*: s=123.21.21.1, d=123.15.15.7->10.10.0.20 [160]
    *Feb 12 15:12:02.118: NAT*: s=10.10.0.20->123.15.15.7, d=123.21.21.1 [161]
    *Feb 12 15:12:02.118: NAT*: s=123.21.21.1, d=123.15.15.7->10.10.0.20 [161]
+   ```
+4. Настроим NAT так, чтобы R19 был доступен с любого узла для удаленного управления.
+   ```
+   Настройки на R14 и R15:
+   
+   ip nat inside source static tcp 10.10.0.19 23 123.14.14.7 23 extendable
+   
+   Проверяем:
+   
+   R22# telnet 123.14.14.7 /source-interface l1
+   !
+   Trying 123.14.14.7 ... Open
+   User Access Verification
+   Password:
+   R19>exit
+   [Connection to 123.14.14.7 closed by foreign host]
+   
+   R14# sh ip nat translations
+   Pro Inside global      Inside local       Outside local      Outside global
+   tcp 123.14.14.7:23     10.10.0.19:23      123.22.22.1:38448  123.22.22.1:38448
+
+   R21#telnet 123.14.14.7 /source-interface l1
+   !
+   Trying 123.14.14.7 ... Open
+   User Access Verification
+   Password:
+   R19>exit
+   [Connection to 123.14.14.7 closed by foreign host]
+
+   R15# sh ip nat translations
+   Pro Inside global      Inside local       Outside local      Outside global
+   tcp 123.14.14.7:23     10.10.0.19:23      123.21.21.1:36627  123.21.21.1:36627
    ```
