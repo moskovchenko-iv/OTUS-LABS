@@ -34,8 +34,8 @@
    ```
    Настройки на R18:
    
-   ip nat pool POOL-123.18.18.2 123.18.18.2 123.18.18.6 netmask 255.255.255.0
-   ip nat inside source list 10 pool POOL-123.18.18.2 overload
+   ip nat pool POOL-123.18.18.2-6 123.18.18.2 123.18.18.6 netmask 255.255.255.0
+   ip nat inside source list 10 pool POOL-123.18.18.2-6 overload
    !
    access-list 10 permit 10.20.101.0 0.0.0.255
    access-list 10 permit 10.20.102.0 0.0.0.255
