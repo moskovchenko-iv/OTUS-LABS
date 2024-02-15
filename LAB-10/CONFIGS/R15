@@ -1,0 +1,250 @@
+
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname R15
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+clock timezone MSK 3 0
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ no shutdown
+ ip address 10.10.0.15 255.255.255.255
+ ip ospf 1 area 0
+ ipv6 address FD00::10:10:0:15/128
+ ipv6 enable
+ ipv6 ospf 1 area 0
+!
+interface Loopback1
+ no shutdown
+ description REAL-IP-FOR-TEST
+ ip address 123.15.15.1 255.255.255.0
+ ip ospf 1 area 0
+ ipv6 address 2001::123:15:15:1/112
+ ipv6 enable
+!
+interface Ethernet0/0
+ no shutdown
+ description link-to-R13
+ ip address 10.10.2.11 255.255.255.254
+ ip nat inside
+ ip virtual-reassembly in
+ ip ospf 1 area 0
+ ipv6 address FE80::1 link-local
+ ipv6 address FD00::10:10:2:11/127
+ ipv6 enable
+ ipv6 ospf 1 area 0
+!
+interface Ethernet0/1
+ no shutdown
+ description link-to-R12
+ ip address 10.10.2.9 255.255.255.254
+ ip nat inside
+ ip virtual-reassembly in
+ ip ospf 1 area 0
+ ipv6 address FE80::1 link-local
+ ipv6 address FD00::10:10:2:9/127
+ ipv6 enable
+ ipv6 ospf 1 area 0
+!
+interface Ethernet0/2
+ no shutdown
+ description link-to-R21-LAMAS
+ ip address 10.0.0.5 255.255.255.254
+ ip nat outside
+ ip virtual-reassembly in
+ ipv6 address FE80::2 link-local
+ ipv6 address FD00::10:0:0:5/127
+ ipv6 enable
+!
+interface Ethernet0/3
+ no shutdown
+ description link-to-R20
+ ip address 10.10.2.13 255.255.255.254
+ ip nat inside
+ ip virtual-reassembly in
+ ip ospf 1 area 102
+ ipv6 address FE80::1 link-local
+ ipv6 address FD00::10:10:2:13/127
+ ipv6 enable
+ ipv6 ospf 1 area 102
+!
+interface Ethernet1/0
+ no shutdown
+ description link-to-R14
+ ip address 10.10.2.25 255.255.255.254
+ ip nat inside
+ ip virtual-reassembly in
+ ip ospf 1 area 0
+ ipv6 address FE80::2 link-local
+ ipv6 address FD00::10:10:2:25/127
+ ipv6 enable
+ ipv6 ospf 1 area 0
+!
+interface Ethernet1/1
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no shutdown
+ no ip address
+ shutdown
+!
+router ospf 1
+ router-id 15.15.15.15
+ area 102 filter-list prefix FILTER_IPV4-AREA_101 in
+ redistribute bgp 1001 subnets
+ passive-interface default
+ no passive-interface Ethernet0/0
+ no passive-interface Ethernet0/1
+ no passive-interface Ethernet0/3
+ no passive-interface Ethernet1/0
+ no passive-interface Loopback0
+ no passive-interface Loopback1
+!
+router bgp 1001
+ bgp log-neighbor-changes
+ neighbor 10.0.0.4 remote-as 301
+ neighbor 10.10.0.14 remote-as 1001
+ neighbor 10.10.0.14 update-source Loopback0
+ neighbor FD00::10:0:0:4 remote-as 301
+ neighbor FD00::10:10:0:14 remote-as 1001
+ neighbor FD00::10:10:0:14 update-source Loopback0
+ !
+ address-family ipv4
+  network 123.15.15.0 mask 255.255.255.0
+  neighbor 10.0.0.4 activate
+  neighbor 10.0.0.4 route-map lp_x2 in
+  neighbor 10.10.0.14 activate
+  neighbor 10.10.0.14 next-hop-self
+  no neighbor FD00::10:0:0:4 activate
+  no neighbor FD00::10:10:0:14 activate
+ exit-address-family
+ !
+ address-family ipv6
+  network 2001::123:15:15:0/112
+  neighbor FD00::10:0:0:4 activate
+  neighbor FD00::10:0:0:4 route-map lp_x2 in
+  neighbor FD00::10:10:0:14 activate
+  neighbor FD00::10:10:0:14 next-hop-self
+ exit-address-family
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+ip nat pool POOL-123.15.15.2 123.15.15.2 123.15.15.2 netmask 255.255.255.0
+ip nat inside source list 10 pool POOL-123.15.15.2 overload
+ip nat inside source static tcp 10.10.0.19 23 123.14.14.7 23 extendable
+ip nat inside source static 10.10.0.20 123.15.15.7
+ip route 0.0.0.0 0.0.0.0 Null0
+ip route 123.15.15.0 255.255.255.0 Null0
+!
+!
+ip prefix-list FILTER_IPV4-AREA_101 seq 5 deny 10.10.0.19/32
+ip prefix-list FILTER_IPV4-AREA_101 seq 10 deny 10.10.2.2/31
+ip prefix-list FILTER_IPV4-AREA_101 seq 15 permit 0.0.0.0/0 le 32
+ipv6 route ::/0 Null0
+ipv6 router ospf 1
+ router-id 15.15.15.15
+ area 102 filter-list prefix FILTER_IPV6-AREA_101 in
+ passive-interface default
+ no passive-interface Ethernet0/0
+ no passive-interface Ethernet0/1
+ no passive-interface Ethernet0/3
+ no passive-interface Ethernet1/0
+ no passive-interface Loopback0
+ no passive-interface Loopback1
+!
+!
+!
+ipv6 prefix-list FILTER_IPV6-AREA_101 seq 5 deny FD00::10:10:0:19/128
+ipv6 prefix-list FILTER_IPV6-AREA_101 seq 10 deny FD00::10:10:2:2/127
+ipv6 prefix-list FILTER_IPV6-AREA_101 seq 15 permit ::/0 le 128
+route-map lp_x2 permit 10
+ set local-preference 200
+!
+!
+access-list 10 permit 10.10.101.0 0.0.0.255
+access-list 10 permit 10.10.102.0 0.0.0.255
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+ transport input none
+!
+!
+end
