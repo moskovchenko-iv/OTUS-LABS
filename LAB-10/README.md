@@ -191,6 +191,86 @@
    !
    route-map kitorn-3p permit 10
    set as-path prepend 1001 1001 1001
+
+   R22# sh ip bgp
+        Network          Next Hop            Metric LocPrf Weight Path
+   *   123.14.14.0/24   10.0.0.3                 0             0 1001 1001 1001 1001 i
+   *                    10.0.0.12                              0 301 1001 i
+   *   123.15.15.0/24   10.0.0.3                               0 1001 1001 1001 1001 i
+   *                    10.0.0.12                              0 301 1001 i
+   *   123.21.21.0/24   10.0.0.3                               0 1001 1001 1001 1001 301 i
+   *                    10.0.0.12                0             0 301 i
+   *   123.22.22.0/24   0.0.0.0                  0         32768 i
+   ```
+4. Настроим офис С.-Петербург так, чтобы трафик до любого офиса распределялся по двум линкам одновременно.
+   ```
+   Добавляем maximum-paths в нашем случае 2 для распределения трафика:
    
-   
+   router bgp 2042
+   bgp log-neighbor-changes
+   neighbor 10.0.0.6 remote-as 520
+   neighbor 10.0.0.8 remote-as 520
+   neighbor FD00::10:0:0:6 remote-as 520
+   neighbor FD00::10:0:0:8 remote-as 520
+   !
+   address-family ipv4
+   network 123.18.18.0 mask 255.255.255.0
+   neighbor 10.0.0.6 activate
+   neighbor 10.0.0.8 activate
+   no neighbor FD00::10:0:0:6 activate
+   no neighbor FD00::10:0:0:8 activate
+   maximum-paths 2
+   exit-address-family
+   !
+   address-family ipv6
+   maximum-paths 2
+   network 2001::123:18:18:0/112
+   neighbor FD00::10:0:0:6 activate
+   neighbor FD00::10:0:0:8 activate
+   exit-address-family
+   ```
+5. Все сети в лабораторной работе имеют IP связность.
+   ```
+   R14# ping 123.22.22.1 source l1
+   Type escape sequence to abort.
+   Sending 5, 100-byte ICMP Echos to 123.22.22.1, timeout is 2 seconds:
+   Packet sent with a source address of 123.14.14.1
+   !!!!!
+   Success rate is 100 percent (5/5), round-trip min/avg/max = 2/3/5 ms
+   R14# ping 123.21.21.1 source l1
+   Type escape sequence to abort.
+   Sending 5, 100-byte ICMP Echos to 123.21.21.1, timeout is 2 seconds:
+   Packet sent with a source address of 123.14.14.1
+   !!!!!
+   Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/2 ms
+   R14# ping 123.23.23.1 source l1
+   Type escape sequence to abort.
+   Sending 5, 100-byte ICMP Echos to 123.23.23.1, timeout is 2 seconds:
+   Packet sent with a source address of 123.14.14.1
+   !!!!!
+   Success rate is 100 percent (5/5), round-trip min/avg/max = 1/2/5 ms
+   R14# ping 123.24.24.1 source l1
+   Type escape sequence to abort.
+   Sending 5, 100-byte ICMP Echos to 123.24.24.1, timeout is 2 seconds:
+   Packet sent with a source address of 123.14.14.1
+   !!!!!
+   Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/2 ms
+   R14# ping 123.25.25.1 source l1
+   Type escape sequence to abort.
+   Sending 5, 100-byte ICMP Echos to 123.25.25.1, timeout is 2 seconds:
+   Packet sent with a source address of 123.14.14.1
+   !!!!!
+   Success rate is 100 percent (5/5), round-trip min/avg/max = 1/2/3 ms
+   R14# ping 123.26.26.1 source l1
+   Type escape sequence to abort.
+   Sending 5, 100-byte ICMP Echos to 123.26.26.1, timeout is 2 seconds:
+   Packet sent with a source address of 123.14.14.1
+   !!!!!
+   Success rate is 100 percent (5/5), round-trip min/avg/max = 1/2/4 ms
+   R14# ping 123.18.18.1 source l1
+   Type escape sequence to abort.
+   Sending 5, 100-byte ICMP Echos to 123.18.18.1, timeout is 2 seconds:
+   Packet sent with a source address of 123.14.14.1
+   !!!!!
+   Success rate is 100 percent (5/5), round-trip min/avg/max = 2/2/2 ms
    ```
