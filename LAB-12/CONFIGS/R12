@@ -1,0 +1,196 @@
+
+!
+! Last configuration change at 13:25:01 MSK Thu Feb 15 2024
+! NVRAM config last updated at 14:06:17 MSK Thu Feb 15 2024
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname R12
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+clock timezone MSK 3 0
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+ip dhcp excluded-address 10.10.101.1
+!
+ip dhcp pool POOL-10.10.101.0_24
+ network 10.10.101.0 255.255.255.0
+ default-router 10.10.101.1
+ lease 2 12 30
+!
+!
+!
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ no shutdown
+ ip address 10.10.0.12 255.255.255.255
+ ip ospf 1 area 0
+ ipv6 address FD00::10:10:0:12/128
+ ipv6 enable
+ ipv6 ospf 1 area 0
+!
+interface Ethernet0/0
+ no shutdown
+ description link-to-SW4
+ ip address 10.10.2.15 255.255.255.254
+ ip ospf 1 area 10
+ ipv6 address FE80::1 link-local
+ ipv6 address FD00::10:10:2:15/127
+ ipv6 enable
+ ipv6 ospf 1 area 10
+!
+interface Ethernet0/1
+ no shutdown
+ description link-to-SW5
+ ip address 10.10.2.17 255.255.255.254
+ ip ospf 1 area 10
+ ipv6 address FE80::1 link-local
+ ipv6 address FD00::10:10:2:17/127
+ ipv6 enable
+ ipv6 ospf 1 area 10
+!
+interface Ethernet0/2
+ no shutdown
+ description link-to-R14
+ ip address 10.10.2.4 255.255.255.254
+ ip ospf 1 area 0
+ ipv6 address FE80::2 link-local
+ ipv6 address FD00::10:10:2:4/127
+ ipv6 enable
+ ipv6 ospf 1 area 0
+!
+interface Ethernet0/3
+ no shutdown
+ description link-to-R15
+ ip address 10.10.2.8 255.255.255.254
+ ip ospf 1 area 0
+ ipv6 address FE80::2 link-local
+ ipv6 address FD00::10:10:2:8/127
+ ipv6 enable
+ ipv6 ospf 1 area 0
+!
+interface Ethernet1/0
+ no shutdown
+ description link-to-R13
+ ip address 10.10.2.26 255.255.255.254
+ ip ospf 1 area 0
+ ipv6 address FE80::1 link-local
+ ipv6 address FD00::10:10:2:26/127
+ ipv6 enable
+ ipv6 ospf 1 area 0
+!
+interface Ethernet1/1
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no shutdown
+ no ip address
+ shutdown
+!
+router ospf 1
+ router-id 12.12.12.12
+ area 10 stub
+ passive-interface default
+ no passive-interface Ethernet0/0
+ no passive-interface Ethernet0/1
+ no passive-interface Ethernet0/2
+ no passive-interface Ethernet0/3
+ no passive-interface Ethernet1/0
+ no passive-interface Loopback0
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+!
+ipv6 router ospf 1
+ router-id 12.12.12.12
+ area 10 stub
+ passive-interface default
+ no passive-interface Ethernet0/0
+ no passive-interface Ethernet0/1
+ no passive-interface Ethernet0/2
+ no passive-interface Ethernet0/3
+ no passive-interface Ethernet1/0
+ no passive-interface Loopback0
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+ transport input none
+!
+ntp master 2
+!
+end
