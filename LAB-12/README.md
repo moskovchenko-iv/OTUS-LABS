@@ -218,4 +218,37 @@
    VPCS7> ip dhcp
    DORA IP 10.10.102.4/24 GW 10.10.102.1
    ```
-6. 
+6. Настроиь NTP сервер на R12 и R13. Все устройства в офисе Москва синхронизируют время с R12 и R13.
+   ```
+   Настраиваем NTP SERVER:
+   
+   R12: ntp master 2
+   R13: ntp master 3
+   
+   На клиентах:
+   
+   ntp server 10.10.0.12 source Loopback0
+   ntp server 10.10.0.13 source Loopback0
+   
+   Проверяем:
+   
+   SW4# show clock detail
+   10:35:09.925 UTC Thu Feb 15 2024
+   Time source is NTP
+
+   SW4# sh ntp associations
+   address         ref clock       st   when   poll reach  delay  offset   disp
+   *~10.10.0.12      127.127.1.1      2     19     64    77  1.000  -0.500  3.749
+   +~10.10.0.13      127.127.1.1      3     20     64    77  0.000  -1.000  6.027
+   * sys.peer, # selected, + candidate, - outlyer, x falseticker, ~ configured
+
+   SW4# show ntp status
+   Clock is synchronized, stratum 3, reference is 10.10.0.12
+   nominal freq is 250.0000 Hz, actual freq is 250.0000 Hz, precision is 2**10
+   ntp uptime is 46200 (1/100 of seconds), resolution is 4000
+   reference time is E9786760.0E147B08 (10:35:12.055 UTC Thu Feb 15 2024)
+   clock offset is -0.5000 msec, root delay is 1.00 msec
+   root dispersion is 8.60 msec, peer dispersion is 3.74 msec
+   loopfilter state is 'CTRL' (Normal Controlled Loop), drift is -0.000000008 s/s
+   system poll interval is 64, last update was 52 sec ago.
+   ```
