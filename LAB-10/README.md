@@ -62,30 +62,34 @@
    R24# sh run | sec bgp
    router bgp 520
    bgp log-neighbor-changes
-   neighbor 10.50.0.23 remote-as 520
-   neighbor 10.50.0.23 update-source Loopback0
-   neighbor 10.50.0.25 remote-as 520
-   neighbor 10.50.0.25 update-source Loopback0
-   neighbor 10.50.0.26 remote-as 520
-   neighbor 10.50.0.26 update-source Loopback0
-   neighbor FD00::10:50:0:23 remote-as 520
-   neighbor FD00::10:50:0:23 update-source Loopback0
-   neighbor FD00::10:50:0:25 remote-as 520
-   neighbor FD00::10:50:0:25 update-source Loopback0
-   neighbor FD00::10:50:0:26 remote-as 520
-   neighbor FD00::10:50:0:26 update-source Loopback0
+   neighbor TRIADA_ipv4 peer-group
+   neighbor TRIADA_ipv4 remote-as 520
+   neighbor TRIADA_ipv4 update-source Loopback0
+   neighbor TRIADA_ipv6 peer-group
+   neighbor TRIADA_ipv6 remote-as 520
+   neighbor TRIADA_ipv6 update-source Loopback0
+   neighbor 10.0.0.7 remote-as 2042
+   neighbor 10.0.0.15 remote-as 301
+   neighbor 10.50.0.23 peer-group TRIADA_ipv4
+   neighbor 10.50.0.25 peer-group TRIADA_ipv4
+   neighbor 10.50.0.26 peer-group TRIADA_ipv4
+   neighbor FD00::10:0:0:7 remote-as 2042
+   neighbor FD00::10:0:0:15 remote-as 301
+   neighbor FD00::10:50:0:23 peer-group TRIADA_ipv6
+   neighbor FD00::10:50:0:25 peer-group TRIADA_ipv6
+   neighbor FD00::10:50:0:26 peer-group TRIADA_ipv6
    !
    address-family ipv4
    network 123.24.24.0 mask 255.255.255.0
+   neighbor TRIADA_ipv4 route-reflector-client
+   neighbor TRIADA_ipv4 next-hop-self
+   neighbor 10.0.0.7 activate
+   neighbor 10.0.0.15 activate
    neighbor 10.50.0.23 activate
-   neighbor 10.50.0.23 route-reflector-client
-   neighbor 10.50.0.23 next-hop-self
    neighbor 10.50.0.25 activate
-   neighbor 10.50.0.25 route-reflector-client
-   neighbor 10.50.0.25 next-hop-self
    neighbor 10.50.0.26 activate
-   neighbor 10.50.0.26 route-reflector-client
-   neighbor 10.50.0.26 next-hop-self
+   no neighbor FD00::10:0:0:7 activate
+   no neighbor FD00::10:0:0:15 activate
    no neighbor FD00::10:50:0:23 activate
    no neighbor FD00::10:50:0:25 activate
    no neighbor FD00::10:50:0:26 activate
@@ -93,15 +97,13 @@
    !
    address-family ipv6
    network 2001::123:24:24:0/112
+   neighbor TRIADA_ipv6 route-reflector-client
+   neighbor TRIADA_ipv6 next-hop-self
+   neighbor FD00::10:0:0:7 activate
+   neighbor FD00::10:0:0:15 activate
    neighbor FD00::10:50:0:23 activate
-   neighbor FD00::10:50:0:23 route-reflector-client
-   neighbor FD00::10:50:0:23 next-hop-self
    neighbor FD00::10:50:0:25 activate
-   neighbor FD00::10:50:0:25 route-reflector-client
-   neighbor FD00::10:50:0:25 next-hop-self
    neighbor FD00::10:50:0:26 activate
-   neighbor FD00::10:50:0:26 route-reflector-client
-   neighbor FD00::10:50:0:26 next-hop-self
    exit-address-family
 
    R24# show ip bgp ipv4 unicast summary
