@@ -50,4 +50,76 @@
    Success rate is 100 percent (5/5), round-trip min/avg/max = 2/3/7 ms
    ```
 2. Настроим DMVPN между Москва и Чокурдах, Лабытнанги.
-   
+   ```
+   Настройки на R15 (Москва):
+   !
+   interface Loopback1
+   description REAL-IP-FOR-TEST
+   ip address 123.15.15.1 255.255.255.0
+   ip ospf 1 area 0
+   ipv6 address 2001::123:15:15:1/112
+   ipv6 enable
+   end
+   !
+   interface Tunnel1
+   ip address 10.0.4.15 255.255.255.0
+   no ip redirects
+   ip mtu 1400
+   ip nhrp map multicast dynamic
+   ip nhrp network-id 1
+   ip tcp adjust-mss 1360
+   tunnel source Loopback1
+   tunnel mode gre multipoint
+   end
+
+   Настройки на R27 (Лабытнанги):
+   !
+   interface Loopback1
+   ip address 123.25.25.17 255.255.255.248
+   end
+   !
+   interface Tunnel1
+   ip address 10.0.4.27 255.255.255.0
+   no ip redirects
+   ip mtu 1400
+   ip nhrp map 10.0.4.15 123.15.15.1
+   ip nhrp map multicast 123.15.15.1
+   ip nhrp network-id 1
+   ip nhrp nhs 10.0.4.15
+   ip nhrp registration no-unique
+   ip tcp adjust-mss 1360
+   tunnel source Loopback1
+   tunnel mode gre multipoint
+   end
+   !
+   R27# traceroute 10.0.4.28 source tunnel 1
+   Type escape sequence to abort.
+   Tracing the route to 10.0.4.28
+   VRF info: (vrf in name/id, vrf out name/id)
+   1 10.0.4.28 2 msec 2 msec *
+
+   Настройки на R28 (Чокурдах):
+   !
+   interface Loopback1
+   ip address 123.25.25.9 255.255.255.248
+   end
+   !
+   interface Tunnel1
+   ip address 10.0.4.28 255.255.255.0
+   no ip redirects
+   ip mtu 1400
+   ip nhrp map 10.0.4.15 123.15.15.1
+   ip nhrp map multicast 123.15.15.1
+   ip nhrp network-id 1
+   ip nhrp nhs 10.0.4.15
+   ip tcp adjust-mss 1360
+   tunnel source Loopback1
+   tunnel mode gre multipoint
+   end
+   !
+   R28# traceroute 10.0.4.27 source tunnel 1
+   Type escape sequence to abort.
+   Tracing the route to 10.0.4.27
+   VRF info: (vrf in name/id, vrf out name/id)
+   1 10.0.4.27 3 msec 2 msec *
+   ```
