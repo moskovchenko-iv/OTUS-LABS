@@ -56,9 +56,6 @@
    interface Loopback1
    description REAL-IP-FOR-TEST
    ip address 123.15.15.1 255.255.255.0
-   ip ospf 1 area 0
-   ipv6 address 2001::123:15:15:1/112
-   ipv6 enable
    end
    !
    interface Tunnel1
@@ -68,6 +65,9 @@
    ip nhrp map multicast dynamic
    ip nhrp network-id 1
    ip tcp adjust-mss 1360
+   ip ospf network broadcast
+   ip ospf priority 255
+   ip ospf 1 area 3
    tunnel source Loopback1
    tunnel mode gre multipoint
    end
@@ -88,6 +88,9 @@
    ip nhrp nhs 10.0.4.15
    ip nhrp registration no-unique
    ip tcp adjust-mss 1360
+   ip ospf network broadcast
+   ip ospf priority 0
+   ip ospf 1 area 3
    tunnel source Loopback1
    tunnel mode gre multipoint
    end
@@ -113,6 +116,9 @@
    ip nhrp network-id 1
    ip nhrp nhs 10.0.4.15
    ip tcp adjust-mss 1360
+   ip ospf network broadcast
+   ip ospf priority 0
+   ip ospf 1 area 3
    tunnel source Loopback1
    tunnel mode gre multipoint
    end
@@ -122,4 +128,72 @@
    Tracing the route to 10.0.4.27
    VRF info: (vrf in name/id, vrf out name/id)
    1 10.0.4.27 3 msec 2 msec *
+   ```
+3. Все узлы в офисах в лабораторной работе имеют IP связность.
+   ```
+   Связность между сетями обеспечена по ospf area 3
+
+   VPCS_1> ping 10.70.101.100
+   
+   84 bytes from 10.70.101.100 icmp_seq=1 ttl=60 time=4.663 ms
+   84 bytes from 10.70.101.100 icmp_seq=2 ttl=60 time=4.067 ms
+   84 bytes from 10.70.101.100 icmp_seq=3 ttl=60 time=4.875 ms
+   84 bytes from 10.70.101.100 icmp_seq=4 ttl=60 time=4.561 ms
+   84 bytes from 10.70.101.100 icmp_seq=5 ttl=60 time=3.872 ms
+   
+   VPCS_1> ping 10.70.102.100
+   
+   84 bytes from 10.70.102.100 icmp_seq=1 ttl=60 time=5.580 ms
+   84 bytes from 10.70.102.100 icmp_seq=2 ttl=60 time=3.612 ms
+   84 bytes from 10.70.102.100 icmp_seq=3 ttl=60 time=5.907 ms
+   84 bytes from 10.70.102.100 icmp_seq=4 ttl=60 time=6.399 ms
+   84 bytes from 10.70.102.100 icmp_seq=5 ttl=60 time=5.535 ms
+   
+   VPCS_7> ping 10.70.101.100
+   
+   84 bytes from 10.70.101.100 icmp_seq=1 ttl=60 time=4.974 ms
+   84 bytes from 10.70.101.100 icmp_seq=2 ttl=60 time=5.816 ms
+   84 bytes from 10.70.101.100 icmp_seq=3 ttl=60 time=7.893 ms
+   84 bytes from 10.70.101.100 icmp_seq=4 ttl=60 time=4.828 ms
+   84 bytes from 10.70.101.100 icmp_seq=5 ttl=60 time=5.780 ms
+   
+   VPCS_7> ping 10.70.102.100
+   
+   84 bytes from 10.70.102.100 icmp_seq=1 ttl=60 time=4.838 ms
+   84 bytes from 10.70.102.100 icmp_seq=2 ttl=60 time=6.115 ms
+   84 bytes from 10.70.102.100 icmp_seq=3 ttl=60 time=6.298 ms
+   84 bytes from 10.70.102.100 icmp_seq=4 ttl=60 time=7.792 ms
+   84 bytes from 10.70.102.100 icmp_seq=5 ttl=60 time=4.458 ms
+
+   VPCS_30> ping 10.10.101.4
+   
+   84 bytes from 10.10.101.4 icmp_seq=1 ttl=60 time=5.713 ms
+   84 bytes from 10.10.101.4 icmp_seq=2 ttl=60 time=4.035 ms
+   84 bytes from 10.10.101.4 icmp_seq=3 ttl=60 time=3.980 ms
+   84 bytes from 10.10.101.4 icmp_seq=4 ttl=60 time=5.724 ms
+   84 bytes from 10.10.101.4 icmp_seq=5 ttl=60 time=4.401 ms
+   
+   VPCS_30> ping 10.10.102.4
+   
+   84 bytes from 10.10.102.4 icmp_seq=1 ttl=60 time=5.410 ms
+   84 bytes from 10.10.102.4 icmp_seq=2 ttl=60 time=4.275 ms
+   84 bytes from 10.10.102.4 icmp_seq=3 ttl=60 time=4.618 ms
+   84 bytes from 10.10.102.4 icmp_seq=4 ttl=60 time=4.080 ms
+   84 bytes from 10.10.102.4 icmp_seq=5 ttl=60 time=4.232 ms
+
+   VPCS_31> ping 10.10.101.4
+
+   84 bytes from 10.10.101.4 icmp_seq=1 ttl=60 time=5.017 ms
+   84 bytes from 10.10.101.4 icmp_seq=2 ttl=60 time=5.835 ms
+   84 bytes from 10.10.101.4 icmp_seq=3 ttl=60 time=5.206 ms
+   84 bytes from 10.10.101.4 icmp_seq=4 ttl=60 time=6.902 ms
+   84 bytes from 10.10.101.4 icmp_seq=5 ttl=60 time=9.638 ms
+   
+   VPCS_31> ping 10.10.102.4
+   
+   84 bytes from 10.10.102.4 icmp_seq=1 ttl=60 time=5.379 ms
+   84 bytes from 10.10.102.4 icmp_seq=2 ttl=60 time=4.248 ms
+   84 bytes from 10.10.102.4 icmp_seq=3 ttl=60 time=4.946 ms
+   84 bytes from 10.10.102.4 icmp_seq=4 ttl=60 time=6.275 ms
+   84 bytes from 10.10.102.4 icmp_seq=5 ttl=60 time=4.753 ms
    ```
