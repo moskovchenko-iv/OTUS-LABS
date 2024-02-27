@@ -6,9 +6,9 @@
 ![img.png](img.png)
 
 1. Настроите GRE поверх IPSec между офисами Москва и С.-Петербург.
-   ```
+   ####
    Настройки на R15
-   
+   ```
    interface Tunnel0
    description TUN-to-R18-PETERBURG
    ip address 10.0.3.15 255.255.255.0
@@ -46,9 +46,9 @@
    match address 105
    !
    access-list 105 permit gre host 123.15.15.1 host 123.18.18.1
-
+   ```
    Настройки на R18
-
+   ```
    interface Tunnel0
    description TUN-to-R15-MOSKOW
    ip address 10.0.3.18 255.255.255.0
@@ -88,9 +88,9 @@
    access-list 105 permit gre host 123.18.18.1 host 123.15.15.1
    ```
 2. Настроите DMVPN поверх IPSec между Москва и Чокурдах, Лабытнанги.
-   ```
+   ####
    Произведем настройку R15:
-   !
+   ```
    R15(config)# ip domain name otus.ru
    R15(config)# ip http server
    R15(config)# crypto key generate rsa label VPN modulus 2048
@@ -157,9 +157,9 @@
    Sending 5, 100-byte ICMP Echos to 10.0.4.28, timeout is 2 seconds:
    !!!!!
    Success rate is 100 percent (5/5), round-trip min/avg/max = 6/7/9 ms
-
+   ```
    Итоговый конфиг R15:
-   !
+   ```
    interface Tunnel1
    ip address 10.0.4.15 255.255.255.0
    no ip redirects
@@ -225,9 +225,8 @@
    crypto ipsec profile DMVPN
    set transform-set SET2
    ```
-   ```
    Произведем настройку R27:
-
+   ```
    R27(config)# ip domain-name otus.ru
    R27(config)# crypto key generate rsa label VPN modulus 2048
 
@@ -307,9 +306,9 @@
    start date: 12:45:52 MSK Feb 27 2024
    end   date: 12:45:52 MSK Feb 26 2027
    Associated Trustpoints: VPN
-
+   ```
    Итоговый конфиг R27:
-
+   ```
    interface Tunnel1
    ip address 10.0.4.27 255.255.255.0
    no ip redirects
@@ -407,9 +406,8 @@
    set transform-set SET2
    !
    ```
-   ```
    Произведем настройку R28:
-   
+   ```   
    Настройка аналогична настройки R27
    R28# show crypto pki certificates
    Certificate
@@ -445,9 +443,9 @@
    end   date: 12:45:52 MSK Feb 26 2027
    Associated Trustpoints: VPN
    Storage: nvram:CA#1CA.cer
-
+   ```
    Итоговый конфиг R28:
-
+   ```
    interface Tunnel1
    ip address 10.0.4.28 255.255.255.0
    no ip redirects
