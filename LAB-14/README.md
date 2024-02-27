@@ -582,4 +582,4 @@
    VRF info: (vrf in name/id, vrf out name/id)
    1 10.0.4.28 7 msec 7 msec *
    ```
-   
+   ![img_3.png](img_3.png)
