@@ -542,3 +542,44 @@
    set transform-set SET2
    !
    ```
+3. Все узлы в офисах в лабораторной работе должны иметь IP связность.
+   ```
+   R15# ping 10.0.3.18
+   Type escape sequence to abort.
+   Sending 5, 100-byte ICMP Echos to 10.0.3.18, timeout is 2 seconds:
+   !!!!!
+   Success rate is 100 percent (5/5), round-trip min/avg/max = 6/6/7 ms
+   R15# traceroute 10.0.3.18
+   Type escape sequence to abort.
+   Tracing the route to 10.0.3.18
+   VRF info: (vrf in name/id, vrf out name/id)
+   1 10.0.3.18 7 msec 7 msec *
+   ```
+   ![img_1.png](img_1.png)
+   ```
+   R15# ping 10.0.4.27
+   Type escape sequence to abort.
+   Sending 5, 100-byte ICMP Echos to 10.0.4.27, timeout is 2 seconds:
+   !!!!!
+   Success rate is 100 percent (5/5), round-trip min/avg/max = 4/6/7 ms
+   !
+   R15# traceroute 10.0.4.27
+   Type escape sequence to abort.
+   Tracing the route to 10.0.4.27
+   VRF info: (vrf in name/id, vrf out name/id)
+   1 10.0.4.27 8 msec 8 msec *
+   ```
+   ![img_2.png](img_2.png)
+   ```
+   R15# ping 10.0.4.28
+   Type escape sequence to abort.
+   Sending 5, 100-byte ICMP Echos to 10.0.4.28, timeout is 2 seconds:
+   !!!!!
+   Success rate is 100 percent (5/5), round-trip min/avg/max = 6/7/8 ms
+   R15# traceroute 10.0.4.28
+   Type escape sequence to abort.
+   Tracing the route to 10.0.4.28
+   VRF info: (vrf in name/id, vrf out name/id)
+   1 10.0.4.28 7 msec 7 msec *
+   ```
+   
