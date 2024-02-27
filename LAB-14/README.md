@@ -101,7 +101,6 @@
    revocation-check crl
    rsakeypair CA
    !
-   !
    crypto pki certificate chain CA
    certificate ca 01
    308202F8 308201E0 A0030201 02020101 300D0609 2A864886 F70D0101 04050030
