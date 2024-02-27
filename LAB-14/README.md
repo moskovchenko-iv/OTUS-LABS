@@ -6,6 +6,87 @@
 ![img.png](img.png)
 
 1. Настроите GRE поверх IPSec между офисами Москва и С.-Петербург.
+   ```
+   Настройки на R15
+   
+   interface Tunnel0
+   description TUN-to-R18-PETERBURG
+   ip address 10.0.3.15 255.255.255.0
+   ip mtu 1400
+   ip tcp adjust-mss 1360
+   tunnel source Loopback1
+   tunnel destination 123.18.18.1
+   tunnel protection ipsec profile GRE
+   end
+   !
+   crypto pki server CA
+   database level complete
+   no database archive
+   !
+   crypto pki trustpoint CA
+   revocation-check crl
+   rsakeypair CA
+   !
+   crypto isakmp policy 5
+   encr 3des
+   hash sha256
+   authentication pre-share
+   group 19
+   crypto isakmp key cisco address 0.0.0.0
+   !
+   crypto ipsec transform-set SET1 esp-3des
+   mode tunnel
+   !
+   crypto ipsec profile GRE
+   set transform-set SET1
+   !
+   crypto map MAP 5 ipsec-isakmp
+   set peer 123.18.18.1
+   set transform-set SET1
+   match address 105
+   !
+   access-list 105 permit gre host 123.15.15.1 host 123.18.18.1
+
+   Настройки на R18
+
+   interface Tunnel0
+   description TUN-to-R15-MOSKOW
+   ip address 10.0.3.18 255.255.255.0
+   ip mtu 1400
+   ip tcp adjust-mss 1360
+   tunnel source Loopback1
+   tunnel destination 123.15.15.1
+   tunnel protection ipsec profile GRE
+   end
+   !
+   crypto pki trustpoint VPN
+   enrollment url http://123.15.15.1:80
+   serial-number
+   ip-address 10.0.3.18
+   subject-name CN=R18,OU=VPN,O=Server,C=RU
+   revocation-check none
+   rsakeypair VPN
+   !
+   crypto isakmp policy 5
+   encr 3des
+   hash sha256
+   authentication pre-share
+   group 19
+   crypto isakmp key cisco address 123.15.15.1
+   !
+   crypto ipsec transform-set SET1 esp-3des
+   mode tunnel
+   !
+   crypto ipsec profile GRE
+   set transform-set SET1
+   !
+   crypto map MAP 5 ipsec-isakmp
+   set peer 123.15.15.1
+   set transform-set SET1
+   match address 105
+   !
+   access-list 105 permit gre host 123.18.18.1 host 123.15.15.1
+   ```
 2. Настроите DMVPN поверх IPSec между Москва и Чокурдах, Лабытнанги.
    ```
    Произведем настройку R15:
