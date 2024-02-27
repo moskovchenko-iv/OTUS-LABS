@@ -1,0 +1,228 @@
+
+!
+! Last configuration change at 13:19:32 MSK Tue Feb 27 2024
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname R28
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+clock timezone MSK 3 0
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+crypto pki trustpoint VPN
+ enrollment url http://123.15.15.1:80
+ serial-number
+ ip-address 10.0.4.28
+ subject-name CN=R28,OU=VPN,O=Otus,C=RU
+ revocation-check none
+ rsakeypair VPN
+!
+!
+crypto pki certificate chain VPN
+ certificate 03 nvram:CA#3.cer
+ certificate ca 01 nvram:CA#1CA.cer
+!
+redundancy
+!
+!
+track 1 ip sla 1 reachability
+ delay down 10 up 10
+!
+!
+!
+!
+!
+!
+crypto isakmp policy 5
+ encr 3des
+ hash sha256
+ authentication pre-share
+ group 19
+crypto isakmp key cisco address 0.0.0.0
+!
+!
+crypto ipsec transform-set SET2 esp-3des
+ mode transport
+!
+crypto ipsec profile DMVPN
+ set transform-set SET2
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ no shutdown
+ ip address 10.70.0.28 255.255.255.0
+ ip ospf 1 area 3
+!
+interface Loopback1
+ no shutdown
+ ip address 123.25.25.9 255.255.255.248
+!
+interface Tunnel1
+ no shutdown
+ ip address 10.0.4.28 255.255.255.0
+ no ip redirects
+ ip mtu 1400
+ ip nhrp map 10.0.4.15 123.15.15.1
+ ip nhrp map multicast 123.15.15.1
+ ip nhrp network-id 1
+ ip nhrp nhs 10.0.4.15
+ ip tcp adjust-mss 1360
+ ip ospf network broadcast
+ ip ospf priority 0
+ ip ospf 1 area 3
+ tunnel source Loopback1
+ tunnel mode gre multipoint
+ tunnel protection ipsec profile DMVPN
+!
+interface Ethernet0/0
+ no shutdown
+ description link-to-R26
+ ip address 123.26.26.20 255.255.255.254
+ ip nat outside
+ ip virtual-reassembly in
+!
+interface Ethernet0/1
+ no shutdown
+ description link-to-R25
+ ip address 123.25.25.18 255.255.255.254
+ ip nat outside
+ ip virtual-reassembly in
+!
+interface Ethernet0/2
+ no shutdown
+ description link-to-SW29
+ no ip address
+!
+interface Ethernet0/2.101
+ no shutdown
+ description int-for-VPC30
+ encapsulation dot1Q 101
+ ip address 10.70.101.1 255.255.255.0
+ ip nat inside
+ ip virtual-reassembly in
+ ip ospf 1 area 3
+!
+interface Ethernet0/2.102
+ no shutdown
+ description int-for-VPC31
+ encapsulation dot1Q 102
+ ip address 10.70.102.1 255.255.255.0
+ ip nat inside
+ ip virtual-reassembly in
+ ip ospf 1 area 3
+!
+interface Ethernet0/3
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/0
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/1
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no shutdown
+ no ip address
+ shutdown
+!
+router ospf 1
+ router-id 28.28.28.28
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+ip nat inside source static 10.70.101.100 123.25.25.10
+ip nat inside source static 10.70.102.100 123.25.25.11
+ip route 0.0.0.0 0.0.0.0 123.26.26.21
+!
+!
+ip prefix-list 10.70.101.0/24 seq 5 permit 10.70.101.0/24
+!
+ip prefix-list 10.70.102.0/24 seq 10 permit 10.70.102.0/24
+ip sla 1
+ icmp-echo 10.0.0.19 source-interface Ethernet0/1
+ frequency 10
+ip sla schedule 1 life forever start-time now
+ip sla 2
+ icmp-echo 10.0.0.21 source-interface Ethernet0/0
+ frequency 10
+ip sla schedule 2 life forever start-time now
+!
+route-map rm1 permit 5
+ match ip address prefix-list 10.70.101.0/24
+ set ip next-hop verify-availability 123.25.25.19 5 track 1
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+ transport input none
+!
+!
+end
