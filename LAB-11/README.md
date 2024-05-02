@@ -112,4 +112,32 @@
       Network          Next Hop            Metric LocPrf Weight Path
    *   0.0.0.0          123.22.22.2                            0 101 i
    ```   
-4. 
+4. Настроить провайдера Ламас так, чтобы в офис Москва отдавался только маршрут по умолчанию и префикс офиса С.-Петербург.
+   ####
+   Создаем access-list разрешающий префиксы Петербурга, применяем в сторону клиента
+   ```
+   ip as-path access-list 5 permit _2042$
+   !
+   neighbor 123.21.21.5 default-originate
+   neighbor 123.21.21.5 soft-reconfiguration inbound
+   neighbor 123.21.21.5 filter-list 5 out
+   ```
+   До применения:
+   ```
+   R15# sh ip bgp neighbors 123.21.21.4 received-routes
+     Network          Next Hop            Metric LocPrf Weight Path
+   *   123.18.18.0/24   123.21.21.4                            0 301 520 2042 i
+   *   123.21.21.0/24   123.21.21.4              0             0 301 i
+   *   123.22.22.0/24   123.21.21.4                            0 301 101 i
+   *   123.23.23.0/24   123.21.21.4                            0 301 520 i
+   *   123.24.24.0/24   123.21.21.4                            0 301 520 i
+   *   123.25.25.0/24   123.21.21.4                            0 301 520 i
+   *   123.26.26.0/24   123.21.21.4                            0 301 520 i
+   ```
+   После применения:
+   ```
+   R15# sh ip bgp neighbors 123.21.21.4 received-routes
+     Network          Next Hop            Metric LocPrf Weight Path
+   *   0.0.0.0          123.21.21.4                            0 301 i
+   *   123.18.18.0/24   123.21.21.4                            0 301 520 2042 i
+   ```
