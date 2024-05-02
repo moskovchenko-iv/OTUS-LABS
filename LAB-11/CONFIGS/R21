@@ -1,0 +1,161 @@
+
+!
+! Last configuration change at 12:37:49 MSK Tue Feb 27 2024
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+service compress-config
+!
+hostname R21
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+clock timezone MSK 3 0
+!
+!
+!
+!
+!
+!
+!
+!
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+!
+!
+spanning-tree mode rapid-pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ no shutdown
+ ip address 10.40.0.21 255.255.255.255
+!
+interface Loopback1
+ no shutdown
+ description REAL-IP-FOR-TEST
+ ip address 123.21.21.1 255.255.255.255
+ ipv6 address 2001::123:21:21:1/112
+ ipv6 enable
+!
+interface Ethernet0/0
+ no shutdown
+ description link-to-R15-MOSKOW
+ no switchport
+ ip address 123.21.21.4 255.255.255.254
+ duplex auto
+ ipv6 address FE80::1 link-local
+ ipv6 address FD00::10:0:0:4/127
+ ipv6 enable
+!
+interface Ethernet0/1
+ no shutdown
+ description link-to-R22-KITORN
+ no switchport
+ ip address 10.0.0.12 255.255.255.254
+ duplex auto
+ ipv6 address FE80::2 link-local
+ ipv6 address FD00::10:0:0:12/127
+ ipv6 enable
+!
+interface Ethernet0/2
+ no shutdown
+ description link-to-R24-TRIADA
+ no switchport
+ ip address 10.0.0.15 255.255.255.254
+ duplex auto
+ ipv6 address FE80::1 link-local
+ ipv6 address FD00::10:0:0:15/127
+ ipv6 enable
+!
+interface Ethernet0/3
+ no shutdown
+ no switchport
+ no ip address
+ shutdown
+ duplex auto
+!
+interface Ethernet1/0
+ no shutdown
+!
+interface Ethernet1/1
+ no shutdown
+!
+interface Ethernet1/2
+ no shutdown
+!
+interface Ethernet1/3
+ no shutdown
+!
+router bgp 301
+ bgp log-neighbor-changes
+ neighbor 10.0.0.5 remote-as 1001
+ neighbor 10.0.0.13 remote-as 101
+ neighbor 10.0.0.14 remote-as 520
+ neighbor 123.21.21.5 remote-as 1001
+ neighbor FD00::10:0:0:5 remote-as 1001
+ neighbor FD00::10:0:0:13 remote-as 101
+ neighbor FD00::10:0:0:14 remote-as 520
+ !
+ address-family ipv4
+  network 123.21.21.0 mask 255.255.255.0
+  neighbor 10.0.0.5 activate
+  neighbor 10.0.0.13 activate
+  neighbor 10.0.0.14 activate
+  neighbor 123.21.21.5 activate
+  no neighbor FD00::10:0:0:5 activate
+  no neighbor FD00::10:0:0:13 activate
+  no neighbor FD00::10:0:0:14 activate
+ exit-address-family
+ !
+ address-family ipv6
+  network 2001::123:21:21:0/112
+  neighbor FD00::10:0:0:5 activate
+  neighbor FD00::10:0:0:13 activate
+  neighbor FD00::10:0:0:14 activate
+ exit-address-family
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+ip route 123.21.21.0 255.255.255.0 Null0
+!
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+!
+!
+end

@@ -1,0 +1,258 @@
+
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname R18
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+clock timezone MSK 3 0
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+ip domain name otus.ru
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+ipv6 dhcp pool DHCP_POOLL_VLAN_101
+ address prefix FD00::10:20:101:0/112
+!
+ipv6 dhcp pool DHCP_POOLL_VLAN_102
+ address prefix FD00::10:20:102:0/112
+!
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+crypto pki trustpoint VPN
+ enrollment url http://123.15.15.1:80
+ serial-number
+ ip-address 10.0.3.18
+ subject-name CN=R18,OU=VPN,O=Server,C=RU
+ revocation-check none
+ rsakeypair VPN
+!
+!
+crypto pki certificate chain VPN
+ certificate 04 nvram:CA#4.cer
+ certificate ca 01 nvram:CA#1CA.cer
+!
+redundancy
+!
+!
+!
+!
+!
+!
+!
+crypto isakmp policy 5
+ encr 3des
+ hash sha256
+ authentication pre-share
+ group 19
+crypto isakmp key cisco address 123.15.15.1
+!
+!
+crypto ipsec transform-set SET1 esp-3des
+ mode tunnel
+!
+crypto ipsec profile GRE
+ set transform-set SET1
+!
+!
+!
+crypto map MAP 5 ipsec-isakmp
+ set peer 123.15.15.1
+ set transform-set SET1
+ match address 105
+!
+!
+!
+!
+!
+interface Loopback0
+ no shutdown
+ ip address 10.20.0.18 255.255.255.255
+ ipv6 address FE80::10:20:0:18 link-local
+ ipv6 address FD00::10:20:0:18/128
+ ipv6 enable
+ ipv6 eigrp 2
+!
+interface Loopback1
+ no shutdown
+ description REAL-IP-FOR-TEST
+ ip address 123.18.18.1 255.255.255.255
+ ipv6 address 2001::123:18:18:1/112
+ ipv6 enable
+!
+interface Tunnel0
+ no shutdown
+ description TUN-to-R15-MOSKOW
+ ip address 10.0.3.18 255.255.255.0
+ ip mtu 1400
+ ip tcp adjust-mss 1360
+ tunnel source Loopback1
+ tunnel destination 123.15.15.1
+ tunnel protection ipsec profile GRE
+!
+interface Ethernet0/0
+ no shutdown
+ description link-to-R16
+ ip address 10.20.2.5 255.255.255.254
+ ip nat inside
+ ip virtual-reassembly in
+ ipv6 address FE80::1 link-local
+ ipv6 address FD00::10:20:2:5/127
+ ipv6 enable
+ ipv6 eigrp 2
+!
+interface Ethernet0/1
+ no shutdown
+ description link-to-R17
+ ip address 10.20.2.3 255.255.255.254
+ ip nat inside
+ ip virtual-reassembly in
+ ipv6 address FE80::1 link-local
+ ipv6 address FD00::10:20:2:3/127
+ ipv6 enable
+ ipv6 eigrp 2
+!
+interface Ethernet0/2
+ no shutdown
+ description link-to-R24-TRIADA
+ ip address 123.24.24.7 255.255.255.254
+ ip nat outside
+ ip virtual-reassembly in
+ ipv6 address FE80::2 link-local
+ ipv6 address FD00::10:0:0:7/127
+ ipv6 enable
+!
+interface Ethernet0/3
+ no shutdown
+ description link-to-R26-TRIADA
+ ip address 123.26.26.9 255.255.255.254
+ ip nat outside
+ ip virtual-reassembly in
+ ipv6 address FE80::2 link-local
+ ipv6 address FD00::10:0:0:9/127
+ ipv6 enable
+!
+!
+router eigrp 1
+ network 10.20.0.0 0.0.255.255
+ shutdown
+!
+!
+router eigrp named
+ !
+ address-family ipv4 unicast autonomous-system 2
+  !
+  topology base
+   redistribute static metric 100000 1000 255 1 1500
+  exit-af-topology
+  network 10.20.0.0 0.0.255.255
+  eigrp router-id 18.18.18.18
+ exit-address-family
+ !
+ address-family ipv6 unicast autonomous-system 2
+  !
+  topology base
+   redistribute static metric 100000 1000 255 1 1500
+  exit-af-topology
+  eigrp router-id 18.18.18.18
+ exit-address-family
+!
+router bgp 2042
+ bgp log-neighbor-changes
+ neighbor 10.0.0.6 remote-as 520
+ neighbor 10.0.0.8 remote-as 520
+ neighbor 123.24.24.6 remote-as 520
+ neighbor 123.26.26.8 remote-as 520
+ neighbor FD00::10:0:0:6 remote-as 520
+ neighbor FD00::10:0:0:8 remote-as 520
+ !
+ address-family ipv4
+  network 123.18.18.0 mask 255.255.255.0
+  neighbor 10.0.0.6 activate
+  neighbor 10.0.0.8 activate
+  neighbor 123.24.24.6 activate
+  neighbor 123.24.24.6 prefix-list DENY_TRANSIT out
+  neighbor 123.26.26.8 activate
+  neighbor 123.26.26.8 prefix-list DENY_TRANSIT out
+  no neighbor FD00::10:0:0:6 activate
+  no neighbor FD00::10:0:0:8 activate
+  maximum-paths 2
+ exit-address-family
+ !
+ address-family ipv6
+  maximum-paths 2
+  network 2001::123:18:18:0/112
+  neighbor FD00::10:0:0:6 activate
+  neighbor FD00::10:0:0:8 activate
+ exit-address-family
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+ip nat pool POOL-123.18.18.2-6 123.18.18.2 123.18.18.6 netmask 255.255.255.0
+ip nat inside source list 10 pool POOL-123.18.18.2-6 overload
+ip route 0.0.0.0 0.0.0.0 Null0
+ip route 10.10.0.0 255.255.0.0 Tunnel0
+ip route 123.18.18.0 255.255.255.0 Null0
+!
+!
+ip prefix-list DENY_TRANSIT seq 5 permit 123.18.18.0/24
+ipv6 route ::/0 Null0
+!
+!
+access-list 10 permit 10.20.101.0 0.0.0.255
+access-list 10 permit 10.20.102.0 0.0.0.255
+access-list 105 permit gre host 123.18.18.1 host 123.15.15.1
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+ transport input none
+!
+!
+end
