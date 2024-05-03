@@ -346,7 +346,8 @@
    37140A5D FFF0494E 39C4B87E A6AAEC33 0CE7E133 287E646C BBFEEA46 48CCF3D1
    8A770D53 0A028F08 C2AB0CE6 C28020D2 5891E590 BCAED132 D9E9EDB7
    quit
-   !
+   ```
+   ```
    crypto ikev2 proposal DMVPN
    encryption aes-cbc-128
    integrity md5
@@ -523,7 +524,8 @@
    37140A5D FFF0494E 39C4B87E A6AAEC33 0CE7E133 287E646C BBFEEA46 48CCF3D1
    8A770D53 0A028F08 C2AB0CE6 C28020D2 5891E590 BCAED132 D9E9EDB7
    quit
-   !
+   ```
+   ```
    crypto ikev2 proposal DMVPN
    encryption aes-cbc-128
    integrity md5
@@ -539,8 +541,6 @@
    authentication remote rsa-sig
    authentication local rsa-sig
    pki trustpoint VPN
-   !
-   !
    !
    crypto ipsec transform-set DMVPN_TR-SET esp-aes esp-md5-hmac
    mode transport
@@ -668,7 +668,8 @@
    37140A5D FFF0494E 39C4B87E A6AAEC33 0CE7E133 287E646C BBFEEA46 48CCF3D1
    8A770D53 0A028F08 C2AB0CE6 C28020D2 5891E590 BCAED132 D9E9EDB7
    quit
-   !
+   ```
+   ```
    crypto ikev2 proposal DMVPN
    encryption aes-cbc-128
    integrity md5
