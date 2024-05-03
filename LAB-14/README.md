@@ -16,7 +16,7 @@
    ip tcp adjust-mss 1360
    tunnel source Loopback1
    tunnel destination 123.18.18.1
-   tunnel protection ipsec profile GRE
+   tunnel protection ipsec profile IPSEC_PROFILE
    end
    !
    crypto pki server CA
@@ -27,25 +27,42 @@
    revocation-check crl
    rsakeypair CA
    !
-   crypto isakmp policy 5
-   encr 3des
-   hash sha256
-   authentication pre-share
-   group 19
-   crypto isakmp key cisco address 0.0.0.0
+   crypto pki trustpoint VPN
+   enrollment url http://123.15.15.1:80
+   serial-number
+   ip-address 10.0.3.15
+   subject-name CN=R15,OU=VPN,O=Server,C=RU
+   revocation-check none
+   rsakeypair VPN
    !
-   crypto ipsec transform-set SET1 esp-3des
+   ```
+   Найтроки первой фазы IKEv2 на R15
+   ```
+   crypto ikev2 proposal GRE
+   encryption aes-cbc-128
+   integrity md5
+   group 2
+   !
+   crypto ikev2 policy IKEV2
+   proposal GRE
+   proposal DMVPN
+   !
+   crypto ikev2 profile IKEV2_PROFILE
+   match address local interface Loopback1
+   match identity remote address 0.0.0.0
+   authentication remote rsa-sig
+   authentication local rsa-sig
+   pki trustpoint VPN
+   !
+   ```
+   Найтроки второй фазы IKEv2 на R15
+   ```
+   crypto ipsec transform-set IPSEC_TR-SET esp-aes esp-md5-hmac
    mode tunnel
    !
-   crypto ipsec profile GRE
-   set transform-set SET1
-   !
-   crypto map MAP 5 ipsec-isakmp
-   set peer 123.18.18.1
-   set transform-set SET1
-   match address 105
-   !
-   access-list 105 permit gre host 123.15.15.1 host 123.18.18.1
+   crypto ipsec profile IPSEC_PROFILE
+   set transform-set DMVPN_TR-SET
+   set ikev2-profile IKEV2_PROFILE
    ```
    Настройки на R18
    ```
@@ -56,7 +73,7 @@
    ip tcp adjust-mss 1360
    tunnel source Loopback1
    tunnel destination 123.15.15.1
-   tunnel protection ipsec profile GRE
+   tunnel protection ipsec profile IPSEC_PROFILE
    end
    !
    crypto pki trustpoint VPN
@@ -67,25 +84,98 @@
    revocation-check none
    rsakeypair VPN
    !
-   crypto isakmp policy 5
-   encr 3des
-   hash sha256
-   authentication pre-share
-   group 19
-   crypto isakmp key cisco address 123.15.15.1
+   crypto ikev2 proposal GRE
+   encryption aes-cbc-128
+   integrity md5
+   group 2
    !
-   crypto ipsec transform-set SET1 esp-3des
+   crypto ikev2 policy IKEV2
+   proposal GRE
+   !
+   !
+   crypto ikev2 profile IKEV2_PROFILE
+   match address local interface Loopback1
+   match identity remote address 0.0.0.0
+   authentication remote rsa-sig
+   authentication local rsa-sig
+   pki trustpoint VPN
+   !
+   crypto ipsec transform-set IPSEC_TR-SET esp-aes esp-md5-hmac
    mode tunnel
    !
-   crypto ipsec profile GRE
-   set transform-set SET1
+   crypto ipsec profile IPSEC_PROFILE
+   set transform-set IPSEC_TR-SET
+   set ikev2-profile IKEV2_PROFILE
    !
-   crypto map MAP 5 ipsec-isakmp
-   set peer 123.15.15.1
-   set transform-set SET1
-   match address 105
+   ```
+   Проверяем работу
+   ```
+   R15# ping 10.0.3.18
    !
-   access-list 105 permit gre host 123.18.18.1 host 123.15.15.1
+   Type escape sequence to abort.
+   Sending 5, 100-byte ICMP Echos to 10.0.3.18, timeout is 2 seconds:
+   !!!!!
+   Success rate is 100 percent (5/5), round-trip min/avg/max = 5/6/8 ms
+   ```
+   ```
+   R15# show crypto ikev2 sa
+   IPv4 Crypto IKEv2  SA
+   !
+   Tunnel-id Local                 Remote                fvrf/ivrf            Status
+   1         123.15.15.1/500       123.18.18.1/500       none/none            READY
+   Encr: AES-CBC, keysize: 128, PRF: MD5, Hash: MD596, DH Grp:2, Auth sign: RSA, Auth verify: RSA
+   Life/Active Time: 86400/2407 sec
+   ```
+   ```
+   R15# show crypto ipsec sa
+   
+   interface: Tunnel0
+   Crypto map tag: Tunnel0-head-0, local addr 123.15.15.1
+   
+   protected vrf: (none)
+   local  ident (addr/mask/prot/port): (123.15.15.1/255.255.255.255/47/0)
+   remote ident (addr/mask/prot/port): (123.18.18.1/255.255.255.255/47/0)
+   current_peer 123.18.18.1 port 500
+   PERMIT, flags={origin_is_acl,}
+   #pkts encaps: 15, #pkts encrypt: 15, #pkts digest: 15
+   #pkts decaps: 15, #pkts decrypt: 15, #pkts verify: 15
+   #pkts compressed: 0, #pkts decompressed: 0
+   #pkts not compressed: 0, #pkts compr. failed: 0
+   #pkts not decompressed: 0, #pkts decompress failed: 0
+   #send errors 0, #recv errors 0
+
+     local crypto endpt.: 123.15.15.1, remote crypto endpt.: 123.18.18.1
+     plaintext mtu 1438, path mtu 1500, ip mtu 1500, ip mtu idb Ethernet0/2
+     current outbound spi: 0xE48C023E(3834380862)
+     PFS (Y/N): N, DH group: none
+
+     inbound esp sas:
+      spi: 0x20ABA6C5(548120261)
+        transform: esp-aes esp-md5-hmac ,
+        in use settings ={Tunnel, }
+        conn id: 2, flow_id: SW:2, sibling_flags 80000040, crypto map: Tunnel0-head-0
+        sa timing: remaining key lifetime (k/sec): (4159937/1183)
+        IV size: 16 bytes
+        replay detection support: Y
+        Status: ACTIVE(ACTIVE)
+
+     inbound ah sas:
+
+     inbound pcp sas:
+
+     outbound esp sas:
+      spi: 0xE48C023E(3834380862)
+        transform: esp-aes esp-md5-hmac ,
+        in use settings ={Tunnel, }
+        conn id: 1, flow_id: SW:1, sibling_flags 80000040, crypto map: Tunnel0-head-0
+        sa timing: remaining key lifetime (k/sec): (4159937/1183)
+        IV size: 16 bytes
+        replay detection support: Y
+        Status: ACTIVE(ACTIVE)
+
+     outbound ah sas:
+
+     outbound pcp sas:
    ```
 2. Настроите DMVPN поверх IPSec между Москва и Чокурдах, Лабытнанги.
    ####
