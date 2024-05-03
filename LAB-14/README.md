@@ -235,18 +235,6 @@
    end   date: 12:45:52 MSK Feb 26 2027
    Associated Trustpoints: CA
    Storage: nvram:CA#1CA.cer
-   
-   R15# ping 10.0.4.27
-   Type escape sequence to abort.
-   Sending 5, 100-byte ICMP Echos to 10.0.4.27, timeout is 2 seconds:
-   !!!!!
-   Success rate is 100 percent (5/5), round-trip min/avg/max = 7/7/8 ms
-   
-   R15#ping 10.0.4.28
-   Type escape sequence to abort.
-   Sending 5, 100-byte ICMP Echos to 10.0.4.28, timeout is 2 seconds:
-   !!!!!
-   Success rate is 100 percent (5/5), round-trip min/avg/max = 6/7/9 ms
    ```
    Итоговый конфиг R15:
    ```
@@ -262,7 +250,8 @@
    ip ospf 1 area 3
    tunnel source Loopback1
    tunnel mode gre multipoint
-   tunnel protection ipsec profile DMVPN
+   tunnel protection ipsec profile IPSEC_PROFILE
+   end
    !
    crypto pki server CA
    database level complete
@@ -271,6 +260,14 @@
    crypto pki trustpoint CA
    revocation-check crl
    rsakeypair CA
+   !
+   crypto pki trustpoint VPN
+   enrollment url http://123.15.15.1:80
+   serial-number
+   ip-address 10.0.3.15
+   subject-name CN=R15,OU=VPN,O=Server,C=RU
+   revocation-check none
+   rsakeypair VPN
    !
    crypto pki certificate chain CA
    certificate ca 01
@@ -299,21 +296,68 @@
    37140A5D FFF0494E 39C4B87E A6AAEC33 0CE7E133 287E646C BBFEEA46 48CCF3D1
    8A770D53 0A028F08 C2AB0CE6 C28020D2 5891E590 BCAED132 D9E9EDB7
    quit
+   crypto pki certificate chain VPN
+   certificate 06
+   3082028E 30820176 A0030201 02020106 300D0609 2A864886 F70D0101 05050030
+   0D310B30 09060355 04031302 4341301E 170D3234 30353033 30383131 31305A17
+   0D323530 35303330 38313131 305A307F 310B3009 06035504 06130252 55310F30
+   0D060355 040A1306 53657276 6572310C 300A0603 55040B13 0356504E 310C300A
+   06035504 03130352 31353143 300F0603 55040513 08363731 31313135 33301606
+   092A8648 86F70D01 09081309 31302E30 2E332E31 35301806 092A8648 86F70D01
+   0902160B 5231352E 6F747573 2E727530 5C300D06 092A8648 86F70D01 01010500
+   034B0030 48024100 B82E446A 4CFE0B99 C2F4A19C 5DE08809 B0F5453C 4191D4FC
+   5EBB121F E492B05B 70E57DFA D20A7752 AAF2BF7A 8BAE0AB1 9961B9D0 761F3681
+   4BD15688 E7DE8B8B 02030100 01A34F30 4D300B06 03551D0F 04040302 05A0301F
+   0603551D 23041830 168014E1 8AAD507D F2A41D6A 15DE43A0 20B75930 1EB57530
+   1D060355 1D0E0416 0414B940 8D6C0A97 F4E088F2 AA977F39 D851ABD7 CBB7300D
+   06092A86 4886F70D 01010505 00038201 0100B32E 62985565 EE4326B6 82AC47D1
+   45BB90A7 B79DCF39 C52515ED C0D6B1DB 875C981C 451A2233 67EA8C82 B51683AD
+   47D2D4D1 DCB9B926 AA28F6CB D27BC336 44C69E81 43803AA2 63DB72BA 58B7B2AE
+   7F8D83BE 50F1EA57 38D0BBAB CAC48EB2 DF4CF976 D3B1CDD7 20A21502 6697872F
+   CD6189F2 971C4B69 24755B7B E8CB5D48 F51D0A9C 84168774 F11164AE EC30FAC7
+   2E1817B5 D4A52C11 25FB6179 F4185565 23A53394 D663AAF9 BED03738 EB8E9393
+   558D1D85 F7ACD8B7 5D0DFF4B 01730884 EAA0E4D5 05A2FB6B D8ED384B 9C8210A4
+   8B112534 362E39D0 A3817D95 9B1D5E9B 6313819A 80E6D1B7 F64D056F 7147B6AA
+   B6B3A0A4 53B4E3A9 C2501846 71165BE0 0C1D
+   quit
+   certificate ca 01
+   308202F8 308201E0 A0030201 02020101 300D0609 2A864886 F70D0101 04050030
+   0D310B30 09060355 04031302 4341301E 170D3234 30323237 30393435 35325A17
+   0D323730 32323630 39343535 325A300D 310B3009 06035504 03130243 41308201
+   22300D06 092A8648 86F70D01 01010500 0382010F 00308201 0A028201 0100B62D
+   6D7853A3 7C7A5DA8 9778594E 2B19845C 234A9F51 A4443F48 D1FA3CB3 7D9DFC9B
+   CE12AE9F E36D49FA 359244A8 9C4FE686 DD5D0C8A F6673DBA 9EE05E51 DB980F24
+   A923764F D45ECD0D 9DE3FB08 13DD4FD1 373398C2 1A0FEB83 50E629D6 62F15AFC
+   59DAB64B C9E1FD38 97940860 2914B295 364066E2 F55FE203 411745CA D38388F0
+   AC4A5135 61F379DD 9C1DAAB3 C6D89647 2BDD6451 42CC8099 C4E11F3C 5ABA4394
+   B73A94C9 1AE13E8B 6993AC63 FB0A301B 0F4E9652 906DA722 E520E210 01B01C84
+   F4E9DC0C EA649260 2D541960 FF2744FE EB85C9A6 0F01C11F F06F35D1 A8669ACE
+   D6FC8A55 205457C0 97A36449 30B0AD8C 4FAAF82D 64156004 520D6B8E 14AF0203
+   010001A3 63306130 0F060355 1D130101 FF040530 030101FF 300E0603 551D0F01
+   01FF0404 03020186 301F0603 551D2304 18301680 14E18AAD 507DF2A4 1D6A15DE
+   43A020B7 59301EB5 75301D06 03551D0E 04160414 E18AAD50 7DF2A41D 6A15DE43
+   A020B759 301EB575 300D0609 2A864886 F70D0101 04050003 82010100 9F21050C
+   9D05D544 DC5D9DEC 654A3C56 6D5557C9 572D87E7 3A5C5CCE 95A42D1A 5EBC8E34
+   F56FE609 1EF8AA66 E4116651 684C2651 A3BC5A87 76771262 D3780C6E 1B37C61D
+   AC017254 C0899521 5C3179C6 54EB02F1 8C75B32B 154FF991 F442D618 F6B02386
+   7806DB20 6E477F8B 1338B976 79BBDCB7 46ECC4F4 43774C69 3B8B2EDD 73D9F973
+   FB1EB209 C71DC7EB 7FB4B4A2 C4923E47 6921E709 9177AE65 1D174722 D6E18DC8
+   A6B8575E C91B91A8 E4F63B8D 30E7F9FA CE289756 6687A9FC 5C260C67 A10D29DB
+   37140A5D FFF0494E 39C4B87E A6AAEC33 0CE7E133 287E646C BBFEEA46 48CCF3D1
+   8A770D53 0A028F08 C2AB0CE6 C28020D2 5891E590 BCAED132 D9E9EDB7
+   quit
    !
-   redundancy
+   crypto ikev2 proposal DMVPN
+   encryption aes-cbc-128
+   integrity md5
+   group 2
    !
-   crypto isakmp policy 5
-   encr 3des
-   hash sha256
-   authentication pre-share
-   group 19
-   crypto isakmp key cisco address 0.0.0.0
-   !
-   crypto ipsec transform-set SET2 esp-3des
+   crypto ipsec transform-set DMVPN_TR-SET esp-aes esp-md5-hmac
    mode transport
    !
-   crypto ipsec profile DMVPN
-   set transform-set SET2
+   crypto ipsec profile IPSEC_PROFILE
+   set transform-set DMVPN_TR-SET
+   set ikev2-profile IKEV2_PROFILE
    ```
    Произведем настройку R27:
    ```
@@ -414,7 +458,7 @@
    ip ospf 1 area 3
    tunnel source Loopback1
    tunnel mode gre multipoint
-   tunnel protection ipsec profile DMVPN
+   tunnel protection ipsec profile IPSEC_PROFILE
    !
    crypto pki trustpoint VPN
    enrollment url http://123.15.15.1:80
@@ -480,21 +524,30 @@
    8A770D53 0A028F08 C2AB0CE6 C28020D2 5891E590 BCAED132 D9E9EDB7
    quit
    !
-   redundancy
+   crypto ikev2 proposal DMVPN
+   encryption aes-cbc-128
+   integrity md5
+   group 2
    !
-   crypto isakmp policy 5
-   encr 3des
-   hash sha256
-   authentication pre-share
-   group 19
-   crypto isakmp key cisco address 0.0.0.0
+   crypto ikev2 policy IKEV2
+   proposal DMVPN
    !
-   crypto ipsec transform-set SET2 esp-3des
+   !
+   crypto ikev2 profile IKEV2_PROFILE
+   match address local interface Loopback1
+   match identity remote address 0.0.0.0
+   authentication remote rsa-sig
+   authentication local rsa-sig
+   pki trustpoint VPN
+   !
+   !
+   !
+   crypto ipsec transform-set DMVPN_TR-SET esp-aes esp-md5-hmac
    mode transport
    !
-   crypto ipsec profile DMVPN
-   set transform-set SET2
-   !
+   crypto ipsec profile IPSEC_PROFILE
+   set transform-set DMVPN_TR-SET
+   set ikev2-profile IKEV2_PROFILE
    ```
    Произведем настройку R28:
    ```   
@@ -616,20 +669,30 @@
    8A770D53 0A028F08 C2AB0CE6 C28020D2 5891E590 BCAED132 D9E9EDB7
    quit
    !
-   redundancy
+   crypto ikev2 proposal DMVPN
+   encryption aes-cbc-128
+   integrity md5
+   group 2
    !
-   crypto isakmp policy 5
-   encr 3des
-   hash sha256
-   authentication pre-share
-   group 19
-   crypto isakmp key cisco address 0.0.0.0
+   crypto ikev2 policy IKEV2
+   proposal DMVPN
    !
-   crypto ipsec transform-set SET2 esp-3des
+   !
+   crypto ikev2 profile IKEV2_PROFILE
+   match address local interface Loopback1
+   match identity remote address 0.0.0.0
+   authentication remote rsa-sig
+   authentication local rsa-sig
+   pki trustpoint VPN
+   !
+   !
+   !
+   crypto ipsec transform-set DMVPN_TR-SET esp-aes esp-md5-hmac
    mode transport
    !
-   crypto ipsec profile DMVPN
-   set transform-set SET2
+   crypto ipsec profile IPSEC_PROFILE
+   set transform-set DMVPN_TR-SET
+   set ikev2-profile IKEV2_PROFILE
    !
    ```
 3. Все узлы в офисах в лабораторной работе должны иметь IP связность.
@@ -645,7 +708,6 @@
    VRF info: (vrf in name/id, vrf out name/id)
    1 10.0.3.18 7 msec 7 msec *
    ```
-   ![img_1.png](img_1.png)
    ```
    R15# ping 10.0.4.27
    Type escape sequence to abort.
@@ -659,7 +721,6 @@
    VRF info: (vrf in name/id, vrf out name/id)
    1 10.0.4.27 8 msec 8 msec *
    ```
-   ![img_2.png](img_2.png)
    ```
    R15# ping 10.0.4.28
    Type escape sequence to abort.
@@ -672,4 +733,3 @@
    VRF info: (vrf in name/id, vrf out name/id)
    1 10.0.4.28 7 msec 7 msec *
    ```
-   ![img_3.png](img_3.png)
