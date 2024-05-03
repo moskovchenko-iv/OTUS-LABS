@@ -1,7 +1,6 @@
 
 !
-! No configuration change since last restart
-! NVRAM config last updated at 12:21:23 MSK Tue Feb 27 2024
+! Last configuration change at 13:25:26 MSK Fri May 3 2024
 !
 version 15.4
 service timestamps debug datetime msec
@@ -35,6 +34,7 @@ mmi snmp-timeout 180
 !
 !
 !
+ip domain name otus.ru
 ip cef
 ipv6 unicast-routing
 ipv6 cef
@@ -47,17 +47,65 @@ multilink bundle-name authenticated
 !
 !
 !
+crypto pki server CA
+ database level complete
+ no database archive
 !
+crypto pki trustpoint CA
+ revocation-check crl
+ rsakeypair CA
+!
+crypto pki trustpoint VPN
+ enrollment url http://123.15.15.1:80
+ serial-number
+ ip-address 10.0.3.15
+ subject-name CN=R15,OU=VPN,O=Server,C=RU
+ revocation-check none
+ rsakeypair VPN
+!
+!
+crypto pki certificate chain CA
+ certificate ca 01 nvram:CA#1CA.cer
+crypto pki certificate chain VPN
+ certificate 06 nvram:CA#6.cer
+ certificate ca 01 nvram:CA#1CA.cer
 !
 redundancy
 !
 !
 !
 !
+crypto ikev2 proposal DMVPN
+ encryption aes-cbc-128
+ integrity md5
+ group 2
+crypto ikev2 proposal GRE
+ encryption aes-cbc-128
+ integrity md5
+ group 2
+!
+crypto ikev2 policy IKEV2
+ proposal GRE
+ proposal DMVPN
+!
+!
+crypto ikev2 profile IKEV2_PROFILE
+ match address local interface Loopback1
+ match identity remote address 0.0.0.0
+ authentication remote rsa-sig
+ authentication local rsa-sig
+ pki trustpoint VPN
 !
 !
 !
+crypto ipsec transform-set IPSEC_TR-SET esp-aes esp-md5-hmac
+ mode tunnel
+crypto ipsec transform-set DMVPN_TR-SET esp-aes esp-md5-hmac
+ mode transport
 !
+crypto ipsec profile IPSEC_PROFILE
+ set transform-set DMVPN_TR-SET
+ set ikev2-profile IKEV2_PROFILE
 !
 !
 !
@@ -89,6 +137,7 @@ interface Tunnel0
  ip tcp adjust-mss 1360
  tunnel source Loopback1
  tunnel destination 123.18.18.1
+ tunnel protection ipsec profile IPSEC_PROFILE
 !
 interface Tunnel1
  no shutdown
@@ -103,6 +152,7 @@ interface Tunnel1
  ip ospf 1 area 3
  tunnel source Loopback1
  tunnel mode gre multipoint
+ tunnel protection ipsec profile IPSEC_PROFILE
 !
 interface Ethernet0/0
  no shutdown
@@ -207,7 +257,9 @@ router bgp 1001
   neighbor 10.10.0.14 activate
   neighbor 10.10.0.14 next-hop-self
   neighbor 123.21.21.4 activate
+  neighbor 123.21.21.4 soft-reconfiguration inbound
   neighbor 123.21.21.4 route-map lp_x2 in
+  neighbor 123.21.21.4 filter-list 5 out
   no neighbor FD00::10:0:0:4 activate
   no neighbor FD00::10:10:0:14 activate
  exit-address-family
@@ -222,14 +274,14 @@ router bgp 1001
 !
 ip forward-protocol nd
 !
+ip as-path access-list 5 permit ^$
 !
-no ip http server
+ip http server
 no ip http secure-server
 ip nat pool POOL-123.15.15.2 123.15.15.2 123.15.15.2 netmask 255.255.255.0
 ip nat inside source list 10 pool POOL-123.15.15.2 overload
 ip nat inside source static tcp 10.10.0.19 23 123.14.14.7 23 extendable
 ip nat inside source static 10.10.0.20 123.15.15.7
-ip route 0.0.0.0 0.0.0.0 Null0
 ip route 10.20.0.0 255.255.0.0 Tunnel0
 ip route 123.15.15.0 255.255.255.0 Null0
 !
@@ -283,3 +335,5 @@ ntp server 10.10.0.12
 ntp server 10.10.0.13
 !
 end
+
+

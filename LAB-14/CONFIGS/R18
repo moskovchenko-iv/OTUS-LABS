@@ -1,6 +1,6 @@
 
 !
-! Last configuration change at 19:41:28 MSK Tue Feb 27 2024
+! Last configuration change at 12:13:58 MSK Fri May 3 2024
 !
 version 15.4
 service timestamps debug datetime msec
@@ -71,29 +71,33 @@ redundancy
 !
 !
 !
+crypto ikev2 proposal GRE
+ encryption aes-cbc-128
+ integrity md5
+ group 2
+!
+crypto ikev2 policy IKEV2
+ proposal GRE
+!
+!
+crypto ikev2 profile IKEV2_PROFILE
+ match address local interface Loopback1
+ match identity remote address 0.0.0.0
+ authentication remote rsa-sig
+ authentication local rsa-sig
+ pki trustpoint VPN
 !
 !
 !
-crypto isakmp policy 5
- encr 3des
- hash sha256
- authentication pre-share
- group 19
-crypto isakmp key cisco address 123.15.15.1
-!
-!
-crypto ipsec transform-set SET1 esp-3des
+crypto ipsec transform-set IPSEC_TR-SET esp-aes esp-md5-hmac
  mode tunnel
 !
-crypto ipsec profile GRE
- set transform-set SET1
+crypto ipsec profile IPSEC_PROFILE
+ set transform-set IPSEC_TR-SET
+ set ikev2-profile IKEV2_PROFILE
 !
 !
 !
-crypto map MAP 5 ipsec-isakmp
- set peer 123.15.15.1
- set transform-set SET1
- match address 105
 !
 !
 !
@@ -122,7 +126,7 @@ interface Tunnel0
  ip tcp adjust-mss 1360
  tunnel source Loopback1
  tunnel destination 123.15.15.1
- tunnel protection ipsec profile GRE
+ tunnel protection ipsec profile IPSEC_PROFILE
 !
 interface Ethernet0/0
  no shutdown
@@ -205,7 +209,9 @@ router bgp 2042
   neighbor 10.0.0.6 activate
   neighbor 10.0.0.8 activate
   neighbor 123.24.24.6 activate
+  neighbor 123.24.24.6 prefix-list DENY_TRANSIT out
   neighbor 123.26.26.8 activate
+  neighbor 123.26.26.8 prefix-list DENY_TRANSIT out
   no neighbor FD00::10:0:0:6 activate
   no neighbor FD00::10:0:0:8 activate
   maximum-paths 2
@@ -229,12 +235,13 @@ ip route 0.0.0.0 0.0.0.0 Null0
 ip route 10.10.0.0 255.255.0.0 Tunnel0
 ip route 123.18.18.0 255.255.255.0 Null0
 !
+!
+ip prefix-list DENY_TRANSIT seq 5 permit 123.18.18.0/24
 ipv6 route ::/0 Null0
 !
 !
 access-list 10 permit 10.20.101.0 0.0.0.255
 access-list 10 permit 10.20.102.0 0.0.0.255
-access-list 105 permit gre host 123.18.18.1 host 123.15.15.1
 !
 control-plane
 !
@@ -254,3 +261,5 @@ line vty 0 4
 !
 !
 end
+
+

@@ -1,6 +1,6 @@
 
 !
-! Last configuration change at 13:19:24 MSK Tue Feb 27 2024
+! Last configuration change at 14:12:01 MSK Fri May 3 2024
 !
 version 15.4
 service timestamps debug datetime msec
@@ -64,22 +64,30 @@ redundancy
 !
 !
 !
+crypto ikev2 proposal DMVPN
+ encryption aes-cbc-128
+ integrity md5
+ group 2
+!
+crypto ikev2 policy IKEV2
+ proposal DMVPN
+!
+!
+crypto ikev2 profile IKEV2_PROFILE
+ match address local interface Loopback1
+ match identity remote address 0.0.0.0
+ authentication remote rsa-sig
+ authentication local rsa-sig
+ pki trustpoint VPN
 !
 !
 !
-crypto isakmp policy 5
- encr 3des
- hash sha256
- authentication pre-share
- group 19
-crypto isakmp key cisco address 0.0.0.0
-!
-!
-crypto ipsec transform-set SET2 esp-3des
+crypto ipsec transform-set DMVPN_TR-SET esp-aes esp-md5-hmac
  mode transport
 !
-crypto ipsec profile DMVPN
- set transform-set SET2
+crypto ipsec profile IPSEC_PROFILE
+ set transform-set DMVPN_TR-SET
+ set ikev2-profile IKEV2_PROFILE
 !
 !
 !
@@ -112,7 +120,7 @@ interface Tunnel1
  ip ospf 1 area 3
  tunnel source Loopback1
  tunnel mode gre multipoint
- tunnel protection ipsec profile DMVPN
+ tunnel protection ipsec profile IPSEC_PROFILE
 !
 interface Ethernet0/0
  no shutdown
@@ -185,3 +193,5 @@ line vty 0 4
 !
 !
 end
+
+

@@ -696,6 +696,119 @@
    set ikev2-profile IKEV2_PROFILE
    !
    ```
+   Проверяем работу
+   ```
+   R27# show crypto ikev2 sa
+   IPv4 Crypto IKEv2  SA
+   
+   Tunnel-id Local                 Remote                fvrf/ivrf            Status
+   1         123.25.25.5/500       123.15.15.1/500       none/none            READY
+   Encr: AES-CBC, keysize: 128, PRF: MD5, Hash: MD596, DH Grp:2, Auth sign: RSA, Auth verify: RSA
+   Life/Active Time: 86400/5496 sec
+   
+   Tunnel-id Local                 Remote                fvrf/ivrf            Status
+   2         123.25.25.5/500       123.25.25.9/500       none/none            READY
+   Encr: AES-CBC, keysize: 128, PRF: MD5, Hash: MD596, DH Grp:2, Auth sign: RSA, Auth verify: RSA
+   Life/Active Time: 86400/5464 sec
+   
+   IPv6 Crypto IKEv2  SA
+   ```
+   ```
+   R27# show crypto ipsec sa
+   
+   interface: Tunnel1
+   Crypto map tag: Tunnel1-head-0, local addr 123.25.25.5
+   
+   protected vrf: (none)
+   local  ident (addr/mask/prot/port): (123.25.25.5/255.255.255.255/47/0)
+   remote ident (addr/mask/prot/port): (123.25.25.9/255.255.255.255/47/0)
+   current_peer 123.25.25.9 port 500
+   PERMIT, flags={origin_is_acl,}
+   #pkts encaps: 1, #pkts encrypt: 1, #pkts digest: 1
+   #pkts decaps: 0, #pkts decrypt: 0, #pkts verify: 0
+   #pkts compressed: 0, #pkts decompressed: 0
+   #pkts not compressed: 0, #pkts compr. failed: 0
+   #pkts not decompressed: 0, #pkts decompress failed: 0
+   #send errors 0, #recv errors 0
+
+     local crypto endpt.: 123.25.25.5, remote crypto endpt.: 123.25.25.9
+     plaintext mtu 1458, path mtu 1500, ip mtu 1500, ip mtu idb (none)
+     current outbound spi: 0x791F394D(2032089421)
+     PFS (Y/N): N, DH group: none
+
+     inbound esp sas:
+      spi: 0xC0D7EB3C(3235375932)
+        transform: esp-aes esp-md5-hmac ,
+        in use settings ={Transport, }
+        conn id: 7, flow_id: SW:7, sibling_flags 80000000, crypto map: Tunnel1-head-0
+        sa timing: remaining key lifetime (k/sec): (4293240/1582)
+        IV size: 16 bytes
+        replay detection support: Y
+        Status: ACTIVE(ACTIVE)
+
+     inbound ah sas:
+
+     inbound pcp sas:
+
+     outbound esp sas:
+      spi: 0x791F394D(2032089421)
+        transform: esp-aes esp-md5-hmac ,
+        in use settings ={Transport, }
+        conn id: 8, flow_id: SW:8, sibling_flags 80000000, crypto map: Tunnel1-head-0
+        sa timing: remaining key lifetime (k/sec): (4293240/1582)
+        IV size: 16 bytes
+        replay detection support: Y
+        Status: ACTIVE(ACTIVE)
+
+     outbound ah sas:
+
+     outbound pcp sas:
+
+    protected vrf: (none)
+    local  ident (addr/mask/prot/port): (123.25.25.5/255.255.255.255/47/0)
+    remote ident (addr/mask/prot/port): (123.15.15.1/255.255.255.255/47/0)
+    current_peer 123.15.15.1 port 500
+    PERMIT, flags={origin_is_acl,}
+    #pkts encaps: 622, #pkts encrypt: 622, #pkts digest: 622
+    #pkts decaps: 629, #pkts decrypt: 629, #pkts verify: 629
+    #pkts compressed: 0, #pkts decompressed: 0
+    #pkts not compressed: 0, #pkts compr. failed: 0
+    #pkts not decompressed: 0, #pkts decompress failed: 0
+    #send errors 0, #recv errors 0
+
+     local crypto endpt.: 123.25.25.5, remote crypto endpt.: 123.15.15.1
+     plaintext mtu 1458, path mtu 1500, ip mtu 1500, ip mtu idb (none)
+     current outbound spi: 0xF0290D8A(4029222282)
+     PFS (Y/N): N, DH group: none
+
+     inbound esp sas:
+      spi: 0x75890A1F(1971915295)
+        transform: esp-aes esp-md5-hmac ,
+        in use settings ={Transport, }
+        conn id: 9, flow_id: SW:9, sibling_flags 80000000, crypto map: Tunnel1-head-0
+        sa timing: remaining key lifetime (k/sec): (4367313/1584)
+        IV size: 16 bytes
+        replay detection support: Y
+        Status: ACTIVE(ACTIVE)
+
+     inbound ah sas:
+
+     inbound pcp sas:
+
+     outbound esp sas:
+      spi: 0xF0290D8A(4029222282)
+        transform: esp-aes esp-md5-hmac ,
+        in use settings ={Transport, }
+        conn id: 10, flow_id: SW:10, sibling_flags 80000000, crypto map: Tunnel1-head-0
+        sa timing: remaining key lifetime (k/sec): (4367314/1584)
+        IV size: 16 bytes
+        replay detection support: Y
+        Status: ACTIVE(ACTIVE)
+
+     outbound ah sas:
+
+     outbound pcp sas:
+   ```
 3. Все узлы в офисах в лабораторной работе должны иметь IP связность.
    ```
    R15# ping 10.0.3.18
