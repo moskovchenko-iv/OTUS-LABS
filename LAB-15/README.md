@@ -128,5 +128,164 @@
    !!!!!
    Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/2 ms
    ```
-4. 
-4. 
+4. Перейдем к настройке оборудрвания AS2000, для предоставления сервисов конечным пользователям. 
+   ####
+   Настроим динамическую маршрутизацию между роутерами R3 и R4 по протоколу isis. Роутеры имеют прямой линк, и линнки через S9, S10 воспользуемся этим для построения iBGP соседства с резервными маршрутами.
+   ```
+   R3# show ip route isis
+   i L1     123.4.0.254/32 [115/20] via 123.3.1.7, 00:28:28, Ethernet0/2.200
+                           [115/20] via 123.3.1.5, 00:28:28, Ethernet0/1.200
+                           [115/20] via 123.3.1.3, 00:28:28, Ethernet0/0
+   
+   R4# show ip route isis
+   i L1     123.3.0.254/32 [115/20] via 123.3.1.6, 00:30:17, Ethernet0/2.200
+                           [115/20] via 123.3.1.4, 00:30:17, Ethernet0/1.200
+                           [115/20] via 123.3.1.2, 00:30:17, Ethernet0/0
+   ```
+   Имеем 3 маршрута через 3 разных линка для построения iBGP с loopback интерфейсом партнера
+   ```
+   R3# show running-config | section bgp
+   router bgp 2000
+   bgp log-neighbor-changes
+   neighbor 123.1.1.10 remote-as 1000
+   neighbor 123.2.1.10 remote-as 1000
+   neighbor 123.4.0.254 remote-as 2000
+   neighbor 123.4.0.254 update-source Loopback0
+   !
+   address-family ipv4
+   network 123.3.0.0 mask 255.255.0.0
+   neighbor 123.1.1.10 activate
+   neighbor 123.1.1.10 soft-reconfiguration inbound
+   neighbor 123.2.1.10 activate
+   neighbor 123.2.1.10 soft-reconfiguration inbound
+   neighbor 123.4.0.254 activate
+   neighbor 123.4.0.254 next-hop-self
+   neighbor 123.4.0.254 soft-reconfiguration inbound
+   exit-address-family
+   ```
+   ```
+   R4# show running-config | section bgp
+   router bgp 2000
+   bgp log-neighbor-changes
+   neighbor 123.1.1.12 remote-as 1000
+   neighbor 123.2.1.12 remote-as 1000
+   neighbor 123.3.0.254 remote-as 2000
+   neighbor 123.3.0.254 update-source Loopback0
+   !
+   address-family ipv4
+   network 123.4.0.0 mask 255.255.0.0
+   neighbor 123.1.1.12 activate
+   neighbor 123.1.1.12 soft-reconfiguration inbound
+   neighbor 123.2.1.12 activate
+   neighbor 123.2.1.12 soft-reconfiguration inbound
+   neighbor 123.3.0.254 activate
+   neighbor 123.3.0.254 next-hop-self
+   neighbor 123.3.0.254 soft-reconfiguration inbound
+   exit-address-family 
+   ```
+5. Перейдем к настройке клиентских сервисов используя основные протоколы сети интернет:
+   * Для выдачи абонентам ip без использования DHCP, экономно использовать пулл, исключить возможность дублирование клиентами ip, предоставлять любое кол-во ip, изолировать по vlan и иметь возможность ограничивать ширину канала, реализуем метод ip unnambered
+     ```
+     interface Loopback1
+     description IP-UNNAMBERED
+     ip address 123.3.101.1 255.255.255.0
+     !
+     interface Ethernet0/3.101
+     encapsulation dot1Q 101
+     ip unnumbered Loopback1
+     !
+     ip route 123.3.101.100 255.255.255.255 Ethernet0/3.101
+     ```
+     Прописываем клиенту ip, проверяем:
+     ```
+     VPCS : 123.3.101.100 255.255.255.0 gateway 123.3.101.1
+     
+     VPCS> ping 123.8.0.254
+     
+     84 bytes from 123.8.0.254 icmp_seq=1 ttl=253 time=3.124 ms
+     84 bytes from 123.8.0.254 icmp_seq=2 ttl=253 time=2.319 ms
+     84 bytes from 123.8.0.254 icmp_seq=3 ttl=253 time=3.360 ms
+     84 bytes from 123.8.0.254 icmp_seq=4 ttl=253 time=2.773 ms
+     84 bytes from 123.8.0.254 icmp_seq=5 ttl=253 time=2.489 ms
+     ```
+     Таким образом добавляя нужное кол-во маршрутов ip в интерфейс пользователя, можем предоставить на клиентский порт необходимое кол-во ip   
+   * Для выдачи абонентам ip по DHCP, настроим dhcp сервер, а для резервирования шлюза воспользуемся vrrp, для удобства используем сеть 123.3.102.0/23, чтобы шлюз был в одной подсети, а R3 выдавал ip из 123.3.102.0/24, а R4 выдавал ip из 123.3.103.0/24      
+     ```
+     R3:
+     !
+     ip dhcp excluded-address 123.3.102.1 123.3.102.3
+     ip dhcp excluded-address 123.3.103.1 123.3.103.255
+     !
+     ip dhcp pool pool_123.3.102.0_23
+     network 123.3.102.0 255.255.254.0
+     default-router 123.3.102.1
+     lease 2 12 30
+     !
+     interface Ethernet0/3.102
+     encapsulation dot1Q 102
+     ip address 123.3.102.2 255.255.254.0
+     vrrp 102 ip 123.3.102.1
+     
+     R4:
+     !
+     ip dhcp excluded-address 123.3.102.1 123.3.102.255
+     !
+     ip dhcp pool pool_123.3.102.0_23
+     network 123.3.102.0 255.255.254.0
+     default-router 123.3.102.1
+     lease 2 12 30
+     !
+     interface Ethernet0/3.102
+     encapsulation dot1Q 102
+     ip address 123.3.102.3 255.255.254.0
+     vrrp 102 ip 123.3.102.1
+     !
+     ```
+   * Для выдачи абонентам серых ip с использованием NAT, настроим NAT, выделим под NAT сеть /24
+     ```
+     ip nat pool pool_123.3.104.0 123.3.104.1 123.3.104.255 netmask 255.255.255.0
+     ip nat inside source list 10 pool pool_123.3.104.0 overload
+     access-list 10 permit 10.3.104.0 0.0.1.255
+     !
+     interface Ethernet0/3.103
+     encapsulation dot1Q 103
+     ip address 10.3.104.1 255.255.254.0
+     ip nat inside
+     !
+     ```
+     Выдачу серых ip можно осуществлять по анологии с белыми ip, статически или по DHCP, соответственно использовать при необходимости DHCP сервер, а резервировать шлюз по vrrp.
+   * Для операторов (не имеющих собственной AS) или клиентов которым необходим блок ip, можно использовать статическую маршрутизацию.
+     ```
+     interface Ethernet0/1.2200
+     description ds.to-R17-AS2200
+     encapsulation dot1Q 2200
+     ip address 123.2.1.8 255.255.255.254
+     !
+     ip route 123.2.200.0 255.255.255.0 123.2.1.9
+     ```
+   * Для корпоративных клиентов не использующих l3 и нуждающихся в блоке ip настраиваем интерфейс на нашей стороне который будет для остальных ip шлюзом.
+     ```
+     interface Ethernet0/3.103
+     encapsulation dot1Q 103
+     ip address 123.4.200.1 255.255.255.0
+     end
+     !
+     VPCS> ip 123.4.200.2 255.255.255.0 123.4.200.1
+     Checking for duplicate address...
+     VPCS : 123.4.200.2 255.255.255.0 gateway 123.4.200.1
+     !
+     VPCS> ping 123.4.200.1
+     123.4.200.1 icmp_seq=1 timeout
+     84 bytes from 123.4.200.1 icmp_seq=2 ttl=255 time=1.070 ms
+     84 bytes from 123.4.200.1 icmp_seq=3 ttl=255 time=1.047 ms
+     84 bytes from 123.4.200.1 icmp_seq=4 ttl=255 time=1.242 ms
+     84 bytes from 123.4.200.1 icmp_seq=5 ttl=255 time=1.193 ms
+     
+     VPCS> ping 123.8.0.254
+     
+     84 bytes from 123.8.0.254 icmp_seq=1 ttl=253 time=2.461 ms
+     84 bytes from 123.8.0.254 icmp_seq=2 ttl=253 time=2.436 ms
+     84 bytes from 123.8.0.254 icmp_seq=3 ttl=253 time=2.461 ms
+     84 bytes from 123.8.0.254 icmp_seq=4 ttl=253 time=2.895 ms
+     84 bytes from 123.8.0.254 icmp_seq=5 ttl=253 time=2.171 ms
+    ```
