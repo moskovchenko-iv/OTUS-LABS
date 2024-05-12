@@ -1,0 +1,113 @@
+
+!
+! Last configuration change at 10:58:04 UTC Sun May 12 2024
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+service compress-config
+!
+hostname S10
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+!
+!
+spanning-tree mode rapid-pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+vlan 2000
+ name ds.to-AS2000
+!
+vlan 2100
+ name ds.to-R16-AS2100
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Ethernet0/0
+ no shutdown
+ description up.to-R1-AS1000
+ switchport trunk allowed vlan 2000,2100
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ load-interval 60
+ spanning-tree bpdufilter enable
+!
+interface Ethernet0/1
+ no shutdown
+ description ds.to-R16-AS2100
+ switchport access vlan 2100
+ switchport mode access
+ load-interval 60
+ spanning-tree portfast edge
+!
+interface Ethernet0/2
+ no shutdown
+ description ds.to-R3-AS2000
+ switchport trunk allowed vlan 200,2000
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 2000
+ switchport mode trunk
+ load-interval 60
+ spanning-tree bpdufilter enable
+!
+interface Ethernet0/3
+ no shutdown
+ description ds.to-R4-AS2000
+ switchport trunk allowed vlan 200,2000
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 2000
+ switchport mode trunk
+ load-interval 60
+ spanning-tree bpdufilter enable
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+!
+!
+end

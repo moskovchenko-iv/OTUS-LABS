@@ -1,0 +1,189 @@
+
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname R3
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+ip dhcp excluded-address 123.3.102.1 123.3.102.3
+ip dhcp excluded-address 123.3.103.1 123.3.103.255
+!
+ip dhcp pool pool_123.3.102.0_23
+ network 123.3.102.0 255.255.254.0
+ default-router 123.3.102.1
+ lease 2 12 30
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ no shutdown
+ ip address 123.3.0.254 255.255.255.255
+ ip router isis
+!
+interface Loopback1
+ no shutdown
+ description IP-UNNAMBERED
+ ip address 123.3.101.1 255.255.255.0
+!
+interface Ethernet0/0
+ no shutdown
+ description pp.to-R4-AS2000
+ ip address 123.3.1.2 255.255.255.254
+ ip router isis
+!
+interface Ethernet0/1
+ no shutdown
+ description up.to-R1-AS1000
+ ip address 123.1.1.11 255.255.255.254
+ ip nat outside
+ ip virtual-reassembly in
+!
+interface Ethernet0/1.200
+ no shutdown
+ description pp.to-R4-AS2000
+ encapsulation dot1Q 200
+ ip address 123.3.1.4 255.255.255.254
+ ip router isis
+!
+interface Ethernet0/2
+ no shutdown
+ description up.to-R2-AS1000
+ ip address 123.2.1.11 255.255.255.254
+ ip nat outside
+ ip virtual-reassembly in
+!
+interface Ethernet0/2.200
+ no shutdown
+ description pp.to-R4-AS2000
+ encapsulation dot1Q 200
+ ip address 123.3.1.6 255.255.255.254
+ ip router isis
+!
+interface Ethernet0/3
+ no shutdown
+ no ip address
+!
+interface Ethernet0/3.101
+ no shutdown
+ encapsulation dot1Q 101
+ ip unnumbered Loopback1
+!
+interface Ethernet0/3.102
+ no shutdown
+ encapsulation dot1Q 102
+ ip address 123.3.102.2 255.255.254.0
+ vrrp 102 ip 123.3.102.1
+!
+interface Ethernet0/3.103
+ no shutdown
+ encapsulation dot1Q 103
+ ip address 10.3.104.2 255.255.254.0
+ ip nat inside
+ ip virtual-reassembly in
+ vrrp 103 ip 10.3.104.1
+!
+router isis
+ net 49.1000.0003.0003.0003.00
+!
+router bgp 2000
+ bgp log-neighbor-changes
+ neighbor 123.1.1.10 remote-as 1000
+ neighbor 123.2.1.10 remote-as 1000
+ neighbor 123.4.0.254 remote-as 2000
+ neighbor 123.4.0.254 update-source Loopback0
+ !
+ address-family ipv4
+  network 123.3.0.0 mask 255.255.0.0
+  neighbor 123.1.1.10 activate
+  neighbor 123.1.1.10 soft-reconfiguration inbound
+  neighbor 123.2.1.10 activate
+  neighbor 123.2.1.10 soft-reconfiguration inbound
+  neighbor 123.4.0.254 activate
+  neighbor 123.4.0.254 next-hop-self
+  neighbor 123.4.0.254 soft-reconfiguration inbound
+ exit-address-family
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+ip nat pool pool_123.3.104.0_23 123.3.104.1 123.3.104.255 netmask 255.255.255.0
+ip nat inside source list 10 pool pool_123.3.104.0_23 overload
+ip route 123.3.0.0 255.255.0.0 Null0
+ip route 123.3.101.100 255.255.255.255 Ethernet0/3.101
+!
+!
+!
+access-list 10 permit 10.3.104.0 0.0.1.255
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+ transport input none
+!
+!
+end

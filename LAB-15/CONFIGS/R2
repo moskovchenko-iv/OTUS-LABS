@@ -1,0 +1,175 @@
+
+!
+! Last configuration change at 12:43:48 UTC Sun May 12 2024
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname R2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ no shutdown
+ ip address 123.2.0.254 255.255.255.255
+!
+interface Ethernet0/0
+ no shutdown
+ description pp.to-R1-AS1000
+ ip address 123.1.1.7 255.255.255.254
+!
+interface Ethernet0/1
+ no shutdown
+ no ip address
+!
+interface Ethernet0/1.2000
+ no shutdown
+ description ds.to-AS2000
+ encapsulation dot1Q 2000
+ ip address 123.2.1.12 255.255.255.254 secondary
+ ip address 123.2.1.10 255.255.255.254
+!
+interface Ethernet0/1.2200
+ no shutdown
+ description ds.to-R17-AS2200
+ encapsulation dot1Q 2200
+ ip address 123.2.1.8 255.255.255.254
+!
+interface Ethernet0/2
+ no shutdown
+ no ip address
+!
+interface Ethernet0/3
+ no shutdown
+ description up.to-R7-AS3300
+ ip address 123.2.1.2 255.255.255.254
+!
+interface Ethernet1/0
+ no shutdown
+ description up.to-R8-AS3400
+ ip address 123.2.1.4 255.255.255.254
+!
+interface Ethernet1/1
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no shutdown
+ no ip address
+ shutdown
+!
+router bgp 1000
+ bgp log-neighbor-changes
+ neighbor 123.1.1.6 remote-as 1000
+ neighbor 123.1.1.6 update-source Ethernet0/0
+ neighbor 123.2.1.3 remote-as 3300
+ neighbor 123.2.1.5 remote-as 3400
+ neighbor 123.2.1.9 remote-as 2200
+ neighbor 123.2.1.11 remote-as 2000
+ neighbor 123.2.1.13 remote-as 2000
+ !
+ address-family ipv4
+  network 123.2.0.0 mask 255.255.0.0
+  neighbor 123.1.1.6 activate
+  neighbor 123.1.1.6 next-hop-self
+  neighbor 123.1.1.6 soft-reconfiguration inbound
+  neighbor 123.2.1.3 activate
+  neighbor 123.2.1.3 soft-reconfiguration inbound
+  neighbor 123.2.1.5 activate
+  neighbor 123.2.1.5 soft-reconfiguration inbound
+  neighbor 123.2.1.9 activate
+  neighbor 123.2.1.9 soft-reconfiguration inbound
+  neighbor 123.2.1.11 activate
+  neighbor 123.2.1.11 soft-reconfiguration inbound
+  neighbor 123.2.1.13 activate
+  neighbor 123.2.1.13 soft-reconfiguration inbound
+ exit-address-family
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+ip route 123.2.0.0 255.255.0.0 Null0
+ip route 123.2.200.0 255.255.255.0 123.2.1.9
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+ transport input none
+!
+!
+end
