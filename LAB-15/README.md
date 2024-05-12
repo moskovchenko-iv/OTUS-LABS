@@ -94,5 +94,38 @@
    123.2.1.11      4         2000      23      23       13    0    0 00:06:43        2
    123.2.1.13      4         2000      23      24       13    0    0 00:06:55        2
    ```
-4.
+   Проверим доступность сетей партнеров:
+   ```
+   R1#ping 123.8.0.254
+   Type escape sequence to abort.
+   Sending 5, 100-byte ICMP Echos to 123.8.0.254, timeout is 2 seconds:
+   !!!!!
+   Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+   R1#ping 123.7.0.254
+   Type escape sequence to abort.
+   Sending 5, 100-byte ICMP Echos to 123.7.0.254, timeout is 2 seconds:
+   !!!!!
+   Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+   R1#ping 123.6.0.254
+   Type escape sequence to abort.
+   Sending 5, 100-byte ICMP Echos to 123.6.0.254, timeout is 2 seconds:
+   !!!!!
+   Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+   R1#ping 123.6.0.254
+   Type escape sequence to abort.
+   Sending 5, 100-byte ICMP Echos to 123.6.0.254, timeout is 2 seconds:
+   !!!!!
+   Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+   R1#ping 123.4.0.254
+   Type escape sequence to abort.
+   Sending 5, 100-byte ICMP Echos to 123.4.0.254, timeout is 2 seconds:
+   !!!!!
+   Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+   R1#ping 123.3.0.254
+   Type escape sequence to abort.
+   Sending 5, 100-byte ICMP Echos to 123.3.0.254, timeout is 2 seconds:
+   !!!!!
+   Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/2 ms
+   ```
+4. 
 4. 
